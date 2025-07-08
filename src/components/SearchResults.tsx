@@ -300,7 +300,7 @@ export default function SearchResults({ results, isLoading = false, filters }: S
   const filteredResults = React.useMemo(() => {
     const filtered = filterResults(initialResults);
     return sortResults(filtered);
-  }, [initialResults, filters, sortBy]);
+  }, [initialResults, filters, sortBy, filterResults, sortResults]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('kk-KZ', {
