@@ -470,6 +470,14 @@ export const translations = {
     openChat: 'Open Chat',
     messageTemplates: 'Message Templates',
     chatHistory: 'Chat History',
+    monthlyOccupancy: 'Monthly Occupancy',
+    averageBill: 'Average Bill',
+    popularDates: 'Popular Dates',
+    ratingByCategory: 'Rating by Category',
+    textReviews: 'Text Reviews',
+    reviewResponses: 'Review Responses',
+    energySavings: 'Energy Savings',
+    wasteReduction: 'Waste Reduction',
     
     // Analyst page
     analystDashboard: 'Analyst Dashboard',
