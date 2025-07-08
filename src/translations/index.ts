@@ -275,7 +275,9 @@ export const translations = {
     interactivity: 'Интерактивность',
     
     // Настройки
+    settings: 'Настройки',
     settingsDesc: 'Настройки языка и аккаунта',
+    notifications: 'Уведомления',
     privacy: 'Конфиденциальность',
     account: 'Аккаунт',
     help: 'Помощь',
@@ -558,7 +560,9 @@ export const translations = {
     interactivity: 'Interactivity',
     
     // Settings
+    settings: 'Settings',
     settingsDesc: 'Language and account settings',
+    notifications: 'Notifications',
     privacy: 'Privacy',
     account: 'Account',
     help: 'Help',
