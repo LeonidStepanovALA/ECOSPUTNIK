@@ -277,6 +277,7 @@ export const translations = {
     // Настройки
     settings: 'Настройки',
     settingsDesc: 'Настройки языка и аккаунта',
+    language: 'Язык',
     notifications: 'Уведомления',
     privacy: 'Конфиденциальность',
     account: 'Аккаунт',
@@ -562,6 +563,7 @@ export const translations = {
     // Settings
     settings: 'Settings',
     settingsDesc: 'Language and account settings',
+    language: 'Language',
     notifications: 'Notifications',
     privacy: 'Privacy',
     account: 'Account',
