@@ -1,36 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ECOSPUTNIK - Eco-Tourism Platform
 
-## Getting Started
+A modern Next.js-based eco-tourism platform with multi-role dashboard supporting tourists, guides, accommodation managers, and analysts.
 
-First, run the development server:
+## 🌱 Features
 
+### Multi-Role Dashboard
+- **Tourist Dashboard**: Search tours, view recommendations, emergency contacts, news
+- **Guide Dashboard**: Manage tours, bookings, finances, analytics
+- **Accommodation Manager**: Manage properties, bookings, sustainability metrics
+- **Analyst Dashboard**: Market analysis, trends, performance metrics
+
+### Key Features
+- 🌍 **Bilingual Support**: Russian/English language switching
+- 📱 **Responsive Design**: Mobile-friendly interface
+- 🎨 **Modern UI**: Clean, eco-friendly design with Tailwind CSS
+- 📊 **Statistics**: Carbon footprint tracking, eco-ratings
+- 🔍 **Search & Recommendations**: Personalized tour suggestions
+- 💬 **Real-time Features**: Chat, notifications, emergency contacts
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/LeonidStepanovALA/ECOSPUTNIK.git
+cd ECOSPUTNIK
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+eco-tourism/
+├── src/
+│   ├── app/                    # Next.js app router
+│   │   ├── tourist/           # Tourist dashboard pages
+│   │   ├── guide/             # Guide dashboard pages
+│   │   ├── accommodation/     # Accommodation manager pages
+│   │   └── analyst/          # Analyst dashboard pages
+│   ├── components/            # Reusable components
+│   ├── hooks/                # Custom React hooks
+│   └── translations/         # Language files
+├── public/                   # Static assets
+└── package.json
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎯 Role-Based Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Tourist
+- Search and book eco-tours
+- View personalized recommendations
+- Track carbon footprint
+- Access emergency contacts
+- Read news and promotions
 
-## Deploy on Vercel
+### Guide
+- Create and manage tours
+- Handle bookings and payments
+- View analytics and ratings
+- Access educational materials
+- Manage eco-certifications
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Accommodation Manager
+- Manage eco-friendly properties
+- Track sustainability metrics
+- Handle bookings and guests
+- Monitor environmental impact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Analyst
+- Market analysis and trends
+- Performance metrics
+- Sustainability reporting
+- Data visualization
+
+## 🌐 Internationalization
+
+The platform supports Russian and English languages with:
+- Language switcher component
+- Translation files
+- Persistent language preference
+- Role-specific translations
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Styling**: Tailwind CSS
+- **Icons**: Heroicons
+- **Language**: TypeScript
+- **State Management**: React hooks
+- **Deployment**: Vercel-ready
+
+## 📈 Future Enhancements
+
+- [ ] Real-time chat functionality
+- [ ] Payment integration
+- [ ] Advanced analytics dashboard
+- [ ] Mobile app development
+- [ ] AI-powered recommendations
+- [ ] Carbon offset integration
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🌍 Environmental Impact
+
+This platform promotes sustainable tourism by:
+- Encouraging eco-friendly travel choices
+- Tracking carbon footprint
+- Supporting local sustainable businesses
+- Educating users about environmental impact
+
+---
+
+**Built with ❤️ for sustainable tourism**
