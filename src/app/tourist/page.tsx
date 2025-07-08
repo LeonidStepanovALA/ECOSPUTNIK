@@ -1,143 +1,130 @@
 'use client';
 
 import React from 'react';
-import { MapIcon, HomeIcon, AdjustmentsHorizontalIcon, CalendarIcon, UserIcon, BookOpenIcon, ChatBubbleLeftIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { 
+  StarIcon, 
+  NewspaperIcon, 
+  MagnifyingGlassIcon, 
+  PhoneIcon,
+  CloudIcon,
+  Cog6ToothIcon
+} from '@heroicons/react/24/outline';
+import PersonalizedRecommendations from '@/components/PersonalizedRecommendations';
+import NewsAndPromotions from '@/components/NewsAndPromotions';
+import SearchSection from '@/components/SearchSection';
+import EmergencyContact from '@/components/EmergencyContact';
+import TouristStats from '@/components/TouristStats';
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '@/translations';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
-const menuItems = [
-  {
-    id: 'main',
-    title: 'Лента/Главная',
-    icon: HomeIcon,
-    items: [
-      'Персонализированные рекомендации',
-      'Акции и новости',
-      'Поиск',
-      'Экстренная связь'
-    ]
-  },
-  {
-    id: 'filters',
-    title: 'Фильтры',
-    icon: AdjustmentsHorizontalIcon,
-    items: [
-      'Тип размещения',
-      'Уровень устойчивости',
-      'Гиды'
-    ]
-  },
-  {
-    id: 'map',
-    title: 'Карта',
-    icon: MapIcon,
-    items: [
-      '"Зеленые" маршруты',
-      'Отметки экоотелей',
-      'Станции зарядки'
-    ]
-  },
-  {
-    id: 'bookings',
-    title: 'Бронирования',
-    icon: CalendarIcon,
-    items: [
-      'Текущие поездки',
-      'Прошлые поездки',
-      'Чеклисты экологичности'
-    ]
-  },
-  {
-    id: 'profile',
-    title: 'Профиль',
-    icon: UserIcon,
-    items: [
-      'Личные данные',
-      'Экостатистика',
-      'Награды и бейджи'
-    ]
-  },
-  {
-    id: 'education',
-    title: 'Образование',
-    icon: BookOpenIcon,
-    items: [
-      'Статьи',
-      'Советы',
-      'FAQ'
-    ]
-  },
-  {
-    id: 'support',
-    title: 'Поддержка',
-    icon: ChatBubbleLeftIcon,
-    items: [
-      'Чат с командой',
-      'FAQ'
-    ]
-  },
-  {
-    id: 'settings',
-    title: 'Настройки',
-    icon: Cog6ToothIcon,
-    items: [
-      'Язык',
-      'Уведомления',
-      'Экорежим'
-    ]
-  }
-];
+interface NavigationButton {
+  href: string;
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  color: string;
+}
 
-export default function TouristDashboard() {
-  const [activeSection, setActiveSection] = React.useState('main');
+export default function TouristPage() {
+  const { language, changeLanguage } = useLanguage();
+  const t = translations[language];
+
+  const navigationButtons: NavigationButton[] = [
+    {
+      href: '/tourist/recommendations',
+      icon: StarIcon,
+      title: t.personalizedRecommendations,
+      description: t.personalizedRecommendationsDesc,
+      color: 'bg-green-500 hover:bg-green-600'
+    },
+    {
+      href: '/tourist/news',
+      icon: NewspaperIcon,
+      title: t.news,
+      description: t.newsDesc,
+      color: 'bg-blue-500 hover:bg-blue-600'
+    },
+    {
+      href: '/tourist/search',
+      icon: MagnifyingGlassIcon,
+      title: t.search,
+      description: t.searchDesc,
+      color: 'bg-purple-500 hover:bg-purple-600'
+    },
+    {
+      href: '/tourist/emergency',
+      icon: PhoneIcon,
+      title: t.emergency,
+      description: t.emergencyDesc,
+      color: 'bg-red-500 hover:bg-red-600'
+    },
+    {
+      href: '/tourist/carbon-report',
+      icon: CloudIcon,
+      title: t.carbonReport,
+      description: t.carbonReportDesc,
+      color: 'bg-teal-500 hover:bg-teal-600'
+    },
+    {
+      href: '/settings',
+      icon: Cog6ToothIcon,
+      title: t.settings,
+      description: t.settingsDesc,
+      color: 'bg-gray-500 hover:bg-gray-600'
+    }
+  ];
 
   return (
-    <div className="flex h-screen bg-green-50">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold text-green-800 mb-8">Личный кабинет туриста</h1>
-          <nav>
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center space-x-2 p-3 rounded-lg mb-2 ${
-                  activeSection === item.id ? 'bg-green-100 text-green-800' : 'text-gray-600 hover:bg-green-50'
-                }`}
-              >
-                <item.icon className="w-6 h-6" />
-                <span>{item.title}</span>
-              </button>
-            ))}
-          </nav>
-        </div>
-      </aside>
+    <div className="container mx-auto px-4 py-6 md:py-8">
+      {/* Language Switcher */}
+      <div className="flex justify-end mb-4">
+        <LanguageSwitcher 
+          currentLanguage={language} 
+          onLanguageChange={changeLanguage}
+        />
+      </div>
 
-      {/* Main content */}
-      <main className="flex-1 p-8">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-green-800 mb-6">
-            {menuItems.find(item => item.id === activeSection)?.title}
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {menuItems
-              .find(item => item.id === activeSection)
-              ?.items.map((subItem, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-lg shadow-md border-2 border-green-100"
-                >
-                  <h3 className="text-xl font-semibold text-green-700 mb-2">
-                    {subItem}
-                  </h3>
-                  <p className="text-green-600">
-                    Нажмите для подробной информации
-                  </p>
-                </div>
-              ))}
-          </div>
-        </div>
-      </main>
+      <h1 className="text-2xl md:text-3xl font-bold text-green-800 mb-6 md:mb-8">
+        {t.touristDashboard}
+      </h1>
+
+      {/* Статистика туриста */}
+      <div className="mb-8">
+        <TouristStats />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        {navigationButtons.map((button) => (
+          <Link 
+            key={button.href} 
+            href={button.href}
+            className={`${button.color} text-white rounded-lg p-4 md:p-6 transition-transform transform hover:scale-105 hover:shadow-lg`}
+          >
+            <div className="flex items-start gap-3 md:gap-4">
+              <button.icon className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0" />
+              <div>
+                <h2 className="text-lg md:text-xl font-semibold mb-2">
+                  {button.title}
+                </h2>
+                <p className="text-sm md:text-base text-white/90">
+                  {button.description}
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-8 md:mt-12 p-4 md:p-6 bg-green-50 rounded-lg">
+        <h3 className="text-lg md:text-xl font-semibold text-green-800 mb-3 md:mb-4">
+          {t.welcomeMessage}
+        </h3>
+        <p className="text-sm md:text-base text-green-700">
+          {t.welcomeDesc}
+        </p>
+      </div>
     </div>
   );
 } 
