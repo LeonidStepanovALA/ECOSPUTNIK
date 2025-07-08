@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HomeIcon, LightBulbIcon, DocumentCheckIcon, CalendarIcon, ChartBarIcon, AcademicCapIcon, ChatBubbleLeftIcon, ShoppingBagIcon, XMarkIcon, PlusIcon, PencilIcon, EyeIcon, CheckCircleIcon, ExclamationTriangleIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, LightBulbIcon, DocumentCheckIcon, CalendarIcon, ChartBarIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/translations';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -10,12 +10,12 @@ export default function AccommodationDashboard() {
   const { language, changeLanguage } = useLanguage();
   const t = translations[language];
 
-  const menuItems = [
-    {
-      id: 'info',
+const menuItems = [
+  {
+    id: 'info',
       title: t.basicInfo,
-      icon: HomeIcon,
-      items: [
+    icon: HomeIcon,
+    items: [
         { 
           name: t.nameAndDescription, 
           action: 'edit-info',
@@ -61,13 +61,13 @@ export default function AccommodationDashboard() {
             { name: t.getCertificate, action: 'get-certificate' }
           ]
         }
-      ]
-    },
-    {
-      id: 'eco-measures',
+    ]
+  },
+  {
+    id: 'eco-measures',
       title: t.ecoMeasures,
-      icon: LightBulbIcon,
-      items: [
+    icon: LightBulbIcon,
+    items: [
         { 
           name: t.energy, 
           action: 'energy-measures',
@@ -113,13 +113,13 @@ export default function AccommodationDashboard() {
             { name: t.ecoTransfer, action: 'eco-transfer' }
           ]
         }
-      ]
-    },
-    {
-      id: 'certificates',
+    ]
+  },
+  {
+    id: 'certificates',
       title: t.certificates,
-      icon: DocumentCheckIcon,
-      items: [
+    icon: DocumentCheckIcon,
+    items: [
         { 
           name: 'LEED', 
           action: 'leed-cert',
@@ -156,13 +156,13 @@ export default function AccommodationDashboard() {
             { name: t.manageFiles, action: 'manage-files' }
           ]
         }
-      ]
-    },
-    {
-      id: 'bookings',
+    ]
+  },
+  {
+    id: 'bookings',
       title: t.bookingManagement,
-      icon: CalendarIcon,
-      items: [
+    icon: CalendarIcon,
+    items: [
         { 
           name: t.availabilityCalendar, 
           action: 'calendar',
@@ -199,13 +199,13 @@ export default function AccommodationDashboard() {
             { name: t.chatHistory, action: 'chat-history' }
           ]
         }
-      ]
-    },
-    {
-      id: 'analytics',
+    ]
+  },
+  {
+    id: 'analytics',
       title: t.analytics,
-      icon: ChartBarIcon,
-      items: [
+    icon: ChartBarIcon,
+    items: [
         { 
           name: 'Статистика бронирований', 
           action: 'booking-stats',
@@ -405,7 +405,7 @@ export default function AccommodationDashboard() {
               >
                 {t.close}
               </button>
-            </div>
+                </div>
           </div>
         </div>
       )}

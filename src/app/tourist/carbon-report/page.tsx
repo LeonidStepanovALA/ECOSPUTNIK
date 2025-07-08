@@ -1,5 +1,5 @@
 import React from 'react';
-import { CloudIcon, SparklesIcon, ArrowTrendingDownIcon, CalendarIcon, MapIcon, CalculatorIcon } from '@heroicons/react/24/outline';
+import { CloudIcon, SparklesIcon, ArrowTrendingDownIcon, CalendarIcon, CalculatorIcon } from '@heroicons/react/24/outline';
 
 const mockCarbonData = {
   summary: {

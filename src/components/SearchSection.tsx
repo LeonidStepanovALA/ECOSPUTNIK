@@ -71,29 +71,7 @@ export default function SearchSection() {
     '5': '5 звезд (превосходный)'
   };
 
-  const durationLabels: Record<Duration, string> = {
-    all: 'Любая длительность',
-    day: 'Однодневный',
-    weekend: '2-3 дня',
-    week: '4-7 дней',
-    long: 'Более недели'
-  };
 
-  const difficultyLabels: Record<Difficulty, string> = {
-    all: 'Любая сложность',
-    easy: 'Легкий (начинающий)',
-    medium: 'Средний (любитель)',
-    hard: 'Сложный (опытный)',
-    expert: 'Экспертный (профи)'
-  };
-
-  const regionLabels: Record<Region, string> = {
-    all: 'Все регионы',
-    almaty: 'Алматы и область',
-    astana: 'Астана и область',
-    shymkent: 'Шымкент и область',
-    other: 'Другие регионы'
-  };
 
   const tourTypeLabels: Record<TourType, string> = {
     all: 'Все направления',

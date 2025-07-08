@@ -10,10 +10,7 @@ import {
   CloudIcon,
   Cog6ToothIcon
 } from '@heroicons/react/24/outline';
-import PersonalizedRecommendations from '@/components/PersonalizedRecommendations';
-import NewsAndPromotions from '@/components/NewsAndPromotions';
-import SearchSection from '@/components/SearchSection';
-import EmergencyContact from '@/components/EmergencyContact';
+
 import TouristStats from '@/components/TouristStats';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/translations';

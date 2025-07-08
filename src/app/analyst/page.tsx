@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChartBarIcon, MapIcon, RocketLaunchIcon, CloudIcon, UserGroupIcon, ArrowDownTrayIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, MapIcon, RocketLaunchIcon, CloudIcon, UserGroupIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/translations';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -10,12 +10,12 @@ export default function AnalystDashboard() {
   const { language, changeLanguage } = useLanguage();
   const t = translations[language];
 
-  const menuItems = [
-    {
-      id: 'dashboard',
+const menuItems = [
+  {
+    id: 'dashboard',
       title: t.dashboard,
-      icon: ChartBarIcon,
-      items: [
+    icon: ChartBarIcon,
+    items: [
         { 
           name: t.totalTourists, 
           action: 'total-tourists',
@@ -52,13 +52,13 @@ export default function AnalystDashboard() {
             { name: t.compensationForecast, action: 'compensation-forecast' }
           ]
         }
-      ]
-    },
-    {
-      id: 'regions',
+    ]
+  },
+  {
+    id: 'regions',
       title: t.regionReports,
-      icon: MapIcon,
-      items: [
+    icon: MapIcon,
+    items: [
         { 
           name: t.activityMap, 
           action: 'activity-map',
@@ -95,13 +95,13 @@ export default function AnalystDashboard() {
             { name: t.culturalFeatures, action: 'cultural-features' }
           ]
         }
-      ]
-    },
-    {
-      id: 'directions',
+    ]
+  },
+  {
+    id: 'directions',
       title: t.directionAnalysis,
-      icon: RocketLaunchIcon,
-      items: [
+    icon: RocketLaunchIcon,
+    items: [
         { 
           name: t.categoryComparison, 
           action: 'category-comparison',
@@ -138,13 +138,13 @@ export default function AnalystDashboard() {
             { name: t.lowSeason, action: 'low-season' }
           ]
         }
-      ]
-    },
-    {
-      id: 'carbon',
+    ]
+  },
+  {
+    id: 'carbon',
       title: t.carbonFootprint,
-      icon: CloudIcon,
-      items: [
+    icon: CloudIcon,
+    items: [
         { 
           name: t.co2Statistics, 
           action: 'co2-statistics',
@@ -181,13 +181,13 @@ export default function AnalystDashboard() {
             { name: t.effectivenessRecommendations, action: 'effectiveness-recommendations' }
           ]
         }
-      ]
-    },
-    {
-      id: 'users',
+    ]
+  },
+  {
+    id: 'users',
       title: t.userAnalytics,
-      icon: UserGroupIcon,
-      items: [
+    icon: UserGroupIcon,
+    items: [
         { 
           name: t.touristProfile, 
           action: 'tourist-profile',
@@ -378,7 +378,7 @@ export default function AnalystDashboard() {
               >
                 {t.close}
               </button>
-            </div>
+                </div>
           </div>
         </div>
       )}
