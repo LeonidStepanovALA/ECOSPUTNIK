@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChartBarIcon, MapIcon, RocketLaunchIcon, CloudIcon, UserGroupIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, MapIcon, RocketLaunchIcon, CloudIcon, UserGroupIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon, BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/translations';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import EcoProjectsReport from '@/components/EcoProjectsReport';
+import FinancingStatusReport from '@/components/FinancingStatusReport';
 
 export default function AnalystDashboard() {
   const { language, changeLanguage } = useLanguage();
@@ -207,6 +209,49 @@ const menuItems = [
           ]
         }
       ]
+    },
+    {
+      id: 'ecoProjects',
+      title: t.ecoProjectsReport,
+      icon: BuildingOfficeIcon,
+      items: [
+        { 
+          name: t.awaitingGreenFinancing, 
+          action: 'awaiting-green-financing',
+          subItems: [
+            { name: t.financingStatus, action: 'financing-status' },
+            { name: t.fundingAmount, action: 'funding-amount' },
+            { name: t.projectProgress, action: 'project-progress' }
+          ]
+        },
+        { 
+          name: t.receivedGreenFinancing, 
+          action: 'received-green-financing',
+          subItems: [
+            { name: t.implementationRate, action: 'implementation-rate' },
+            { name: t.successRate, action: 'success-rate' },
+            { name: t.projectProgress, action: 'project-progress' }
+          ]
+        },
+        { 
+          name: t.implementedProjects, 
+          action: 'implemented-projects',
+          subItems: [
+            { name: t.successRate, action: 'success-rate' },
+            { name: t.ecoImpact, action: 'eco-impact' },
+            { name: t.costBenefit, action: 'cost-benefit' }
+          ]
+        },
+        { 
+          name: t.projectsInProgress, 
+          action: 'projects-in-progress',
+          subItems: [
+            { name: t.projectProgress, action: 'project-progress' },
+            { name: t.completionForecast, action: 'completion-forecast' },
+            { name: t.resourceAllocation, action: 'resource-allocation' }
+          ]
+        }
+      ]
     }
   ];
 
@@ -356,10 +401,23 @@ const menuItems = [
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-green-800">
-                {selectedAction}
+                {selectedAction?.includes('awaiting-green-financing') ? t.awaitingGreenFinancing :
+                 selectedAction?.includes('received-green-financing') ? t.receivedGreenFinancing :
+                 selectedAction?.includes('implemented-projects') ? t.implementedProjects :
+                 selectedAction?.includes('projects-in-progress') ? t.projectsInProgress :
+                 selectedAction?.includes('financing-status') ? t.financingStatus :
+                 selectedAction?.includes('funding-amount') ? t.fundingAmount :
+                 selectedAction?.includes('project-progress') ? t.projectProgress :
+                 selectedAction?.includes('implementation-rate') ? t.implementationRate :
+                 selectedAction?.includes('success-rate') ? t.successRate :
+                 selectedAction?.includes('eco-impact') ? t.ecoImpact :
+                 selectedAction?.includes('cost-benefit') ? t.costBenefit :
+                 selectedAction?.includes('completion-forecast') ? t.completionForecast :
+                 selectedAction?.includes('resource-allocation') ? t.resourceAllocation :
+                 selectedAction}
               </h3>
               <button
                 onClick={closeModal}
@@ -368,17 +426,71 @@ const menuItems = [
                 <XMarkIcon className="w-6 h-6" />
               </button>
             </div>
-            <div className="text-green-600 mb-4">
-              {t.functionInDevelopment}
-            </div>
-            <div className="flex justify-end">
+            
+            {/* Financing Status Report */}
+            {selectedAction?.includes('financing-status') && (
+              <FinancingStatusReport />
+            )}
+            
+            {/* Eco Projects Report */}
+            {(selectedAction?.includes('green-financing') || 
+              selectedAction?.includes('implemented-projects') || 
+              selectedAction?.includes('projects-in-progress') ||
+              selectedAction?.includes('eco-projects') ||
+              selectedAction?.includes('funding-amount') ||
+              selectedAction?.includes('project-progress') ||
+              selectedAction?.includes('implementation-rate') ||
+              selectedAction?.includes('success-rate') ||
+              selectedAction?.includes('eco-impact') ||
+              selectedAction?.includes('cost-benefit') ||
+              selectedAction?.includes('completion-forecast') ||
+              selectedAction?.includes('resource-allocation')) && (
+              <EcoProjectsReport 
+                filter={
+                  selectedAction?.includes('awaiting-green-financing') ? 'awaiting' :
+                  selectedAction?.includes('received-green-financing') ? 'received' :
+                  selectedAction?.includes('implemented-projects') ? 'implemented' :
+                  selectedAction?.includes('projects-in-progress') ? 'in-progress' :
+                  selectedAction?.includes('funding-amount') ? 'all' :
+                  selectedAction?.includes('project-progress') ? 'all' :
+                  selectedAction?.includes('implementation-rate') ? 'received' :
+                  selectedAction?.includes('success-rate') ? 'implemented' :
+                  selectedAction?.includes('eco-impact') ? 'implemented' :
+                  selectedAction?.includes('cost-benefit') ? 'implemented' :
+                  selectedAction?.includes('completion-forecast') ? 'in-progress' :
+                  selectedAction?.includes('resource-allocation') ? 'in-progress' :
+                  'all'
+                }
+              />
+            )}
+            
+            {/* Default development message for other actions */}
+            {!selectedAction?.includes('green-financing') && 
+             !selectedAction?.includes('implemented-projects') && 
+             !selectedAction?.includes('projects-in-progress') &&
+             !selectedAction?.includes('eco-projects') &&
+             !selectedAction?.includes('financing-status') &&
+             !selectedAction?.includes('funding-amount') &&
+             !selectedAction?.includes('project-progress') &&
+             !selectedAction?.includes('implementation-rate') &&
+             !selectedAction?.includes('success-rate') &&
+             !selectedAction?.includes('eco-impact') &&
+             !selectedAction?.includes('cost-benefit') &&
+             !selectedAction?.includes('completion-forecast') &&
+             !selectedAction?.includes('resource-allocation') && (
+              <div className="text-green-600 mb-4">
+                {t.functionInDevelopment}
+              </div>
+            )}
+            
+            <div className="flex justify-end mt-4">
               <button
                 onClick={closeModal}
                 className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               >
                 {t.close}
               </button>
-                </div>
+            </div>
           </div>
         </div>
       )}

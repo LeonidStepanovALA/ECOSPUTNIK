@@ -206,7 +206,7 @@ export default function SearchSection() {
               </select>
             </div>
 
-            {selectedFilters.type === 'tour' && (
+            {selectedFilters.type === 'tour' && selectedFilters.tourType === 'ski' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Сложность

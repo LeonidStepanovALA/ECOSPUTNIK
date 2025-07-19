@@ -30,10 +30,10 @@ export default function Home() {
       icon: '🏡'
     },
     {
-      title: t.analyst,
-      description: t.analystDesc,
-      href: '/analyst',
-      icon: '📊'
+      title: t.admin,
+      description: t.adminDesc,
+      href: '/admin',
+      icon: '⚙️'
     }
   ];
   return (

@@ -22,10 +22,10 @@ const mockTouristData = {
     points: 1250,
     badges: 8,
     achievements: [
-      'Эко-путешественник',
-      'Защитник природы',
-      'Эксперт по переработке',
-      'Мастер экономии энергии'
+      'ecoTraveler',
+      'natureProtector',
+      'recyclingExpert',
+      'energyMaster'
     ]
   },
   stats: {
@@ -200,7 +200,7 @@ export default function TouristStats({ className = '' }: TouristStatsProps) {
               {mockTouristData.ecoRating.achievements.map((achievement, index) => (
                 <div key={index} className="flex items-center space-x-2 p-2 bg-green-50 rounded-lg">
                   <StarIcon className="w-4 h-4 text-yellow-500" />
-                  <span className="text-sm text-green-700">{achievement}</span>
+                  <span className="text-sm text-green-700">{t[achievement as keyof typeof t]}</span>
                 </div>
               ))}
             </div>
