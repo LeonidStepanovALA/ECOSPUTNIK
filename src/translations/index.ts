@@ -315,6 +315,16 @@ export const translations = {
     appUsageTime: 'Время в приложении',
     interactivity: 'Интерактивность',
     
+    // Интерактивная карта
+    mapView: 'Вид карты',
+    legend: 'Легенда',
+    low: 'Низкий',
+    medium: 'Средний',
+    high: 'Высокий',
+    totalRevenue: 'Общий доход',
+    totalCarbonFootprint: 'Общий углеродный след',
+    activities: 'Активности',
+    
     // Администратор
     admin: 'Администратор',
     adminDesc: 'Управление курсами для гидов, размещение новостей и акций в календарь, организация экологических мероприятий',
@@ -757,6 +767,16 @@ export const translations = {
     platformActivity: 'Platform Activity',
     appUsageTime: 'App Usage Time',
     interactivity: 'Interactivity',
+    
+    // Interactive Map
+    mapView: 'Map View',
+    legend: 'Legend',
+    low: 'Low',
+    medium: 'Medium',
+    high: 'High',
+    totalRevenue: 'Total Revenue',
+    totalCarbonFootprint: 'Total Carbon Footprint',
+    activities: 'Activities',
     
     // Admin
     admin: 'Administrator',

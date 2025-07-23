@@ -7,6 +7,7 @@ import { translations } from '@/translations';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import EcoProjectsReport from '@/components/EcoProjectsReport';
 import FinancingStatusReport from '@/components/FinancingStatusReport';
+import InteractiveMap from '@/components/InteractiveMap';
 
 export default function AnalystDashboard() {
   const { language, changeLanguage } = useLanguage();
@@ -432,6 +433,11 @@ const menuItems = [
               <FinancingStatusReport />
             )}
             
+            {/* Interactive Map */}
+            {selectedAction?.includes('interactive-map') && (
+              <InteractiveMap />
+            )}
+            
             {/* Eco Projects Report */}
             {(selectedAction?.includes('green-financing') || 
               selectedAction?.includes('implemented-projects') || 
@@ -470,6 +476,7 @@ const menuItems = [
              !selectedAction?.includes('projects-in-progress') &&
              !selectedAction?.includes('eco-projects') &&
              !selectedAction?.includes('financing-status') &&
+             !selectedAction?.includes('interactive-map') &&
              !selectedAction?.includes('funding-amount') &&
              !selectedAction?.includes('project-progress') &&
              !selectedAction?.includes('implementation-rate') &&
