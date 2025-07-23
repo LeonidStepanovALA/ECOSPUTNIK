@@ -325,6 +325,15 @@ export const translations = {
     totalCarbonFootprint: 'Общий углеродный след',
     activities: 'Активности',
     
+    // ТОП-5 направлений
+    sortBy: 'Сортировать по',
+    popularity: 'Популярность',
+    revenue: 'Доход',
+    ecoRating: 'Эко-рейтинг',
+    description: 'Описание',
+    bookings: 'Бронирования',
+    carbonFootprint: 'Углеродный след',
+    
     // Администратор
     admin: 'Администратор',
     adminDesc: 'Управление курсами для гидов, размещение новостей и акций в календарь, организация экологических мероприятий',
@@ -777,6 +786,15 @@ export const translations = {
     totalRevenue: 'Total Revenue',
     totalCarbonFootprint: 'Total Carbon Footprint',
     activities: 'Activities',
+    
+    // Top Directions
+    sortBy: 'Sort by',
+    popularity: 'Popularity',
+    revenue: 'Revenue',
+    ecoRating: 'Eco Rating',
+    description: 'Description',
+    bookings: 'Bookings',
+    carbonFootprint: 'Carbon Footprint',
     
     // Admin
     admin: 'Administrator',

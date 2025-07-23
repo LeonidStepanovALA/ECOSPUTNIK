@@ -8,6 +8,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import EcoProjectsReport from '@/components/EcoProjectsReport';
 import FinancingStatusReport from '@/components/FinancingStatusReport';
 import InteractiveMap from '@/components/InteractiveMap';
+import TopDirections from '@/components/TopDirections';
 
 export default function AnalystDashboard() {
   const { language, changeLanguage } = useLanguage();
@@ -438,6 +439,13 @@ const menuItems = [
               <InteractiveMap />
             )}
             
+            {/* Top Directions */}
+            {(selectedAction?.includes('popularity-ranking') || 
+              selectedAction?.includes('revenue-ranking') || 
+              selectedAction?.includes('eco-rating-ranking')) && (
+              <TopDirections />
+            )}
+            
             {/* Eco Projects Report */}
             {(selectedAction?.includes('green-financing') || 
               selectedAction?.includes('implemented-projects') || 
@@ -477,6 +485,9 @@ const menuItems = [
              !selectedAction?.includes('eco-projects') &&
              !selectedAction?.includes('financing-status') &&
              !selectedAction?.includes('interactive-map') &&
+             !selectedAction?.includes('popularity-ranking') &&
+             !selectedAction?.includes('revenue-ranking') &&
+             !selectedAction?.includes('eco-rating-ranking') &&
              !selectedAction?.includes('funding-amount') &&
              !selectedAction?.includes('project-progress') &&
              !selectedAction?.includes('implementation-rate') &&
