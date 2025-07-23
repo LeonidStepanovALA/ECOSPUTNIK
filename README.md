@@ -1,139 +1,193 @@
-# ECOSPUTNIK - Eco-Tourism Platform
+# 🌍 Eco-Tourism Platform
 
-A modern Next.js-based eco-tourism platform with multi-role dashboard supporting tourists, guides, accommodation managers, and analysts.
+Современная платформа для экологического туризма с многоролевой системой и персонализированными дашбордами.
 
-## 🌱 Features
+## 🚀 Технологии
 
-### Multi-Role Dashboard
-- **Tourist Dashboard**: Search tours, view recommendations, emergency contacts, news
-- **Guide Dashboard**: Manage tours, bookings, finances, analytics
-- **Accommodation Manager**: Manage properties, bookings, sustainability metrics
-- **Analyst Dashboard**: Market analysis, trends, performance metrics
+- **Frontend:** Next.js 15, React 19, TypeScript
+- **Стилизация:** Tailwind CSS
+- **Языки:** Русский, Английский
+- **Архитектура:** Многоролевая система с персонализированными дашбордами
 
-### Key Features
-- 🌍 **Bilingual Support**: Russian/English language switching
-- 📱 **Responsive Design**: Mobile-friendly interface
-- 🎨 **Modern UI**: Clean, eco-friendly design with Tailwind CSS
-- 📊 **Statistics**: Carbon footprint tracking, eco-ratings
-- 🔍 **Search & Recommendations**: Personalized tour suggestions
-- 💬 **Real-time Features**: Chat, notifications, emergency contacts
+## 👥 Роли пользователей
 
-## 🚀 Getting Started
+### 👤 **Турист**
+- Персонализированные рекомендации
+- Эко-события и новости
+- Поиск туров и гидов
+- Экстренная связь с Emergency системой
+- Отчеты о сокращенном углеродном следе
 
-### Prerequisites
+### 🎯 **Гид**
+- Управление профилем и турами
+- Календарь бронирований
+- Финансовая аналитика
+- Обучение и сертификация
+
+### 🏨 **Менеджер размещения**
+- Управление объектами размещения
+- Экологическая сертификация
+- Аналитика загрузки
+- Финансовые отчеты
+
+### 📊 **Аналитик**
+- Комплексная аналитика платформы
+- Статистика пользователей и бронирований
+- Анализ CO₂ и экологических показателей
+- Отчеты по зеленому финансированию
+
+### ⚙️ **Администратор**
+- Управление курсами для гидов
+- Календарь событий
+- Системная аналитика
+
+## 🛠️ Установка и запуск
+
+### Предварительные требования
 - Node.js 18+ 
-- npm or yarn
+- npm или yarn
 
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/LeonidStepanovALA/ECOSPUTNIK.git
-cd ECOSPUTNIK
-```
-
-2. Install dependencies:
+### Установка зависимостей
 ```bash
 npm install
 ```
 
-3. Run the development server:
+### Запуск в режиме разработки
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+Приложение будет доступно по адресу [http://localhost:3000](http://localhost:3000)
 
-## 📁 Project Structure
+### Сборка для продакшена
+```bash
+npm run build
+```
+
+### Запуск продакшен версии
+```bash
+npm start
+```
+
+## 📁 Структура проекта
 
 ```
 eco-tourism/
 ├── src/
-│   ├── app/                    # Next.js app router
-│   │   ├── tourist/           # Tourist dashboard pages
-│   │   ├── guide/             # Guide dashboard pages
-│   │   ├── accommodation/     # Accommodation manager pages
-│   │   └── analyst/          # Analyst dashboard pages
-│   ├── components/            # Reusable components
-│   ├── hooks/                # Custom React hooks
-│   └── translations/         # Language files
-├── public/                   # Static assets
+│   ├── app/                    # Next.js App Router
+│   │   ├── page.tsx           # Главная страница
+│   │   ├── tourist/           # Страницы туриста
+│   │   ├── guide/             # Страницы гида
+│   │   ├── accommodation/     # Страницы размещения
+│   │   ├── analyst/           # Страницы аналитика
+│   │   └── admin/             # Страницы администратора
+│   ├── components/            # Переиспользуемые компоненты
+│   ├── context/               # React Context
+│   ├── hooks/                 # Кастомные хуки
+│   └── translations/          # Языковые файлы
+├── public/                    # Статические файлы
 └── package.json
 ```
 
-## 🎯 Role-Based Features
+## 🌐 Многоязычность
 
-### Tourist
-- Search and book eco-tours
-- View personalized recommendations
-- Track carbon footprint
-- Access emergency contacts
-- Read news and promotions
+Платформа поддерживает два языка:
+- 🇷🇺 Русский
+- 🇺🇸 Английский
 
-### Guide
-- Create and manage tours
-- Handle bookings and payments
-- View analytics and ratings
-- Access educational materials
-- Manage eco-certifications
+Система переводов централизована в `src/translations/index.ts`
 
-### Accommodation Manager
-- Manage eco-friendly properties
-- Track sustainability metrics
-- Handle bookings and guests
-- Monitor environmental impact
+## 📱 Адаптивность
 
-### Analyst
-- Market analysis and trends
-- Performance metrics
-- Sustainability reporting
-- Data visualization
+- Мобильная оптимизация
+- Адаптивная сетка
+- Touch-friendly интерфейс
+- Responsive дизайн
 
-## 🌐 Internationalization
+## 🔒 Безопасность
 
-The platform supports Russian and English languages with:
-- Language switcher component
-- Translation files
-- Persistent language preference
-- Role-specific translations
+- Валидация данных
+- Санитизация ввода
+- Защита от XSS
+- Безопасная геолокация
 
-## 🛠️ Technology Stack
+## 🚨 Экстренная система
 
-- **Framework**: Next.js 14 with App Router
-- **Styling**: Tailwind CSS
-- **Icons**: Heroicons
-- **Language**: TypeScript
-- **State Management**: React hooks
-- **Deployment**: Vercel-ready
+### Emergency система
+- Кнопка экстренного вызова
+- Автоматическая отправка координат
+- Текстовое сообщение о ситуации
+- Возможность прикрепления фото
+- Многоязычная поддержка
 
-## 📈 Future Enhancements
+## 📊 Аналитика
 
-- [ ] Real-time chat functionality
-- [ ] Payment integration
-- [ ] Advanced analytics dashboard
-- [ ] Mobile app development
-- [ ] AI-powered recommendations
-- [ ] Carbon offset integration
+### Метрики туриста
+- Углеродный след (тонны CO₂)
+- Эко-рейтинг (баллы)
+- Количество эко-туров
+- Посаженные деревья
+- Эко-действия
 
-## 🤝 Contributing
+### Аналитические отчеты
+- Региональная статистика
+- Сезонные тренды
+- Финансовые метрики
+- Экологические показатели
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+## 🎨 Дизайн
 
-## 📄 License
+### Цветовая схема
+- Зеленый (#059669) - основной брендинг
+- Синий (#3B82F6) - информационные элементы
+- Красный (#DC2626) - экстренные функции
+- Желтый (#F59E0B) - предупреждения
 
-This project is licensed under the MIT License.
+## 🚀 Развертывание
 
-## 🌍 Environmental Impact
+### Vercel (рекомендуется)
+1. Подключите репозиторий к Vercel
+2. Настройте переменные окружения
+3. Деплой произойдет автоматически
 
-This platform promotes sustainable tourism by:
-- Encouraging eco-friendly travel choices
-- Tracking carbon footprint
-- Supporting local sustainable businesses
-- Educating users about environmental impact
+### Другие платформы
+- Netlify
+- AWS Amplify
+- Heroku
+
+## 📋 Планы развития
+
+### 🔮 Будущие функции
+- [ ] Реальное время чат
+- [ ] Интеграция платежей
+- [ ] Продвинутая аналитика
+- [ ] Мобильное приложение
+- [ ] AI-рекомендации
+- [ ] Интеграция компенсации углерода
+
+### 🎯 Приоритеты
+1. **Стабильность** - обеспечение надежной работы
+2. **UX/UI** - улучшение пользовательского опыта
+3. **Функциональность** - добавление новых возможностей
+4. **Масштабирование** - подготовка к росту
+
+## 🤝 Вклад в проект
+
+1. Форкните репозиторий
+2. Создайте ветку для новой функции (`git checkout -b feature/amazing-feature`)
+3. Зафиксируйте изменения (`git commit -m 'Add amazing feature'`)
+4. Отправьте в ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
+
+## 📄 Лицензия
+
+Этот проект распространяется под лицензией MIT. См. файл `LICENSE` для получения дополнительной информации.
+
+## 📞 Поддержка
+
+Если у вас есть вопросы или предложения, создайте Issue в репозитории.
 
 ---
 
-**Built with ❤️ for sustainable tourism**
+*Версия: 1.0.0*
+*Последнее обновление: 23.07.2024*

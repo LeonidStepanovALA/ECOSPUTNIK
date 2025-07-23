@@ -1,0 +1,31 @@
+КОМАНДЫ ДЛЯ РАЗМЕЩЕНИЯ НА GITHUB
+=====================================
+
+1. Инициализация Git:
+git init
+
+2. Добавление файлов:
+git add .
+
+3. Создание коммита:
+git commit -m "Initial commit: Eco-Tourism Platform v1.0.0"
+
+4. Создайте репозиторий на GitHub:
+- Перейдите на https://github.com
+- Нажмите "New repository"
+- Название: eco-tourism-platform
+- НЕ ставьте галочки на README, .gitignore, license
+- Нажмите "Create repository"
+
+5. Подключение к GitHub (замените YOUR_USERNAME):
+git remote add origin https://github.com/YOUR_USERNAME/eco-tourism-platform.git
+
+6. Переименование ветки:
+git branch -M main
+
+7. Отправка на GitHub:
+git push -u origin main
+
+=====================================
+ГОТОВО! Проект размещен на GitHub.
+===================================== 

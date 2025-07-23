@@ -30,7 +30,7 @@ export default function GuideDashboard() {
         { name: t.createTour, action: 'create-tour' },
         { name: t.editTours, action: 'edit-tours' },
         { name: t.calendar, action: 'calendar' },
-        { name: t.statistics, action: 'statistics' }
+        { name: t.statisticsSection, action: 'statistics' }
       ]
     },
     {

@@ -221,6 +221,7 @@ export default function SearchResults({ results, isLoading = false, filters }: S
   // Используем переданные результаты или mockResults, если результаты не переданы
   const initialResults = results && results.length > 0 ? results : mockResults;
 
+  const filteredResults = React.useMemo(() => {
   const filterResults = (items: SearchResult[]) => {
     if (!filters) return items;
 
@@ -297,10 +298,9 @@ export default function SearchResults({ results, isLoading = false, filters }: S
     return sorted;
   };
 
-  const filteredResults = React.useMemo(() => {
     const filtered = filterResults(initialResults);
     return sortResults(filtered);
-  }, [initialResults, filters, sortBy, filterResults, sortResults]);
+  }, [initialResults, filters, sortBy]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('kk-KZ', {

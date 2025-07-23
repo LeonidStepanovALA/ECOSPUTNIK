@@ -5,7 +5,6 @@ import {
   AcademicCapIcon, 
   CalendarIcon, 
   PlusIcon, 
-  TrashIcon, 
   PencilIcon,
   EyeIcon,
   XMarkIcon,
@@ -18,6 +17,8 @@ import { translations } from '@/translations';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import EcoProjectsReport from '@/components/EcoProjectsReport';
 import FinancingStatusReport from '@/components/FinancingStatusReport';
+import { useNews } from '@/context/NewsContext';
+import { useEffect } from 'react';
 
 interface Course {
   id: number;
@@ -42,6 +43,7 @@ interface CalendarEvent {
 export default function AdminDashboard() {
   const { language, changeLanguage } = useLanguage();
   const t = translations[language];
+  const { news, addNews, updateNews, forceUpdateNews, clearDuplicates: clearNewsDuplicates, deleteNews, deleteNewsByTitle } = useNews();
 
   const [activeSection, setActiveSection] = useState('courses');
   const [showModal, setShowModal] = useState(false);
@@ -49,9 +51,40 @@ export default function AdminDashboard() {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [selectedStatAction, setSelectedStatAction] = useState<string | null>(null);
   const [showStatModal, setShowStatModal] = useState(false);
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
+  
+  // Состояние для формы добавления курса/события
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    duration: '',
+    level: '',
+    instructor: '',
+    date: '',
+    dateFrom: '',
+    dateTo: '',
+    type: '',
+    region: '',
+    status: 'active',
+    image: null as File | null
+  });
 
-  // Моковые данные
-  const mockCourses: Course[] = [
+  // Функция для сохранения событий в localStorage
+  const saveEventsToStorage = (eventsData: CalendarEvent[]) => {
+    if (typeof window !== 'undefined' && isDataLoaded) {
+      localStorage.setItem('eco-tourism-events', JSON.stringify(eventsData));
+    }
+  };
+
+  // Функция для сохранения курсов в localStorage
+  const saveCoursesToStorage = (coursesData: Course[]) => {
+    if (typeof window !== 'undefined' && isDataLoaded) {
+      localStorage.setItem('eco-tourism-courses', JSON.stringify(coursesData));
+    }
+  };
+
+  // Начальные данные для курсов
+  const initialCourses: Course[] = [
     {
       id: 1,
       title: t.courseBasicEcoTourism,
@@ -81,71 +114,69 @@ export default function AdminDashboard() {
     }
   ];
 
-  const mockEvents: CalendarEvent[] = [
-    {
-      id: '1',
-      title: t.eventIndependenceDay,
-      description: t.eventIndependenceDayDesc,
-      date: '2024-12-16',
-      type: 'holiday',
-      region: t.allRegions,
-      status: 'active'
-    },
-    {
-      id: '2',
-      title: t.eventPlantTree,
-      description: t.eventPlantTreeDesc,
-      date: '2024-10-15',
-      type: 'eco-event',
-      region: t.regionAlmaty,
-      status: 'active'
-    },
-    {
-      id: '3',
-      title: t.eventCleanBalkhash,
-      description: t.eventCleanBalkhashDesc,
-      date: '2024-09-20',
-      type: 'eco-event',
-      region: t.regionAlmatyOblast,
-      status: 'active'
-    },
-    {
-      id: '4',
-      title: t.eventNewEcoHotel,
-      description: t.eventNewEcoHotelDesc,
-      date: '2024-11-01',
-      type: 'news',
-      region: t.regionAlmaty,
-      status: 'active'
-    },
-    {
-      id: '5',
-      title: t.eventEcoToursDiscount,
-      description: t.eventEcoToursDiscountDesc,
-      date: '2024-10-25',
-      type: 'promotion',
-      region: t.allRegions,
-      status: 'active'
-    },
-    {
-      id: '6',
-      title: t.eventNewBikeRoutes,
-      description: t.eventNewBikeRoutesDesc,
-      date: '2024-10-10',
-      type: 'news',
-      region: t.regionAstana,
-      status: 'active'
-    },
-    {
-      id: '7',
-      title: t.eventFreeEcoTours,
-      description: t.eventFreeEcoToursDesc,
-      date: '2024-10-28',
-      type: 'promotion',
-      region: t.regionShymkent,
-      status: 'active'
+  // Начальные данные для событий (пустые для ручного добавления)
+  const initialEvents: CalendarEvent[] = [];
+
+  // Состояние для списков курсов и событий
+  const [courses, setCourses] = useState<Course[]>(initialCourses);
+  const [events, setEvents] = useState<CalendarEvent[]>(initialEvents);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  // Загружаем данные из localStorage после монтирования компонента
+  useEffect(() => {
+    const savedCourses = localStorage.getItem('eco-tourism-courses');
+    const savedEvents = localStorage.getItem('eco-tourism-events');
+    
+    if (savedCourses) {
+      try {
+        const parsedCourses = JSON.parse(savedCourses);
+        setCourses(parsedCourses);
+      } catch (error) {
+        console.error('Ошибка при загрузке курсов из localStorage:', error);
+      }
     }
-  ];
+    
+    if (savedEvents) {
+      try {
+        const parsedEvents = JSON.parse(savedEvents);
+        setEvents(parsedEvents);
+      } catch (error) {
+        console.error('Ошибка при загрузке событий из localStorage:', error);
+      }
+    }
+    
+    setIsDataLoaded(true);
+  }, []);
+
+  // Синхронизируем события с контекстом новостей при загрузке
+  useEffect(() => {
+    if (isDataLoaded && events.length > 0) {
+      console.log('Синхронизация событий с контекстом новостей...');
+      
+      // Получаем текущие новости из контекста
+      const currentNews = news.map(item => item.title);
+      console.log('Текущие новости в контексте:', currentNews);
+      
+      // Добавляем события в контекст новостей, если их там нет
+      events.forEach(event => {
+        if ((event.type === 'news' || event.type === 'promotion' || event.type === 'eco-event') && 
+            !currentNews.includes(event.title)) {
+          console.log('Добавляем событие в контекст новостей:', event.title, event.type);
+          
+          addNews({
+            type: event.type as 'news' | 'promotion' | 'eco-event',
+            title: event.title,
+            description: event.description,
+            date: event.date,
+            region: event.region,
+            status: event.status as 'active' | 'inactive',
+            discount: event.type === 'promotion' ? '20%' : undefined,
+            validUntil: event.type === 'promotion' ? '2024-12-31' : undefined
+          });
+        }
+      });
+    }
+  }, [isDataLoaded, events, news, addNews]);
 
   // Моковые данные для дашборда
   const dashboardData = {
@@ -619,11 +650,249 @@ export default function AdminDashboard() {
   const closeModal = () => {
     setShowModal(false);
     setModalType(null);
+    setEditingEventId(null);
+    setFormData({
+      title: '',
+      description: '',
+      duration: '',
+      level: '',
+      instructor: '',
+      date: '',
+      dateFrom: '',
+      dateTo: '',
+      type: '',
+      region: '',
+      status: 'active',
+      image: null
+    });
+  };
+
+  const handleInputChange = (field: string, value: string | File) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSave = () => {
+    if (modalType === 'course') {
+      const newCourse: Course = {
+        id: courses.length + 1,
+        title: formData.title,
+        description: formData.description,
+        duration: formData.duration,
+        level: formData.level,
+        instructor: formData.instructor,
+        status: formData.status as 'active' | 'inactive'
+      };
+      const updatedCourses = [...courses, newCourse];
+      setCourses(updatedCourses);
+      saveCoursesToStorage(updatedCourses);
+      console.log('Сохранен новый курс:', newCourse);
+    } else if (modalType === 'event') {
+      // Определяем дату в зависимости от типа события
+      let eventDate = formData.date;
+      if (formData.type === 'eco-event') {
+        eventDate = `${formData.dateFrom} - ${formData.dateTo}`;
+      } else if (formData.type === 'news') {
+        eventDate = new Date().toISOString().split('T')[0]; // Текущая дата для новостей
+      }
+
+      if (editingEventId) {
+        // Режим редактирования - обновляем существующее событие
+        const updatedEvents = events.map(event => 
+          event.id === editingEventId 
+            ? {
+                ...event,
+                title: formData.title,
+                description: formData.description,
+                date: eventDate,
+                type: formData.type as 'holiday' | 'eco-event' | 'promotion' | 'news',
+                region: formData.region,
+                status: formData.status as 'active' | 'inactive'
+              }
+            : event
+        );
+        setEvents(updatedEvents);
+        saveEventsToStorage(updatedEvents);
+        
+        // Обновляем в контексте новостей, если это новость, акция или эко-событие
+        if (formData.type === 'news' || formData.type === 'promotion' || formData.type === 'eco-event') {
+          // Находим старое событие
+          const oldEvent = events.find(event => event.id === editingEventId);
+          if (oldEvent && (oldEvent.type === 'news' || oldEvent.type === 'promotion' || oldEvent.type === 'eco-event')) {
+            // Находим соответствующую новость в контексте
+            const existingNewsItem = news.find(item => item.title === oldEvent.title);
+            
+            // Определяем правильную дату для новостей
+            let newsDate = formData.date;
+            if (formData.type === 'eco-event' && formData.dateFrom && formData.dateTo) {
+              // Для эко-событий используем дату начала
+              newsDate = formData.dateFrom;
+            } else if (formData.type === 'news') {
+              // Для новостей используем текущую дату
+              newsDate = new Date().toISOString().split('T')[0];
+            }
+            
+            if (existingNewsItem) {
+              // Обновляем существующую новость вместо создания новой
+              const updatedNewsItem = {
+                ...existingNewsItem,
+                title: formData.title,
+                description: formData.description,
+                type: formData.type as 'news' | 'promotion' | 'eco-event',
+                date: newsDate,
+                region: formData.region,
+                status: formData.status as 'active' | 'inactive',
+                image: formData.image,
+                discount: formData.type === 'promotion' ? '20%' : undefined,
+                validUntil: formData.type === 'promotion' ? '2024-12-31' : undefined
+              };
+              
+              // Обновляем в контексте
+              updateNews(existingNewsItem.id, updatedNewsItem);
+              console.log('Обновлена существующая новость:', formData.title);
+            } else {
+              // Если не нашли существующую новость, добавляем новую
+              addNews({
+                type: formData.type as 'news' | 'promotion' | 'eco-event',
+                title: formData.title,
+                description: formData.description,
+                date: newsDate,
+                region: formData.region,
+                status: formData.status as 'active' | 'inactive',
+                image: formData.image,
+                discount: formData.type === 'promotion' ? '20%' : undefined,
+                validUntil: formData.type === 'promotion' ? '2024-12-31' : undefined
+              });
+              console.log('Добавлена новая новость:', formData.title, 'тип:', formData.type, 'статус:', formData.status);
+            }
+          }
+        }
+        
+        console.log('Обновлено событие:', formData.title);
+        
+        // Автоматически очищаем дубликаты после обновления
+        setTimeout(() => {
+          console.log('Автоматическая очистка дубликатов после обновления...');
+          clearNewsDuplicates();
+          console.log('Дубликаты новостей удалены автоматически');
+        }, 100);
+      } else {
+        // Режим создания - добавляем новое событие
+        const newEvent: CalendarEvent = {
+          id: `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          title: formData.title,
+          description: formData.description,
+          date: eventDate,
+          type: formData.type as 'holiday' | 'eco-event' | 'promotion' | 'news',
+          region: formData.region,
+          status: formData.status as 'active' | 'inactive'
+        };
+        const updatedEvents = [...events, newEvent];
+        setEvents(updatedEvents);
+        saveEventsToStorage(updatedEvents);
+        
+        // Также добавляем в контекст новостей, если это новость, акция или эко-событие
+        if (formData.type === 'news' || formData.type === 'promotion' || formData.type === 'eco-event') {
+          // Определяем правильную дату для новостей
+          let newsDate = formData.date;
+          if (formData.type === 'eco-event' && formData.dateFrom && formData.dateTo) {
+            // Для эко-событий используем дату начала
+            newsDate = formData.dateFrom;
+          } else if (formData.type === 'news') {
+            // Для новостей используем текущую дату
+            newsDate = new Date().toISOString().split('T')[0];
+          }
+          
+          addNews({
+            type: formData.type as 'news' | 'promotion' | 'eco-event',
+            title: formData.title,
+            description: formData.description,
+            date: newsDate,
+            region: formData.region,
+            status: formData.status as 'active' | 'inactive',
+            image: formData.image,
+            discount: formData.type === 'promotion' ? '20%' : undefined,
+            validUntil: formData.type === 'promotion' ? '2024-12-31' : undefined
+          });
+          console.log('Добавлена новая новость:', formData.title, 'тип:', formData.type, 'статус:', formData.status);
+        }
+        
+        console.log('Сохранено новое событие:', newEvent);
+      }
+    }
+    closeModal();
   };
 
   const handleStatAction = (action: string) => {
     setSelectedStatAction(action);
     setShowStatModal(true);
+  };
+
+  // Функция для принудительной очистки дубликатов
+  const clearDuplicates = () => {
+    console.log('=== НАЧАЛО ОЧИСТКИ ДУБЛИКАТОВ ===');
+    
+    // Проверяем дубликаты в событиях
+    const eventTitles = events.map(event => event.title);
+    const duplicateEventTitles = eventTitles.filter((title, index) => eventTitles.indexOf(title) !== index);
+    console.log('Дубликаты в событиях:', duplicateEventTitles);
+    
+    // Удаляем дубликаты событий (оставляем только первое)
+    const uniqueEvents = events.filter((event, index, self) => 
+      index === self.findIndex(e => e.title === event.title)
+    );
+    
+    if (uniqueEvents.length !== events.length) {
+      console.log(`Удалено ${events.length - uniqueEvents.length} дубликатов событий`);
+      setEvents(uniqueEvents);
+      saveEventsToStorage(uniqueEvents);
+    }
+    
+    // Очищаем дубликаты новостей через контекст
+    clearNewsDuplicates();
+    
+    // Синхронизируем события с новостями
+    console.log('Синхронизация событий с новостями...');
+    const eventNewsTitles = uniqueEvents
+      .filter(event => event.type === 'news' || event.type === 'promotion' || event.type === 'eco-event')
+      .map(event => event.title);
+    
+    const currentNewsTitles = news.map(item => item.title);
+    
+    // Добавляем события в новости, если их там нет
+    uniqueEvents.forEach(event => {
+      if ((event.type === 'news' || event.type === 'promotion' || event.type === 'eco-event') && 
+          !currentNewsTitles.includes(event.title)) {
+        console.log('Добавляем событие в новости:', event.title, event.type);
+        
+        // Определяем правильную дату для новостей
+        let newsDate = event.date;
+        if (event.type === 'eco-event' && event.date.includes(' - ')) {
+          // Для эко-событий берем дату начала из диапазона
+          newsDate = event.date.split(' - ')[0];
+        }
+        
+        addNews({
+          type: event.type as 'news' | 'promotion' | 'eco-event',
+          title: event.title,
+          description: event.description,
+          date: newsDate,
+          region: event.region,
+          status: event.status as 'active' | 'inactive',
+          discount: event.type === 'promotion' ? '20%' : undefined,
+          validUntil: event.type === 'promotion' ? '2024-12-31' : undefined
+        });
+      }
+    });
+    
+    console.log('=== ОЧИСТКА ДУБЛИКАТОВ ЗАВЕРШЕНА ===');
+    console.log('Итоговое количество событий:', uniqueEvents.length);
+    console.log('Итоговое количество новостей:', news.length);
+    
+    // Показываем уведомление пользователю
+    alert(`Очистка завершена!\nУдалено дубликатов событий: ${events.length - uniqueEvents.length}\nДубликаты новостей очищены автоматически`);
   };
 
   const closeStatModal = () => {
@@ -641,6 +910,64 @@ export default function AdminDashboard() {
     setExpandedItems(newExpanded);
   };
 
+  const handleEditEvent = (event: CalendarEvent) => {
+    setModalType('event');
+    setEditingEventId(event.id);
+    
+    // Находим соответствующую новость в контексте для получения изображения
+    const newsItem = news.find(item => item.title === event.title);
+    
+    setFormData({
+      title: event.title,
+      description: event.description,
+      duration: '',
+      level: '',
+      instructor: '',
+      date: event.date.includes(' - ') ? '' : event.date,
+      dateFrom: event.date.includes(' - ') ? event.date.split(' - ')[0] : '',
+      dateTo: event.date.includes(' - ') ? event.date.split(' - ')[1] : '',
+      type: event.type,
+      region: event.region,
+      status: event.status,
+      image: newsItem?.image || null
+    });
+    setShowModal(true);
+  };
+
+  const handleDeleteEvent = (eventId: string) => {
+    if (confirm('Вы уверены, что хотите удалить это событие?')) {
+      const updatedEvents = events.filter(event => event.id !== eventId);
+      setEvents(updatedEvents);
+      saveEventsToStorage(updatedEvents);
+      
+      // Также удаляем из контекста новостей, если это новость, акция или эко-событие
+      const eventToDelete = events.find(event => event.id === eventId);
+      if (eventToDelete && (eventToDelete.type === 'news' || eventToDelete.type === 'promotion' || eventToDelete.type === 'eco-event')) {
+        console.log('Удаляем событие из контекста:', eventToDelete.title, eventToDelete.type);
+        
+        // Удаляем все новости с таким же названием (на случай дублирования)
+        const newsToDelete = news.filter(item => item.title === eventToDelete.title);
+        console.log('Найдено новостей для удаления:', newsToDelete.length);
+        
+        newsToDelete.forEach(newsItem => {
+          console.log('Удаляем новость по ID:', newsItem.id, newsItem.title);
+          deleteNews(newsItem.id);
+        });
+        
+        // Также удаляем по названию для надежности
+        console.log('Удаляем по названию:', eventToDelete.title);
+        deleteNewsByTitle(eventToDelete.title);
+        
+        // Принудительно обновляем состояние
+        setTimeout(() => {
+          console.log('Принудительное обновление состояния после удаления');
+          const currentNews = news.filter(item => item.title !== eventToDelete.title);
+          console.log('Оставшиеся новости:', currentNews.map(item => ({ id: item.id, title: item.title, type: item.type })));
+        }, 100);
+      }
+    }
+  };
+
   const renderCourses = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -655,7 +982,7 @@ export default function AdminDashboard() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockCourses.map((course) => (
+        {courses.map((course) => (
           <div key={course.id} className="bg-white p-6 rounded-lg shadow-md border-2 border-green-100">
             <div className="flex justify-between items-start mb-4">
               <h4 className="text-lg font-semibold text-green-800">{course.title}</h4>
@@ -694,18 +1021,44 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-semibold text-green-800">{t.eventCalendarFull}</h3>
-        <button
-          onClick={() => handleAddNew('event')}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center space-x-2"
-        >
-          <PlusIcon className="w-5 h-5" />
-          <span>Добавить событие/новость</span>
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={checkNewsState}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+          >
+            <span>Проверить состояние</span>
+          </button>
+          <button
+            onClick={clearDuplicates}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            Очистить дубликаты
+          </button>
+          <button
+            onClick={clearNewsDuplicates}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            Очистить дубликаты новостей
+          </button>
+          <button
+            onClick={clearAllNewsAndEvents}
+            className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 flex items-center space-x-2"
+          >
+            <span>Очистить ВСЕ</span>
+          </button>
+          <button
+            onClick={() => handleAddNew('event')}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center space-x-2"
+          >
+            <PlusIcon className="w-5 h-5" />
+            <span>Добавить событие/новость</span>
+          </button>
+        </div>
       </div>
       
       <div className="space-y-4">
-        {mockEvents.map((event) => (
-          <div key={event.id} className="bg-white p-6 rounded-lg shadow-md border-2 border-green-100">
+        {events.map((event, index) => (
+          <div key={`${event.id}_${index}`} className="bg-white p-6 rounded-lg shadow-md border-2 border-green-100">
             <div className="flex justify-between items-start mb-4">
               <h4 className="text-lg font-semibold text-green-800">{event.title}</h4>
               <div className="flex space-x-2">
@@ -737,10 +1090,16 @@ export default function AdminDashboard() {
                 {event.type === 'promotion' && <span>Категория: Акция</span>}
               </div>
               <div className="flex space-x-2">
-                <button className="bg-green-100 text-green-800 px-3 py-1 rounded hover:bg-green-200 text-sm">
+                <button 
+                  onClick={() => handleEditEvent(event)}
+                  className="bg-green-100 text-green-800 px-3 py-1 rounded hover:bg-green-200 text-sm"
+                >
                   Редактировать
                 </button>
-                <button className="bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200 text-sm">
+                <button 
+                  onClick={() => handleDeleteEvent(event.id)}
+                  className="bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200 text-sm"
+                >
                   Удалить
                 </button>
               </div>
@@ -1691,6 +2050,49 @@ export default function AdminDashboard() {
     }
   };
 
+  // Функция для проверки состояния новостей и событий
+  const checkNewsState = () => {
+    console.log('=== ПРОВЕРКА СОСТОЯНИЯ ===');
+    console.log('События в админ панели:', events.map(event => ({ id: event.id, title: event.title, type: event.type })));
+    console.log('Новости в контексте:', news.map(item => ({ id: item.id, title: item.title, type: item.type })));
+    
+    // Проверяем синхронизацию
+    const eventNewsTitles = events
+      .filter(event => event.type === 'news' || event.type === 'promotion' || event.type === 'eco-event')
+      .map(event => event.title);
+    
+    const newsTitles = news.map(item => item.title);
+    
+    const missingInNews = eventNewsTitles.filter(title => !newsTitles.includes(title));
+    const missingInEvents = newsTitles.filter(title => !eventNewsTitles.includes(title));
+    
+    console.log('События, отсутствующие в новостях:', missingInNews);
+    console.log('Новости, отсутствующие в событиях:', missingInEvents);
+    console.log('=== ПРОВЕРКА ЗАВЕРШЕНА ===');
+  };
+
+  // Функция для полной очистки всех новостей и событий
+  const clearAllNewsAndEvents = () => {
+    console.log('=== ПОЛНАЯ ОЧИСТКА ВСЕХ НОВОСТЕЙ И СОБЫТИЙ ===');
+    
+    // Очищаем все события
+    setEvents([]);
+    saveEventsToStorage([]);
+    console.log('Все события удалены');
+    
+    // Очищаем все новости
+    forceUpdateNews([]);
+    console.log('Все новости удалены');
+    
+    // Очищаем localStorage
+    localStorage.removeItem('eco-tourism-events');
+    localStorage.removeItem('eco-tourism-news');
+    console.log('localStorage очищен');
+    
+    console.log('=== ОЧИСТКА ЗАВЕРШЕНА ===');
+    console.log('Теперь можете добавлять новые события и новости вручную');
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
       <div className="max-w-6xl mx-auto">
@@ -1741,7 +2143,7 @@ export default function AdminDashboard() {
               }`}
             >
               <ChartBarIcon className="w-5 h-5" />
-              <span>{t.statistics}</span>
+              <span>{t.adminStatistics}</span>
             </button>
           </div>
         </div>
@@ -1755,11 +2157,11 @@ export default function AdminDashboard() {
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <div className="flex justify-between items-center mb-4">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-green-800">
                 {modalType === 'course' ? t.addCourse :
-                 modalType === 'event' ? t.addEvent : ''}
+                 modalType === 'event' ? (editingEventId ? 'Редактировать событие' : t.addEvent) : ''}
               </h3>
               <button
                 onClick={closeModal}
@@ -1769,12 +2171,16 @@ export default function AdminDashboard() {
               </button>
             </div>
             
+            <div className="p-6 overflow-y-auto flex-1">
+            
             {modalType === 'course' && (
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.courseName}</label>
                   <input
                     type="text"
+                    value={formData.title}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={t.courseNamePlaceholder}
                   />
@@ -1782,6 +2188,8 @@ export default function AdminDashboard() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.description}</label>
                   <textarea
+                    value={formData.description}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     rows={3}
                     placeholder={t.courseDescriptionPlaceholder}
@@ -1790,18 +2198,45 @@ export default function AdminDashboard() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.duration}</label>
                   <input
-                    type="number"
+                    type="text"
+                    value={formData.duration}
+                    onChange={(e) => handleInputChange('duration', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={t.durationPlaceholder}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.level}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                  <select 
+                    value={formData.level}
+                    onChange={(e) => handleInputChange('level', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
                     <option value="">{t.selectLevel}</option>
                     <option value="beginner">{t.beginner}</option>
                     <option value="intermediate">{t.intermediate}</option>
                     <option value="advanced">{t.advanced}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Инструктор</label>
+                  <input
+                    type="text"
+                    value={formData.instructor}
+                    onChange={(e) => handleInputChange('instructor', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Введите имя инструктора"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventStatus}</label>
+                  <select 
+                    value={formData.status}
+                    onChange={(e) => handleInputChange('status', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
+                    <option value="active">{t.activeStatus}</option>
+                    <option value="inactive">{t.inactiveStatus}</option>
                   </select>
                 </div>
               </div>
@@ -1810,9 +2245,25 @@ export default function AdminDashboard() {
             {modalType === 'event' && (
               <div className="space-y-4">
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventType}</label>
+                  <select 
+                    value={formData.type}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
+                    <option value="">{t.selectEventType}</option>
+                    <option value="holiday">{t.holiday}</option>
+                    <option value="eco-event">{t.ecoEvent}</option>
+                    <option value="news">{t.eventNews}</option>
+                    <option value="promotion">{t.promotion}</option>
+                  </select>
+                </div>
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventName}</label>
                   <input
                     type="text"
+                    value={formData.title}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={t.eventNamePlaceholder}
                   />
@@ -1820,31 +2271,58 @@ export default function AdminDashboard() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.description}</label>
                   <textarea
+                    value={formData.description}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     rows={3}
                     placeholder={t.eventDescriptionPlaceholder}
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventDate}</label>
-                  <input
-                    type="date"
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventType}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option value="">{t.selectEventType}</option>
-                    <option value="holiday">{t.holiday}</option>
-                    <option value="eco-event">{t.ecoEvent}</option>
-                    <option value="news">{t.news}</option>
-                    <option value="promotion">{t.promotion}</option>
-                  </select>
-                </div>
+                {/* Динамические поля дат в зависимости от типа события */}
+                {formData.type === 'news' ? (
+                  // Для новостей дата не нужна
+                  null
+                ) : formData.type === 'eco-event' ? (
+                  // Для эко-событий нужен промежуток дат
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Дата начала</label>
+                      <input
+                        type="date"
+                        value={formData.dateFrom}
+                        onChange={(e) => handleInputChange('dateFrom', e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Дата окончания</label>
+                      <input
+                        type="date"
+                        value={formData.dateTo}
+                        onChange={(e) => handleInputChange('dateTo', e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  // Для остальных типов событий одна дата
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventDate}</label>
+                    <input
+                      type="date"
+                      value={formData.date}
+                      onChange={(e) => handleInputChange('date', e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    />
+                  </div>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventRegion}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                  <select 
+                    value={formData.region}
+                    onChange={(e) => handleInputChange('region', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
                     <option value="">{t.selectEventRegion}</option>
                     <option value="Все регионы">{t.allRegions}</option>
                     <option value="Алматы">Алматы</option>
@@ -1855,22 +2333,60 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventStatus}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                  <select 
+                    value={formData.status}
+                    onChange={(e) => handleInputChange('status', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
                     <option value="active">{t.activeStatus}</option>
                     <option value="inactive">{t.inactiveStatus}</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Изображение</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleInputChange('image', file);
+                      }
+                    }}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                  {formData.image && (
+                    <div className="mt-2">
+                      <p className="text-sm text-green-600">✓ Файл выбран: {formData.image.name}</p>
+                      {formData.image instanceof File && (
+                        <div className="mt-2">
+                          <img 
+                            src={URL.createObjectURL(formData.image)} 
+                            alt="Предварительный просмотр"
+                            className="max-w-full h-auto rounded-lg shadow-md"
+                            style={{ maxHeight: '200px' }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             
-            <div className="flex justify-end space-x-3 mt-6">
+            </div>
+            
+            <div className="flex justify-end space-x-3 p-6 border-t border-gray-200">
               <button
                 onClick={closeModal}
                 className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
               >
                 {t.cancel}
               </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+              <button 
+                onClick={handleSave}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              >
                 {t.save}
               </button>
             </div>

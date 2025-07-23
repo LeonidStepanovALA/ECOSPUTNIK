@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { NewsProvider } from "@/context/NewsContext";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
@@ -16,7 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <body className={`${inter.className} bg-green-50`}>{children}</body>
+      <body className={`${inter.className} bg-green-50`}>
+        <NewsProvider>
+          {children}
+        </NewsProvider>
+      </body>
     </html>
   );
 }

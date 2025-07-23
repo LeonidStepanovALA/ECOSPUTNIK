@@ -1,7 +1,11 @@
+'use client';
+
 import React from 'react';
+import Link from 'next/link';
 import { CloudIcon, StarIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/hooks/useLanguage';
 import { translations } from '@/translations';
+import { useNews } from '@/context/NewsContext';
 
 interface TouristStatsProps {
   className?: string;
@@ -40,6 +44,16 @@ const mockTouristData = {
 export default function TouristStats({ className = '' }: TouristStatsProps) {
   const { language } = useLanguage();
   const t = translations[language];
+  const { getActiveNews } = useNews();
+  
+  // Подсчитываем количество активных эко-событий
+  const activeNews = getActiveNews();
+  const ecoEventsCount = 5; // Фиксированное количество эко-событий на странице
+  
+  // Отладочная информация
+  console.log('TouristStats - активные новости:', activeNews.map(item => ({ id: item.id, title: item.title, type: item.type, status: item.status })));
+  console.log('TouristStats - количество эко-событий:', ecoEventsCount);
+  console.log('TouristStats - все эко-события:', activeNews.filter(item => item.type === 'eco-event'));
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -207,7 +221,7 @@ export default function TouristStats({ className = '' }: TouristStatsProps) {
           </div>
           
           <div>
-            <h4 className="font-medium text-green-800 mb-3">{t.statistics}</h4>
+            <h4 className="font-medium text-green-800 mb-3">{t.statisticsSection}</h4>
             <div className="space-y-2">
               <div className="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
                 <span className="text-sm text-gray-600">{t.ecoActionsCompleted}</span>
@@ -241,7 +255,15 @@ export default function TouristStats({ className = '' }: TouristStatsProps) {
             <StarIcon className="w-5 h-5 text-green-500 mt-0.5" />
             <div>
               <p className="font-medium text-green-800">{t.ecoVolunteering}</p>
-              <p className="text-sm text-green-600">{t.ecoVolunteeringDesc}</p>
+              <p className="text-sm text-green-600">
+                {t.ecoVolunteeringDesc} 
+                <Link 
+                  href="/tourist/eco-events" 
+                  className="font-semibold text-green-700 ml-1 hover:text-green-800 hover:underline cursor-pointer transition-colors"
+                >
+                  {t.availableEcoEvents}: {ecoEventsCount}
+                </Link>
+              </p>
             </div>
           </div>
           <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
