@@ -639,6 +639,121 @@ export default function AdminDashboard() {
           ]
         }
       ]
+    },
+    {
+      id: 'accommodationEcoMeasures',
+      title: t.accommodationEcoMeasures,
+      icon: ChartBarIcon,
+      items: [
+        { 
+          name: t.energyEfficiency, 
+          action: 'energy-efficiency',
+          subItems: [
+            { name: t.solarEnergy, action: 'solar-energy' },
+            { name: t.windEnergy, action: 'wind-energy' },
+            { name: t.geothermalEnergy, action: 'geothermal-energy' },
+            { name: t.energyStorage, action: 'energy-storage' },
+            { name: t.smartLighting, action: 'smart-lighting' },
+            { name: t.energyMonitoring, action: 'energy-monitoring' }
+          ]
+        },
+        { 
+          name: t.waterConservation, 
+          action: 'water-conservation',
+          subItems: [
+            { name: t.waterRecycling, action: 'water-recycling' },
+            { name: t.rainwaterCollection, action: 'rainwater-collection' },
+            { name: t.waterFiltration, action: 'water-filtration' },
+            { name: t.waterEfficientFixtures, action: 'water-efficient-fixtures' },
+            { name: t.greywaterSystems, action: 'greywater-systems' },
+            { name: t.waterConservationPrograms, action: 'water-conservation-programs' }
+          ]
+        },
+        { 
+          name: t.wasteManagement, 
+          action: 'waste-management',
+          subItems: [
+            { name: t.wasteReductionMeasures, action: 'waste-reduction-measures' },
+            { name: t.compostingSystems, action: 'composting-systems' },
+            { name: t.recyclingPrograms, action: 'recycling-programs' },
+            { name: t.zeroWaste, action: 'zero-waste' },
+            { name: t.wasteAudit, action: 'waste-audit' },
+            { name: t.wasteEducation, action: 'waste-education' }
+          ]
+        },
+        { 
+          name: t.sustainableFood, 
+          action: 'sustainable-food',
+          subItems: [
+            { name: t.organicFood, action: 'organic-food' },
+            { name: t.localSuppliers, action: 'local-suppliers' },
+            { name: t.seasonalMenu, action: 'seasonal-menu' },
+            { name: t.foodWasteReduction, action: 'food-waste-reduction' },
+            { name: t.sustainableFishing, action: 'sustainable-fishing' },
+            { name: t.vegetarianOptions, action: 'vegetarian-options' }
+          ]
+        },
+        { 
+          name: t.ecoTransport, 
+          action: 'eco-transport',
+          subItems: [
+            { name: t.electricVehicles, action: 'electric-vehicles' },
+            { name: t.bicycleInfrastructure, action: 'bicycle-infrastructure' },
+            { name: t.publicTransport, action: 'public-transport' },
+            { name: t.carpooling, action: 'carpooling' },
+            { name: t.walkingPaths, action: 'walking-paths' },
+            { name: t.ecoShuttle, action: 'eco-shuttle' }
+          ]
+        },
+        { 
+          name: t.greenBuilding, 
+          action: 'green-building',
+          subItems: [
+            { name: t.greenMaterials, action: 'green-materials' },
+            { name: t.naturalVentilation, action: 'natural-ventilation' },
+            { name: t.greenRoof, action: 'green-roof' },
+            { name: t.passiveDesign, action: 'passive-design' },
+            { name: t.sustainableConstruction, action: 'sustainable-construction' },
+            { name: t.ecoCertification, action: 'eco-certification' }
+          ]
+        },
+        { 
+          name: t.biodiversity, 
+          action: 'biodiversity',
+          subItems: [
+            { name: t.nativePlants, action: 'native-plants' },
+            { name: t.wildlifeHabitat, action: 'wildlife-habitat' },
+            { name: t.birdSanctuary, action: 'bird-sanctuary' },
+            { name: t.butterflyGarden, action: 'butterfly-garden' },
+            { name: t.organicGardening, action: 'organic-gardening' },
+            { name: t.biodiversityMonitoring, action: 'biodiversity-monitoring' }
+          ]
+        },
+        { 
+          name: t.communityEngagement, 
+          action: 'community-engagement',
+          subItems: [
+            { name: t.localEmployment, action: 'local-employment' },
+            { name: t.culturalPreservation, action: 'cultural-preservation' },
+            { name: t.communityProjects, action: 'community-projects' },
+            { name: t.educationalPrograms, action: 'educational-programs' },
+            { name: t.volunteerOpportunities, action: 'volunteer-opportunities' },
+            { name: t.localPartnerships, action: 'local-partnerships' }
+          ]
+        },
+        { 
+          name: t.carbonNeutrality, 
+          action: 'carbon-neutrality',
+          subItems: [
+            { name: t.carbonOffsetting, action: 'carbon-offsetting' },
+            { name: t.carbonAudit, action: 'carbon-audit' },
+            { name: t.carbonReduction, action: 'carbon-reduction' },
+            { name: t.carbonNeutralCertification, action: 'carbon-neutral-certification' },
+            { name: t.carbonReporting, action: 'carbon-reporting' },
+            { name: t.carbonEducation, action: 'carbon-education' }
+          ]
+        }
+      ]
     }
   ];
 
@@ -1962,6 +2077,17 @@ export default function AdminDashboard() {
           </div>
         );
         
+      case 'energy-efficiency':
+      case 'water-conservation':
+      case 'waste-management':
+      case 'sustainable-food':
+      case 'eco-transport':
+      case 'green-building':
+      case 'biodiversity':
+      case 'community-engagement':
+      case 'carbon-neutrality':
+        return renderAccommodationEcoMeasures(action);
+        
       default:
         return (
           <div className="space-y-6">
@@ -2035,6 +2161,340 @@ export default function AdminDashboard() {
           </div>
         );
     }
+  };
+
+  const renderAccommodationEcoMeasures = (action: string) => {
+    // Моковые данные для экологических мер точек размещения
+    const ecoMeasuresData = {
+      energyEfficiency: {
+        totalAccommodations: 150,
+        implementingMeasures: 89,
+        solarEnergy: 45,
+        windEnergy: 23,
+        geothermalEnergy: 12,
+        energyStorage: 34,
+        smartLighting: 67,
+        energyMonitoring: 78
+      },
+      waterConservation: {
+        totalAccommodations: 150,
+        implementingMeasures: 112,
+        waterRecycling: 56,
+        rainwaterCollection: 78,
+        waterFiltration: 89,
+        waterEfficientFixtures: 134,
+        greywaterSystems: 45,
+        waterConservationPrograms: 67
+      },
+      wasteManagement: {
+        totalAccommodations: 150,
+        implementingMeasures: 98,
+        wasteReduction: 67,
+        compostingSystems: 45,
+        recyclingPrograms: 89,
+        zeroWaste: 23,
+        wasteAudit: 56,
+        wasteEducation: 78
+      },
+      sustainableFood: {
+        totalAccommodations: 150,
+        implementingMeasures: 134,
+        organicFood: 89,
+        localSuppliers: 112,
+        seasonalMenu: 78,
+        foodWasteReduction: 67,
+        sustainableFishing: 45,
+        vegetarianOptions: 98
+      },
+      ecoTransport: {
+        totalAccommodations: 150,
+        implementingMeasures: 67,
+        electricVehicles: 34,
+        bicycleInfrastructure: 56,
+        publicTransport: 89,
+        carpooling: 45,
+        walkingPaths: 78,
+        ecoShuttle: 23
+      },
+      greenBuilding: {
+        totalAccommodations: 150,
+        implementingMeasures: 89,
+        greenMaterials: 67,
+        naturalVentilation: 78,
+        greenRoof: 34,
+        passiveDesign: 45,
+        sustainableConstruction: 56,
+        ecoCertification: 89
+      },
+      biodiversity: {
+        totalAccommodations: 150,
+        implementingMeasures: 78,
+        nativePlants: 67,
+        wildlifeHabitat: 45,
+        birdSanctuary: 34,
+        butterflyGarden: 23,
+        organicGardening: 89,
+        biodiversityMonitoring: 56
+      },
+      communityEngagement: {
+        totalAccommodations: 150,
+        implementingMeasures: 112,
+        localEmployment: 134,
+        culturalPreservation: 89,
+        communityProjects: 67,
+        educationalPrograms: 78,
+        volunteerOpportunities: 56,
+        localPartnerships: 98
+      },
+      carbonNeutrality: {
+        totalAccommodations: 150,
+        implementingMeasures: 45,
+        carbonOffsetting: 34,
+        carbonAudit: 56,
+        carbonReduction: 67,
+        carbonNeutralCertification: 23,
+        carbonReporting: 45,
+        carbonEducation: 78
+      }
+    };
+
+    // Конкретные примеры точек размещения с их мерами
+    const accommodationExamples = {
+      energyEfficiency: [
+        { name: "Eco Hotel Almaty", region: "Алматы", score: 95, measures: ["Солнечные панели 50 кВт", "Умное освещение LED", "Система мониторинга энергии"], status: "Лидер" },
+        { name: "Green Resort Shymkent", region: "Шымкент", score: 88, measures: ["Ветровые турбины", "Геотермальное отопление", "Аккумуляторы энергии"], status: "Активный" },
+        { name: "Solar Lodge Astana", region: "Астана", score: 82, measures: ["Солнечные коллекторы", "Энергоэффективные окна", "Автоматизация систем"], status: "Развивающийся" },
+        { name: "Wind Eco Hotel", region: "Алматинская область", score: 78, measures: ["Ветровая энергия", "Умные термостаты", "Энергосберегающие приборы"], status: "Активный" },
+        { name: "Smart Energy Resort", region: "Алматы", score: 75, measures: ["Гибридная система", "Мониторинг в реальном времени", "Оптимизация нагрузки"], status: "Развивающийся" },
+        { name: "Eco Power Lodge", region: "Шымкент", score: 72, measures: ["Микро-ГЭС", "Солнечные панели", "Система управления"], status: "Активный" },
+        { name: "Green Energy Hotel", region: "Астана", score: 68, measures: ["Биомассовые котлы", "Тепловые насосы", "Энергоаудит"], status: "Развивающийся" },
+        { name: "Sustainable Power Inn", region: "Алматинская область", score: 65, measures: ["Солнечные водонагреватели", "Энергоэффективная вентиляция", "Умные счетчики"], status: "Активный" },
+        { name: "Eco Energy Resort", region: "Алматы", score: 62, measures: ["Ветровые генераторы", "Геотермальные системы", "Автоматизация"], status: "Развивающийся" },
+        { name: "Green Power Lodge", region: "Шымкент", score: 58, measures: ["Солнечные панели", "Энергосберегающие технологии", "Мониторинг"], status: "Активный" }
+      ],
+      waterConservation: [
+        { name: "Aqua Eco Hotel", region: "Алматы", score: 96, measures: ["Система очистки воды", "Сбор дождевой воды", "Водосберегающая сантехника"], status: "Лидер" },
+        { name: "Water Wise Resort", region: "Шымкент", score: 91, measures: ["Система серой воды", "Фильтрация воды", "Программы экономии"], status: "Активный" },
+        { name: "Eco Water Lodge", region: "Астана", score: 87, measures: ["Переработка воды", "Умные краны", "Мониторинг расхода"], status: "Развивающийся" },
+        { name: "Sustainable Water Inn", region: "Алматинская область", score: 84, measures: ["Система рециркуляции", "Водосберегающие души", "Образовательные программы"], status: "Активный" },
+        { name: "Green Water Hotel", region: "Алматы", score: 81, measures: ["Очистка сточных вод", "Система орошения", "Контроль утечек"], status: "Развивающийся" },
+        { name: "Eco Aqua Resort", region: "Шымкент", score: 78, measures: ["Система фильтрации", "Водосберегающие туалеты", "Мониторинг качества"], status: "Активный" },
+        { name: "Water Conservation Lodge", region: "Астана", score: 75, measures: ["Система сбора дождевой воды", "Экономичные смесители", "Обучение персонала"], status: "Развивающийся" },
+        { name: "Sustainable Aqua Inn", region: "Алматинская область", score: 72, measures: ["Система очистки", "Водосберегающие технологии", "Программы осведомленности"], status: "Активный" },
+        { name: "Green Water Resort", region: "Алматы", score: 69, measures: ["Система рециркуляции", "Умные счетчики воды", "Контроль качества"], status: "Развивающийся" },
+        { name: "Eco Water Inn", region: "Шымкент", score: 66, measures: ["Система фильтрации", "Водосберегающая сантехника", "Мониторинг"], status: "Активный" }
+      ],
+      wasteManagement: [
+        { name: "Zero Waste Hotel", region: "Алматы", score: 98, measures: ["Полная переработка отходов", "Компостирование", "Система сортировки"], status: "Лидер" },
+        { name: "Eco Waste Resort", region: "Шымкент", score: 92, measures: ["Программы переработки", "Система компостирования", "Образовательные программы"], status: "Активный" },
+        { name: "Green Waste Lodge", region: "Астана", score: 88, measures: ["Сортировка отходов", "Компостирование", "Сокращение пластика"], status: "Развивающийся" },
+        { name: "Sustainable Waste Inn", region: "Алматинская область", score: 85, measures: ["Переработка бумаги", "Система компостирования", "Обучение персонала"], status: "Активный" },
+        { name: "Eco Waste Hotel", region: "Алматы", score: 82, measures: ["Сортировка отходов", "Переработка стекла", "Сокращение отходов"], status: "Развивающийся" },
+        { name: "Green Waste Resort", region: "Шымкент", score: 79, measures: ["Система компостирования", "Переработка пластика", "Образовательные программы"], status: "Активный" },
+        { name: "Zero Waste Lodge", region: "Астана", score: 76, measures: ["Полная переработка", "Компостирование", "Сокращение отходов"], status: "Развивающийся" },
+        { name: "Sustainable Waste Inn", region: "Алматинская область", score: 73, measures: ["Сортировка отходов", "Переработка", "Обучение"], status: "Активный" },
+        { name: "Eco Waste Resort", region: "Алматы", score: 70, measures: ["Система компостирования", "Переработка", "Сокращение отходов"], status: "Развивающийся" },
+        { name: "Green Waste Hotel", region: "Шымкент", score: 67, measures: ["Сортировка отходов", "Компостирование", "Образовательные программы"], status: "Активный" }
+      ],
+      sustainableFood: [
+        { name: "Organic Farm Hotel", region: "Алматы", score: 97, measures: ["Собственная органическая ферма", "Местные поставщики", "Сезонное меню"], status: "Лидер" },
+        { name: "Farm to Table Resort", region: "Шымкент", score: 93, measures: ["Партнерство с местными фермерами", "Органические продукты", "Сокращение пищевых отходов"], status: "Активный" },
+        { name: "Eco Food Lodge", region: "Астана", score: 89, measures: ["Органические ингредиенты", "Вегетарианские опции", "Устойчивое рыболовство"], status: "Развивающийся" },
+        { name: "Sustainable Food Inn", region: "Алматинская область", score: 86, measures: ["Местные поставщики", "Сезонное меню", "Сокращение отходов"], status: "Активный" },
+        { name: "Green Food Hotel", region: "Алматы", score: 83, measures: ["Органические продукты", "Вегетарианские блюда", "Образовательные программы"], status: "Развивающийся" },
+        { name: "Eco Food Resort", region: "Шымкент", score: 80, measures: ["Местные поставщики", "Органические ингредиенты", "Сокращение пищевых отходов"], status: "Активный" },
+        { name: "Sustainable Food Lodge", region: "Астана", score: 77, measures: ["Органические продукты", "Сезонное меню", "Вегетарианские опции"], status: "Развивающийся" },
+        { name: "Green Food Inn", region: "Алматинская область", score: 74, measures: ["Местные поставщики", "Органические ингредиенты", "Сокращение отходов"], status: "Активный" },
+        { name: "Eco Food Resort", region: "Алматы", score: 71, measures: ["Органические продукты", "Вегетарианские блюда", "Образовательные программы"], status: "Развивающийся" },
+        { name: "Sustainable Food Hotel", region: "Шымкент", score: 68, measures: ["Местные поставщики", "Органические ингредиенты", "Сокращение пищевых отходов"], status: "Активный" }
+      ],
+      ecoTransport: [
+        { name: "Electric Vehicle Hotel", region: "Алматы", score: 94, measures: ["Электромобили для гостей", "Зарядные станции", "Велосипедная инфраструктура"], status: "Лидер" },
+        { name: "Bike Friendly Resort", region: "Шымкент", score: 90, measures: ["Прокат велосипедов", "Велосипедные дорожки", "Общественный транспорт"], status: "Активный" },
+        { name: "Eco Transport Lodge", region: "Астана", score: 86, measures: ["Эко-шаттл", "Пешеходные дорожки", "Карпулинг"], status: "Развивающийся" },
+        { name: "Sustainable Transport Inn", region: "Алматинская область", score: 83, measures: ["Электромобили", "Велосипедная инфраструктура", "Общественный транспорт"], status: "Активный" },
+        { name: "Green Transport Hotel", region: "Алматы", score: 80, measures: ["Зарядные станции", "Прокат велосипедов", "Пешеходные дорожки"], status: "Развивающийся" },
+        { name: "Eco Transport Resort", region: "Шымкент", score: 77, measures: ["Эко-шаттл", "Велосипедная инфраструктура", "Карпулинг"], status: "Активный" },
+        { name: "Sustainable Transport Lodge", region: "Астана", score: 74, measures: ["Электромобили", "Общественный транспорт", "Пешеходные дорожки"], status: "Развивающийся" },
+        { name: "Green Transport Inn", region: "Алматинская область", score: 71, measures: ["Зарядные станции", "Прокат велосипедов", "Общественный транспорт"], status: "Активный" },
+        { name: "Eco Transport Resort", region: "Алматы", score: 68, measures: ["Эко-шаттл", "Велосипедная инфраструктура", "Пешеходные дорожки"], status: "Развивающийся" },
+        { name: "Sustainable Transport Hotel", region: "Шымкент", score: 65, measures: ["Электромобили", "Прокат велосипедов", "Карпулинг"], status: "Активный" }
+      ],
+      greenBuilding: [
+        { name: "LEED Certified Hotel", region: "Алматы", score: 96, measures: ["Зеленые материалы", "Естественная вентиляция", "Зеленая крыша"], status: "Лидер" },
+        { name: "Green Building Resort", region: "Шымкент", score: 92, measures: ["Пассивный дизайн", "Устойчивое строительство", "Эко-сертификация"], status: "Активный" },
+        { name: "Sustainable Building Lodge", region: "Астана", score: 88, measures: ["Зеленые материалы", "Зеленая крыша", "Естественная вентиляция"], status: "Развивающийся" },
+        { name: "Eco Building Inn", region: "Алматинская область", score: 85, measures: ["Пассивный дизайн", "Устойчивое строительство", "Эко-сертификация"], status: "Активный" },
+        { name: "Green Building Hotel", region: "Алматы", score: 82, measures: ["Зеленые материалы", "Естественная вентиляция", "Зеленая крыша"], status: "Развивающийся" },
+        { name: "Sustainable Building Resort", region: "Шымкент", score: 79, measures: ["Пассивный дизайн", "Устойчивое строительство", "Эко-сертификация"], status: "Активный" },
+        { name: "Eco Building Lodge", region: "Астана", score: 76, measures: ["Зеленые материалы", "Зеленая крыша", "Естественная вентиляция"], status: "Развивающийся" },
+        { name: "Green Building Inn", region: "Алматинская область", score: 73, measures: ["Пассивный дизайн", "Устойчивое строительство", "Эко-сертификация"], status: "Активный" },
+        { name: "Sustainable Building Resort", region: "Алматы", score: 70, measures: ["Зеленые материалы", "Естественная вентиляция", "Зеленая крыша"], status: "Развивающийся" },
+        { name: "Eco Building Hotel", region: "Шымкент", score: 67, measures: ["Пассивный дизайн", "Устойчивое строительство", "Эко-сертификация"], status: "Активный" }
+      ],
+      biodiversity: [
+        { name: "Wildlife Sanctuary Hotel", region: "Алматы", score: 95, measures: ["Местные растения", "Среда обитания диких животных", "Птичий заповедник"], status: "Лидер" },
+        { name: "Biodiversity Resort", region: "Шымкент", score: 91, measures: ["Сад бабочек", "Органическое садоводство", "Мониторинг биоразнообразия"], status: "Активный" },
+        { name: "Eco Wildlife Lodge", region: "Астана", score: 87, measures: ["Местные растения", "Среда обитания", "Органическое садоводство"], status: "Развивающийся" },
+        { name: "Sustainable Wildlife Inn", region: "Алматинская область", score: 84, measures: ["Птичий заповедник", "Сад бабочек", "Мониторинг биоразнообразия"], status: "Активный" },
+        { name: "Green Wildlife Hotel", region: "Алматы", score: 81, measures: ["Местные растения", "Среда обитания диких животных", "Органическое садоводство"], status: "Развивающийся" },
+        { name: "Eco Wildlife Resort", region: "Шымкент", score: 78, measures: ["Сад бабочек", "Мониторинг биоразнообразия", "Местные растения"], status: "Активный" },
+        { name: "Sustainable Wildlife Lodge", region: "Астана", score: 75, measures: ["Птичий заповедник", "Органическое садоводство", "Среда обитания"], status: "Развивающийся" },
+        { name: "Green Wildlife Inn", region: "Алматинская область", score: 72, measures: ["Местные растения", "Сад бабочек", "Мониторинг биоразнообразия"], status: "Активный" },
+        { name: "Eco Wildlife Resort", region: "Алматы", score: 69, measures: ["Среда обитания диких животных", "Органическое садоводство", "Местные растения"], status: "Развивающийся" },
+        { name: "Sustainable Wildlife Hotel", region: "Шымкент", score: 66, measures: ["Птичий заповедник", "Сад бабочек", "Органическое садоводство"], status: "Активный" }
+      ],
+      communityEngagement: [
+        { name: "Community Hotel Almaty", region: "Алматы", score: 94, measures: ["Местная занятость 95%", "Сохранение культуры", "Общественные проекты"], status: "Лидер" },
+        { name: "Local Partnership Resort", region: "Шымкент", score: 90, measures: ["Образовательные программы", "Возможности для волонтерства", "Местные партнерства"], status: "Активный" },
+        { name: "Cultural Heritage Lodge", region: "Астана", score: 86, measures: ["Сохранение культуры", "Местная занятость", "Общественные проекты"], status: "Развивающийся" },
+        { name: "Community Engagement Inn", region: "Алматинская область", score: 83, measures: ["Образовательные программы", "Местные партнерства", "Возможности для волонтерства"], status: "Активный" },
+        { name: "Local Community Hotel", region: "Алматы", score: 80, measures: ["Местная занятость", "Сохранение культуры", "Общественные проекты"], status: "Развивающийся" },
+        { name: "Eco Community Resort", region: "Шымкент", score: 77, measures: ["Образовательные программы", "Возможности для волонтерства", "Местные партнерства"], status: "Активный" },
+        { name: "Sustainable Community Lodge", region: "Астана", score: 74, measures: ["Сохранение культуры", "Местная занятость", "Общественные проекты"], status: "Развивающийся" },
+        { name: "Green Community Inn", region: "Алматинская область", score: 71, measures: ["Образовательные программы", "Местные партнерства", "Возможности для волонтерства"], status: "Активный" },
+        { name: "Eco Community Resort", region: "Алматы", score: 68, measures: ["Местная занятость", "Сохранение культуры", "Общественные проекты"], status: "Развивающийся" },
+        { name: "Sustainable Community Hotel", region: "Шымкент", score: 65, measures: ["Образовательные программы", "Возможности для волонтерства", "Местные партнерства"], status: "Активный" }
+      ],
+      carbonNeutrality: [
+        { name: "Carbon Neutral Hotel", region: "Алматы", score: 96, measures: ["Компенсация углерода 100%", "Аудит углерода", "Сертификация углеродной нейтральности"], status: "Лидер" },
+        { name: "Zero Carbon Resort", region: "Шымкент", score: 89, measures: ["Сокращение углерода", "Отчетность по углероду", "Обучение по углероду"], status: "Активный" },
+        { name: "Eco Carbon Lodge", region: "Астана", score: 82, measures: ["Аудит углерода", "Компенсация углерода", "Сокращение углерода"], status: "Развивающийся" },
+        { name: "Sustainable Carbon Inn", region: "Алматинская область", score: 78, measures: ["Отчетность по углероду", "Обучение по углероду", "Сертификация углеродной нейтральности"], status: "Активный" },
+        { name: "Green Carbon Hotel", region: "Алматы", score: 75, measures: ["Компенсация углерода", "Аудит углерода", "Сокращение углерода"], status: "Развивающийся" },
+        { name: "Eco Carbon Resort", region: "Шымкент", score: 72, measures: ["Отчетность по углероду", "Обучение по углероду", "Компенсация углерода"], status: "Активный" },
+        { name: "Sustainable Carbon Lodge", region: "Астана", score: 69, measures: ["Аудит углерода", "Сокращение углерода", "Сертификация углеродной нейтральности"], status: "Развивающийся" },
+        { name: "Green Carbon Inn", region: "Алматинская область", score: 66, measures: ["Отчетность по углероду", "Обучение по углероду", "Компенсация углерода"], status: "Активный" },
+        { name: "Eco Carbon Resort", region: "Алматы", score: 63, measures: ["Аудит углерода", "Сокращение углерода", "Отчетность по углероду"], status: "Развивающийся" },
+        { name: "Sustainable Carbon Hotel", region: "Шымкент", score: 60, measures: ["Обучение по углероду", "Компенсация углерода", "Сертификация углеродной нейтральности"], status: "Активный" }
+      ]
+    };
+
+    const getMeasureData = (action: string) => {
+      switch (action) {
+        case 'energy-efficiency': return ecoMeasuresData.energyEfficiency;
+        case 'water-conservation': return ecoMeasuresData.waterConservation;
+        case 'waste-management': return ecoMeasuresData.wasteManagement;
+        case 'sustainable-food': return ecoMeasuresData.sustainableFood;
+        case 'eco-transport': return ecoMeasuresData.ecoTransport;
+        case 'green-building': return ecoMeasuresData.greenBuilding;
+        case 'biodiversity': return ecoMeasuresData.biodiversity;
+        case 'community-engagement': return ecoMeasuresData.communityEngagement;
+        case 'carbon-neutrality': return ecoMeasuresData.carbonNeutrality;
+        default: return ecoMeasuresData.energyEfficiency;
+      }
+    };
+
+    const getMeasureTitle = (action: string) => {
+      switch (action) {
+        case 'energy-efficiency': return t.energyEfficiency;
+        case 'water-conservation': return t.waterConservation;
+        case 'waste-management': return t.wasteManagement;
+        case 'sustainable-food': return t.sustainableFood;
+        case 'eco-transport': return t.ecoTransport;
+        case 'green-building': return t.greenBuilding;
+        case 'biodiversity': return t.biodiversity;
+        case 'community-engagement': return t.communityEngagement;
+        case 'carbon-neutrality': return t.carbonNeutrality;
+        default: return t.energyEfficiency;
+      }
+    };
+
+    const getAccommodationExamples = (action: string) => {
+      switch (action) {
+        case 'energy-efficiency': return accommodationExamples.energyEfficiency;
+        case 'water-conservation': return accommodationExamples.waterConservation;
+        case 'waste-management': return accommodationExamples.wasteManagement;
+        case 'sustainable-food': return accommodationExamples.sustainableFood;
+        case 'eco-transport': return accommodationExamples.ecoTransport;
+        case 'green-building': return accommodationExamples.greenBuilding;
+        case 'biodiversity': return accommodationExamples.biodiversity;
+        case 'community-engagement': return accommodationExamples.communityEngagement;
+        case 'carbon-neutrality': return accommodationExamples.carbonNeutrality;
+        default: return accommodationExamples.energyEfficiency;
+      }
+    };
+
+    const data = getMeasureData(action);
+    const title = getMeasureTitle(action);
+    const examples = getAccommodationExamples(action);
+
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-blue-50 p-6 rounded-lg">
+            <h4 className="text-lg font-semibold text-blue-800 mb-2">Всего точек размещения</h4>
+            <p className="text-3xl font-bold text-blue-600">{data.totalAccommodations.toLocaleString()}</p>
+          </div>
+          <div className="bg-green-50 p-6 rounded-lg">
+            <h4 className="text-lg font-semibold text-green-800 mb-2">Внедряют меры</h4>
+            <p className="text-3xl font-bold text-green-600">{data.implementingMeasures.toLocaleString()}</p>
+          </div>
+          <div className="bg-purple-50 p-6 rounded-lg">
+            <h4 className="text-lg font-semibold text-purple-800 mb-2">Процент внедрения</h4>
+            <p className="text-3xl font-bold text-purple-600">{Math.round((data.implementingMeasures / data.totalAccommodations) * 100)}%</p>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h4 className="text-lg font-semibold text-gray-800 mb-4">{title} - Детальная статистика</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Object.entries(data).filter(([key]) => key !== 'totalAccommodations' && key !== 'implementingMeasures').map(([measure, count]) => (
+              <div key={measure} className="bg-gray-50 p-4 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-gray-700">{getMeasureTitle(measure)}</span>
+                  <span className="text-lg font-bold text-green-600">{count}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-green-500 h-2 rounded-full" 
+                    style={{ width: `${(count / data.totalAccommodations) * 100}%` }}
+                  ></div>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  {Math.round((count / data.totalAccommodations) * 100)}% от общего числа
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h4 className="text-lg font-semibold text-gray-800 mb-4">Топ-10 точек размещения по {title.toLowerCase()}</h4>
+          <div className="space-y-3">
+            {examples.map((accommodation, index) => (
+              <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg font-bold text-gray-500">#{index + 1}</span>
+                  <div>
+                    <h5 className="font-semibold text-gray-800">{accommodation.name}</h5>
+                    <p className="text-sm text-gray-600">{accommodation.region} • {accommodation.measures.length} мер</p>
+                    <div className="mt-1">
+                      {accommodation.measures.map((measure, idx) => (
+                        <span key={idx} className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-1 mb-1">
+                          {measure}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold text-green-600">{accommodation.score}%</p>
+                  <p className="text-sm text-gray-500">Эко-рейтинг</p>
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                    accommodation.status === 'Лидер' ? 'bg-yellow-100 text-yellow-800' :
+                    accommodation.status === 'Активный' ? 'bg-green-100 text-green-800' :
+                    'bg-blue-100 text-blue-800'
+                  }`}>
+                    {accommodation.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const renderContent = () => {
@@ -2429,6 +2889,69 @@ export default function AdminDashboard() {
                  selectedStatAction?.includes('tours-count') ? t.toursCount :
                  selectedStatAction?.includes('average-rating') ? t.averageRating :
                  selectedStatAction?.includes('specializations') ? t.specializations :
+                 selectedStatAction?.includes('energy-efficiency') ? t.energyEfficiency :
+                 selectedStatAction?.includes('water-conservation') ? t.waterConservation :
+                 selectedStatAction?.includes('waste-management') ? t.wasteManagement :
+                 selectedStatAction?.includes('sustainable-food') ? t.sustainableFood :
+                 selectedStatAction?.includes('eco-transport') ? t.ecoTransport :
+                 selectedStatAction?.includes('green-building') ? t.greenBuilding :
+                 selectedStatAction?.includes('biodiversity') ? t.biodiversity :
+                 selectedStatAction?.includes('community-engagement') ? t.communityEngagement :
+                 selectedStatAction?.includes('carbon-neutrality') ? t.carbonNeutrality :
+                 selectedStatAction?.includes('solar-energy') ? t.solarEnergy :
+                 selectedStatAction?.includes('wind-energy') ? t.windEnergy :
+                 selectedStatAction?.includes('geothermal-energy') ? t.geothermalEnergy :
+                 selectedStatAction?.includes('energy-storage') ? t.energyStorage :
+                 selectedStatAction?.includes('smart-lighting') ? t.smartLighting :
+                 selectedStatAction?.includes('energy-monitoring') ? t.energyMonitoring :
+                 selectedStatAction?.includes('water-recycling') ? t.waterRecycling :
+                 selectedStatAction?.includes('rainwater-collection') ? t.rainwaterCollection :
+                 selectedStatAction?.includes('water-filtration') ? t.waterFiltration :
+                 selectedStatAction?.includes('water-efficient-fixtures') ? t.waterEfficientFixtures :
+                 selectedStatAction?.includes('greywater-systems') ? t.greywaterSystems :
+                 selectedStatAction?.includes('water-conservation-programs') ? t.waterConservationPrograms :
+                 selectedStatAction?.includes('waste-reduction-measures') ? t.wasteReductionMeasures :
+                 selectedStatAction?.includes('composting-systems') ? t.compostingSystems :
+                 selectedStatAction?.includes('recycling-programs') ? t.recyclingPrograms :
+                 selectedStatAction?.includes('zero-waste') ? t.zeroWaste :
+                 selectedStatAction?.includes('waste-audit') ? t.wasteAudit :
+                 selectedStatAction?.includes('waste-education') ? t.wasteEducation :
+                 selectedStatAction?.includes('organic-food') ? t.organicFood :
+                 selectedStatAction?.includes('local-suppliers') ? t.localSuppliers :
+                 selectedStatAction?.includes('seasonal-menu') ? t.seasonalMenu :
+                 selectedStatAction?.includes('food-waste-reduction') ? t.foodWasteReduction :
+                 selectedStatAction?.includes('sustainable-fishing') ? t.sustainableFishing :
+                 selectedStatAction?.includes('vegetarian-options') ? t.vegetarianOptions :
+                 selectedStatAction?.includes('electric-vehicles') ? t.electricVehicles :
+                 selectedStatAction?.includes('bicycle-infrastructure') ? t.bicycleInfrastructure :
+                 selectedStatAction?.includes('public-transport') ? t.publicTransport :
+                 selectedStatAction?.includes('carpooling') ? t.carpooling :
+                 selectedStatAction?.includes('walking-paths') ? t.walkingPaths :
+                 selectedStatAction?.includes('eco-shuttle') ? t.ecoShuttle :
+                 selectedStatAction?.includes('green-materials') ? t.greenMaterials :
+                 selectedStatAction?.includes('natural-ventilation') ? t.naturalVentilation :
+                 selectedStatAction?.includes('green-roof') ? t.greenRoof :
+                 selectedStatAction?.includes('passive-design') ? t.passiveDesign :
+                 selectedStatAction?.includes('sustainable-construction') ? t.sustainableConstruction :
+                 selectedStatAction?.includes('eco-certification') ? t.ecoCertification :
+                 selectedStatAction?.includes('native-plants') ? t.nativePlants :
+                 selectedStatAction?.includes('wildlife-habitat') ? t.wildlifeHabitat :
+                 selectedStatAction?.includes('bird-sanctuary') ? t.birdSanctuary :
+                 selectedStatAction?.includes('butterfly-garden') ? t.butterflyGarden :
+                 selectedStatAction?.includes('organic-gardening') ? t.organicGardening :
+                 selectedStatAction?.includes('biodiversity-monitoring') ? t.biodiversityMonitoring :
+                 selectedStatAction?.includes('local-employment') ? t.localEmployment :
+                 selectedStatAction?.includes('cultural-preservation') ? t.culturalPreservation :
+                 selectedStatAction?.includes('community-projects') ? t.communityProjects :
+                 selectedStatAction?.includes('educational-programs') ? t.educationalPrograms :
+                 selectedStatAction?.includes('volunteer-opportunities') ? t.volunteerOpportunities :
+                 selectedStatAction?.includes('local-partnerships') ? t.localPartnerships :
+                 selectedStatAction?.includes('carbon-offsetting') ? t.carbonOffsetting :
+                 selectedStatAction?.includes('carbon-audit') ? t.carbonAudit :
+                 selectedStatAction?.includes('carbon-reduction') ? t.carbonReduction :
+                 selectedStatAction?.includes('carbon-neutral-certification') ? t.carbonNeutralCertification :
+                 selectedStatAction?.includes('carbon-reporting') ? t.carbonReporting :
+                 selectedStatAction?.includes('carbon-education') ? t.carbonEducation :
                  selectedStatAction}
               </h3>
               <button
@@ -2532,6 +3055,73 @@ export default function AdminDashboard() {
               renderGuidesReport(selectedStatAction)
             )}
             
+            {/* Accommodation Eco Measures Reports */}
+            {(selectedStatAction?.includes('energy-efficiency') ||
+              selectedStatAction?.includes('water-conservation') ||
+              selectedStatAction?.includes('waste-management') ||
+              selectedStatAction?.includes('sustainable-food') ||
+              selectedStatAction?.includes('eco-transport') ||
+              selectedStatAction?.includes('green-building') ||
+              selectedStatAction?.includes('biodiversity') ||
+              selectedStatAction?.includes('community-engagement') ||
+              selectedStatAction?.includes('carbon-neutrality') ||
+              selectedStatAction?.includes('solar-energy') ||
+              selectedStatAction?.includes('wind-energy') ||
+              selectedStatAction?.includes('geothermal-energy') ||
+              selectedStatAction?.includes('energy-storage') ||
+              selectedStatAction?.includes('smart-lighting') ||
+              selectedStatAction?.includes('energy-monitoring') ||
+              selectedStatAction?.includes('water-recycling') ||
+              selectedStatAction?.includes('rainwater-collection') ||
+              selectedStatAction?.includes('water-filtration') ||
+              selectedStatAction?.includes('water-efficient-fixtures') ||
+              selectedStatAction?.includes('greywater-systems') ||
+              selectedStatAction?.includes('water-conservation-programs') ||
+              selectedStatAction?.includes('waste-reduction-measures') ||
+              selectedStatAction?.includes('composting-systems') ||
+              selectedStatAction?.includes('recycling-programs') ||
+              selectedStatAction?.includes('zero-waste') ||
+              selectedStatAction?.includes('waste-audit') ||
+              selectedStatAction?.includes('waste-education') ||
+              selectedStatAction?.includes('organic-food') ||
+              selectedStatAction?.includes('local-suppliers') ||
+              selectedStatAction?.includes('seasonal-menu') ||
+              selectedStatAction?.includes('food-waste-reduction') ||
+              selectedStatAction?.includes('sustainable-fishing') ||
+              selectedStatAction?.includes('vegetarian-options') ||
+              selectedStatAction?.includes('electric-vehicles') ||
+              selectedStatAction?.includes('bicycle-infrastructure') ||
+              selectedStatAction?.includes('public-transport') ||
+              selectedStatAction?.includes('carpooling') ||
+              selectedStatAction?.includes('walking-paths') ||
+              selectedStatAction?.includes('eco-shuttle') ||
+              selectedStatAction?.includes('green-materials') ||
+              selectedStatAction?.includes('natural-ventilation') ||
+              selectedStatAction?.includes('green-roof') ||
+              selectedStatAction?.includes('passive-design') ||
+              selectedStatAction?.includes('sustainable-construction') ||
+              selectedStatAction?.includes('eco-certification') ||
+              selectedStatAction?.includes('native-plants') ||
+              selectedStatAction?.includes('wildlife-habitat') ||
+              selectedStatAction?.includes('bird-sanctuary') ||
+              selectedStatAction?.includes('butterfly-garden') ||
+              selectedStatAction?.includes('organic-gardening') ||
+              selectedStatAction?.includes('biodiversity-monitoring') ||
+              selectedStatAction?.includes('local-employment') ||
+              selectedStatAction?.includes('cultural-preservation') ||
+              selectedStatAction?.includes('community-projects') ||
+              selectedStatAction?.includes('educational-programs') ||
+              selectedStatAction?.includes('volunteer-opportunities') ||
+              selectedStatAction?.includes('local-partnerships') ||
+              selectedStatAction?.includes('carbon-offsetting') ||
+              selectedStatAction?.includes('carbon-audit') ||
+              selectedStatAction?.includes('carbon-reduction') ||
+              selectedStatAction?.includes('carbon-neutral-certification') ||
+              selectedStatAction?.includes('carbon-reporting') ||
+              selectedStatAction?.includes('carbon-education')) && (
+              renderAccommodationEcoMeasures(selectedStatAction)
+            )}
+            
             {/* Default development message for other actions */}
             {!selectedStatAction?.includes('green-financing') && 
              !selectedStatAction?.includes('implemented-projects') && 
@@ -2589,7 +3179,70 @@ export default function AdminDashboard() {
              !selectedStatAction?.includes('training-progress') &&
              !selectedStatAction?.includes('tours-count') &&
              !selectedStatAction?.includes('average-rating') &&
-             !selectedStatAction?.includes('specializations') && (
+             !selectedStatAction?.includes('specializations') &&
+             !selectedStatAction?.includes('energy-efficiency') &&
+             !selectedStatAction?.includes('water-conservation') &&
+             !selectedStatAction?.includes('waste-management') &&
+             !selectedStatAction?.includes('sustainable-food') &&
+             !selectedStatAction?.includes('eco-transport') &&
+             !selectedStatAction?.includes('green-building') &&
+             !selectedStatAction?.includes('biodiversity') &&
+             !selectedStatAction?.includes('community-engagement') &&
+             !selectedStatAction?.includes('carbon-neutrality') &&
+             !selectedStatAction?.includes('solar-energy') &&
+             !selectedStatAction?.includes('wind-energy') &&
+             !selectedStatAction?.includes('geothermal-energy') &&
+             !selectedStatAction?.includes('energy-storage') &&
+             !selectedStatAction?.includes('smart-lighting') &&
+             !selectedStatAction?.includes('energy-monitoring') &&
+             !selectedStatAction?.includes('water-recycling') &&
+             !selectedStatAction?.includes('rainwater-collection') &&
+             !selectedStatAction?.includes('water-filtration') &&
+             !selectedStatAction?.includes('water-efficient-fixtures') &&
+             !selectedStatAction?.includes('greywater-systems') &&
+             !selectedStatAction?.includes('water-conservation-programs') &&
+             !selectedStatAction?.includes('waste-reduction-measures') &&
+             !selectedStatAction?.includes('composting-systems') &&
+             !selectedStatAction?.includes('recycling-programs') &&
+             !selectedStatAction?.includes('zero-waste') &&
+             !selectedStatAction?.includes('waste-audit') &&
+             !selectedStatAction?.includes('waste-education') &&
+             !selectedStatAction?.includes('organic-food') &&
+             !selectedStatAction?.includes('local-suppliers') &&
+             !selectedStatAction?.includes('seasonal-menu') &&
+             !selectedStatAction?.includes('food-waste-reduction') &&
+             !selectedStatAction?.includes('sustainable-fishing') &&
+             !selectedStatAction?.includes('vegetarian-options') &&
+             !selectedStatAction?.includes('electric-vehicles') &&
+             !selectedStatAction?.includes('bicycle-infrastructure') &&
+             !selectedStatAction?.includes('public-transport') &&
+             !selectedStatAction?.includes('carpooling') &&
+             !selectedStatAction?.includes('walking-paths') &&
+             !selectedStatAction?.includes('eco-shuttle') &&
+             !selectedStatAction?.includes('green-materials') &&
+             !selectedStatAction?.includes('natural-ventilation') &&
+             !selectedStatAction?.includes('green-roof') &&
+             !selectedStatAction?.includes('passive-design') &&
+             !selectedStatAction?.includes('sustainable-construction') &&
+             !selectedStatAction?.includes('eco-certification') &&
+             !selectedStatAction?.includes('native-plants') &&
+             !selectedStatAction?.includes('wildlife-habitat') &&
+             !selectedStatAction?.includes('bird-sanctuary') &&
+             !selectedStatAction?.includes('butterfly-garden') &&
+             !selectedStatAction?.includes('organic-gardening') &&
+             !selectedStatAction?.includes('biodiversity-monitoring') &&
+             !selectedStatAction?.includes('local-employment') &&
+             !selectedStatAction?.includes('cultural-preservation') &&
+             !selectedStatAction?.includes('community-projects') &&
+             !selectedStatAction?.includes('educational-programs') &&
+             !selectedStatAction?.includes('volunteer-opportunities') &&
+             !selectedStatAction?.includes('local-partnerships') &&
+             !selectedStatAction?.includes('carbon-offsetting') &&
+             !selectedStatAction?.includes('carbon-audit') &&
+             !selectedStatAction?.includes('carbon-reduction') &&
+             !selectedStatAction?.includes('carbon-neutral-certification') &&
+             !selectedStatAction?.includes('carbon-reporting') &&
+             !selectedStatAction?.includes('carbon-education') && (
               <div className="text-green-600 mb-4">
                 {t.functionInDevelopment}
               </div>

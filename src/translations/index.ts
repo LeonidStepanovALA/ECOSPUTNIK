@@ -98,6 +98,90 @@ export const translations = {
     myTours: 'Мои туры',
     createTour: 'Создание тура',
     editTours: 'Редактирование туров',
+    
+    // Экологические меры точек размещения
+    accommodationEcoMeasures: 'Экологические меры точек размещения',
+    energyEfficiency: 'Энергоэффективность',
+    waterConservation: 'Сохранение воды',
+    wasteManagement: 'Управление отходами',
+    sustainableFood: 'Устойчивое питание',
+    ecoTransport: 'Эко-транспорт',
+    greenBuilding: 'Зеленое строительство',
+    biodiversity: 'Биоразнообразие',
+    communityEngagement: 'Вовлечение сообщества',
+    carbonNeutrality: 'Углеродная нейтральность',
+    
+    // Энергоэффективность
+    solarEnergy: 'Солнечная энергия',
+    windEnergy: 'Ветровая энергия',
+    geothermalEnergy: 'Геотермальная энергия',
+    energyStorage: 'Накопление энергии',
+    smartLighting: 'Умное освещение',
+    energyMonitoring: 'Мониторинг энергии',
+    
+    // Сохранение воды
+    waterRecycling: 'Переработка воды',
+    rainwaterCollection: 'Сбор дождевой воды',
+    waterFiltration: 'Фильтрация воды',
+    waterEfficientFixtures: 'Водосберегающая сантехника',
+    greywaterSystems: 'Системы серой воды',
+    waterConservationPrograms: 'Программы сохранения воды',
+    
+    // Управление отходами
+    wasteReductionMeasures: 'Сокращение отходов',
+    compostingSystems: 'Системы компостирования',
+    recyclingPrograms: 'Программы переработки',
+    zeroWaste: 'Нулевые отходы',
+    wasteAudit: 'Аудит отходов',
+    wasteEducation: 'Обучение управлению отходами',
+    
+    // Устойчивое питание
+    organicFood: 'Органическая пища',
+    localSuppliers: 'Местные поставщики',
+    seasonalMenu: 'Сезонное меню',
+    foodWasteReduction: 'Сокращение пищевых отходов',
+    sustainableFishing: 'Устойчивое рыболовство',
+    vegetarianOptions: 'Вегетарианские опции',
+    
+    // Эко-транспорт
+    electricVehicles: 'Электромобили',
+    bicycleInfrastructure: 'Инфраструктура для велосипедов',
+    publicTransport: 'Общественный транспорт',
+    carpooling: 'Карпулинг',
+    walkingPaths: 'Пешеходные дорожки',
+    ecoShuttle: 'Эко-шаттл',
+    
+    // Зеленое строительство
+    greenMaterials: 'Зеленые материалы',
+    naturalVentilation: 'Естественная вентиляция',
+    greenRoof: 'Зеленая крыша',
+    passiveDesign: 'Пассивный дизайн',
+    sustainableConstruction: 'Устойчивое строительство',
+    ecoCertification: 'Эко-сертификация',
+    
+    // Биоразнообразие
+    nativePlants: 'Местные растения',
+    wildlifeHabitat: 'Среда обитания диких животных',
+    birdSanctuary: 'Птичий заповедник',
+    butterflyGarden: 'Сад бабочек',
+    organicGardening: 'Органическое садоводство',
+    biodiversityMonitoring: 'Мониторинг биоразнообразия',
+    
+    // Вовлечение сообщества
+    localEmployment: 'Местная занятость',
+    culturalPreservation: 'Сохранение культуры',
+    communityProjects: 'Общественные проекты',
+    educationalPrograms: 'Образовательные программы',
+    volunteerOpportunities: 'Возможности для волонтерства',
+    localPartnerships: 'Местные партнерства',
+    
+    // Углеродная нейтральность
+    carbonOffsetting: 'Компенсация углерода',
+    carbonAudit: 'Аудит углерода',
+    carbonReduction: 'Сокращение углерода',
+    carbonNeutralCertification: 'Сертификация углеродной нейтральности',
+    carbonReporting: 'Отчетность по углероду',
+    carbonEducation: 'Обучение по углероду',
     calendar: 'Календарь',
     bookings: 'Бронирования',
     currentBookings: 'Текущие заказы',
@@ -683,6 +767,90 @@ export const translations = {
     reviewResponses: 'Review Responses',
     energySavings: 'Energy Savings',
     wasteReduction: 'Waste Reduction',
+    
+    // Accommodation Eco Measures
+    accommodationEcoMeasures: 'Accommodation Eco Measures',
+    energyEfficiency: 'Energy Efficiency',
+    waterConservation: 'Water Conservation',
+    wasteManagement: 'Waste Management',
+    sustainableFood: 'Sustainable Food',
+    ecoTransport: 'Eco Transport',
+    greenBuilding: 'Green Building',
+    biodiversity: 'Biodiversity',
+    communityEngagement: 'Community Engagement',
+    carbonNeutrality: 'Carbon Neutrality',
+    
+    // Energy Efficiency
+    solarEnergy: 'Solar Energy',
+    windEnergy: 'Wind Energy',
+    geothermalEnergy: 'Geothermal Energy',
+    energyStorage: 'Energy Storage',
+    smartLighting: 'Smart Lighting',
+    energyMonitoring: 'Energy Monitoring',
+    
+    // Water Conservation
+    waterRecycling: 'Water Recycling',
+    rainwaterCollection: 'Rainwater Collection',
+    waterFiltration: 'Water Filtration',
+    waterEfficientFixtures: 'Water-Efficient Fixtures',
+    greywaterSystems: 'Greywater Systems',
+    waterConservationPrograms: 'Water Conservation Programs',
+    
+    // Waste Management
+    wasteReductionMeasures: 'Waste Reduction',
+    compostingSystems: 'Composting Systems',
+    recyclingPrograms: 'Recycling Programs',
+    zeroWaste: 'Zero Waste',
+    wasteAudit: 'Waste Audit',
+    wasteEducation: 'Waste Education',
+    
+    // Sustainable Food
+    organicFood: 'Organic Food',
+    localSuppliers: 'Local Suppliers',
+    seasonalMenu: 'Seasonal Menu',
+    foodWasteReduction: 'Food Waste Reduction',
+    sustainableFishing: 'Sustainable Fishing',
+    vegetarianOptions: 'Vegetarian Options',
+    
+    // Eco Transport
+    electricVehicles: 'Electric Vehicles',
+    bicycleInfrastructure: 'Bicycle Infrastructure',
+    publicTransport: 'Public Transport',
+    carpooling: 'Carpooling',
+    walkingPaths: 'Walking Paths',
+    ecoShuttle: 'Eco Shuttle',
+    
+    // Green Building
+    greenMaterials: 'Green Materials',
+    naturalVentilation: 'Natural Ventilation',
+    greenRoof: 'Green Roof',
+    passiveDesign: 'Passive Design',
+    sustainableConstruction: 'Sustainable Construction',
+    ecoCertification: 'Eco Certification',
+    
+    // Biodiversity
+    nativePlants: 'Native Plants',
+    wildlifeHabitat: 'Wildlife Habitat',
+    birdSanctuary: 'Bird Sanctuary',
+    butterflyGarden: 'Butterfly Garden',
+    organicGardening: 'Organic Gardening',
+    biodiversityMonitoring: 'Biodiversity Monitoring',
+    
+    // Community Engagement
+    localEmployment: 'Local Employment',
+    culturalPreservation: 'Cultural Preservation',
+    communityProjects: 'Community Projects',
+    educationalPrograms: 'Educational Programs',
+    volunteerOpportunities: 'Volunteer Opportunities',
+    localPartnerships: 'Local Partnerships',
+    
+    // Carbon Neutrality
+    carbonOffsetting: 'Carbon Offsetting',
+    carbonAudit: 'Carbon Audit',
+    carbonReduction: 'Carbon Reduction',
+    carbonNeutralCertification: 'Carbon Neutral Certification',
+    carbonReporting: 'Carbon Reporting',
+    carbonEducation: 'Carbon Education',
     
     // Analyst page
     analystDashboard: 'Analyst Dashboard',
