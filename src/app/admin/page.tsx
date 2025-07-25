@@ -28,6 +28,7 @@ interface Course {
   level: string;
   instructor: string;
   status: 'active' | 'inactive';
+  files?: File[];
 }
 
 interface CalendarEvent {
@@ -51,6 +52,8 @@ export default function AdminDashboard() {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [selectedStatAction, setSelectedStatAction] = useState<string | null>(null);
   const [showStatModal, setShowStatModal] = useState(false);
+  const [showRecommendationsModal, setShowRecommendationsModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   
   // Состояние для формы добавления курса/события
@@ -66,7 +69,8 @@ export default function AdminDashboard() {
     type: '',
     region: '',
     status: 'active',
-    image: null as File | null
+    image: null as File | null,
+    files: [] as File[]
   });
 
   // Функция для сохранения событий в localStorage
@@ -646,6 +650,11 @@ export default function AdminDashboard() {
       icon: ChartBarIcon,
       items: [
         { 
+          name: t.createAutoRecommendations, 
+          action: 'create-auto-recommendations',
+          isButton: true
+        },
+        { 
           name: t.energyEfficiency, 
           action: 'energy-efficiency',
           subItems: [
@@ -778,11 +787,12 @@ export default function AdminDashboard() {
       type: '',
       region: '',
       status: 'active',
-      image: null
+      image: null,
+      files: []
     });
   };
 
-  const handleInputChange = (field: string, value: string | File) => {
+  const handleInputChange = (field: string, value: string | File | File[]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -798,7 +808,8 @@ export default function AdminDashboard() {
         duration: formData.duration,
         level: formData.level,
         instructor: formData.instructor,
-        status: formData.status as 'active' | 'inactive'
+        status: formData.status as 'active' | 'inactive',
+        files: formData.files
       };
       const updatedCourses = [...courses, newCourse];
       setCourses(updatedCourses);
@@ -1044,7 +1055,8 @@ export default function AdminDashboard() {
       type: event.type,
       region: event.region,
       status: event.status,
-      image: newsItem?.image || null
+      image: newsItem?.image || null,
+      files: []
     });
     setShowModal(true);
   };
@@ -1115,6 +1127,21 @@ export default function AdminDashboard() {
               <p className="text-sm text-gray-600"><strong>Длительность:</strong> {course.duration}</p>
               <p className="text-sm text-gray-600"><strong>Уровень:</strong> {course.level}</p>
               <p className="text-sm text-gray-600"><strong>Инструктор:</strong> {course.instructor}</p>
+              {course.files && course.files.length > 0 && (
+                <div>
+                  <p className="text-sm text-gray-600"><strong>Файлы:</strong></p>
+                  <div className="mt-1 space-y-1">
+                    {course.files.map((file, index) => (
+                      <div key={index} className="flex items-center space-x-2 text-xs text-blue-600">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span className="truncate">{file.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex space-x-2">
               <button className="flex-1 bg-green-100 text-green-800 py-2 rounded-lg hover:bg-green-200 flex items-center justify-center space-x-1">
@@ -1253,22 +1280,42 @@ export default function AdminDashboard() {
                 {section.items.map((item, index) => (
                   <div key={index} className="border-l-2 border-green-200 pl-4">
                     <button
-                      onClick={() => handleStatAction(item.action)}
-                      className="w-full text-left p-2 bg-green-50 rounded hover:bg-green-100 transition-colors mb-2"
+                      onClick={() => {
+                        if (item.isButton) {
+                          if (item.action === 'create-auto-recommendations') {
+                            setShowRecommendationsModal(true);
+                          } else {
+                            handleStatAction(item.action);
+                          }
+                        } else {
+                          handleStatAction(item.action);
+                        }
+                      }}
+                      className={`w-full text-left p-2 rounded transition-colors mb-2 ${
+                        item.isButton 
+                          ? 'bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold' 
+                          : 'bg-green-50 hover:bg-green-100 text-green-700'
+                      }`}
                     >
-                      <span className="text-sm font-medium text-green-700">{item.name}</span>
+                      <span className={`text-sm font-medium ${
+                        item.isButton ? 'text-blue-700' : 'text-green-700'
+                      }`}>
+                        {item.name}
+                      </span>
                     </button>
-                    <div className="ml-4 space-y-1">
-                      {item.subItems.map((subItem, subIndex) => (
-                        <button
-                          key={subIndex}
-                          onClick={() => handleStatAction(subItem.action)}
-                          className="w-full text-left p-2 text-xs text-green-600 hover:bg-green-50 rounded transition-colors"
-                        >
-                          {subItem.name}
-                        </button>
-                      ))}
-                    </div>
+                    {!item.isButton && item.subItems && (
+                      <div className="ml-4 space-y-1">
+                        {item.subItems.map((subItem, subIndex) => (
+                          <button
+                            key={subIndex}
+                            onClick={() => handleStatAction(subItem.action)}
+                            className="w-full text-left p-2 text-xs text-green-600 hover:bg-green-50 rounded transition-colors"
+                          >
+                            {subItem.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -2163,6 +2210,479 @@ export default function AdminDashboard() {
     }
   };
 
+  const renderAutoRecommendations = () => {
+    const recommendations = [
+      {
+        category: 'Энергия',
+        icon: '⚡',
+        measures: [
+          'Установка солнечных панелей мощностью 10-50 кВт',
+          'Внедрение умного освещения LED',
+          'Система мониторинга энергопотребления',
+          'Геотермальное отопление',
+          'Аккумуляторы энергии для пиковых нагрузок'
+        ],
+        priority: 'Высокий',
+        estimatedCost: '2-5 млн тенге',
+        paybackPeriod: '3-5 лет',
+        co2Reduction: '15-25 тонн CO₂/год',
+        accommodationPoints: [
+          {
+            name: 'Эко-отель "Зеленые горы"',
+            location: 'Алматы, ул. Абая 150',
+            currentStatus: 'Средний уровень',
+            currentMeasures: ['LED освещение 30%', 'Солнечные панели 5 кВт'],
+            neededMeasures: ['Расширение солнечных панелей до 20 кВт', 'Умная система управления'],
+            estimatedInvestment: '3.2 млн тенге',
+            potentialSavings: '1.8 млн тенге/год',
+            co2Reduction: '18 тонн CO₂/год',
+            priority: 'Высокий'
+          },
+          {
+            name: 'Гостиница "Озеро Балхаш"',
+            location: 'Алматинская область, с. Балхаш',
+            currentStatus: 'Низкий уровень',
+            currentMeasures: ['Базовое освещение'],
+            neededMeasures: ['Солнечные панели 15 кВт', 'Система мониторинга', 'Аккумуляторы'],
+            estimatedInvestment: '4.5 млн тенге',
+            potentialSavings: '2.1 млн тенге/год',
+            co2Reduction: '22 тонн CO₂/год',
+            priority: 'Критический'
+          },
+          {
+            name: 'Курорт "Алтайские вершины"',
+            location: 'ВКО, г. Усть-Каменогорск',
+            currentStatus: 'Высокий уровень',
+            currentMeasures: ['Солнечные панели 25 кВт', 'Умная система', 'Геотермальное отопление'],
+            neededMeasures: ['Расширение до 40 кВт', 'Аккумуляторы энергии'],
+            estimatedInvestment: '1.8 млн тенге',
+            potentialSavings: '1.2 млн тенге/год',
+            co2Reduction: '12 тонн CO₂/год',
+            priority: 'Средний'
+          }
+        ]
+      },
+      {
+        category: 'Вода',
+        icon: '💧',
+        measures: [
+          'Система сбора и очистки дождевой воды',
+          'Водосберегающая сантехника',
+          'Система рециркуляции серой воды',
+          'Умные краны с датчиками движения',
+          'Мониторинг утечек в реальном времени'
+        ],
+        priority: 'Высокий',
+        estimatedCost: '1-3 млн тенге',
+        paybackPeriod: '2-4 года',
+        co2Reduction: '5-10 тонн CO₂/год',
+        accommodationPoints: [
+          {
+            name: 'Отель "Аквамарин"',
+            location: 'Астана, пр. Республики 45',
+            currentStatus: 'Средний уровень',
+            currentMeasures: ['Водосберегающие краны 50%', 'Базовый мониторинг'],
+            neededMeasures: ['Система сбора дождевой воды', 'Рециркуляция серой воды', 'Умные датчики'],
+            estimatedInvestment: '2.1 млн тенге',
+            potentialSavings: '0.8 млн тенге/год',
+            co2Reduction: '8 тонн CO₂/год',
+            priority: 'Высокий'
+          },
+          {
+            name: 'Санаторий "Жемчужина"',
+            location: 'Алматинская область, с. Капчагай',
+            currentStatus: 'Низкий уровень',
+            currentMeasures: ['Обычная сантехника'],
+            neededMeasures: ['Полная система водосбережения', 'Сбор дождевой воды', 'Мониторинг утечек'],
+            estimatedInvestment: '2.8 млн тенге',
+            potentialSavings: '1.2 млн тенге/год',
+            co2Reduction: '12 тонн CO₂/год',
+            priority: 'Критический'
+          },
+          {
+            name: 'Курорт "Бурабай"',
+            location: 'Акмолинская область, с. Бурабай',
+            currentStatus: 'Высокий уровень',
+            currentMeasures: ['Система сбора дождевой воды', 'Водосберегающая сантехника 80%'],
+            neededMeasures: ['Рециркуляция серой воды', 'Умные датчики утечек'],
+            estimatedInvestment: '1.2 млн тенге',
+            potentialSavings: '0.6 млн тенге/год',
+            co2Reduction: '6 тонн CO₂/год',
+            priority: 'Средний'
+          }
+        ]
+      },
+      {
+        category: 'Отходы',
+        icon: '♻️',
+        measures: [
+          'Полная система сортировки отходов',
+          'Компостирование органических отходов',
+          'Переработка пластика и стекла',
+          'Программа "Нулевые отходы"',
+          'Обучение персонала управлению отходами'
+        ],
+        priority: 'Средний',
+        estimatedCost: '500 тыс - 1.5 млн тенге',
+        paybackPeriod: '1-3 года',
+        co2Reduction: '8-15 тонн CO₂/год',
+        accommodationPoints: [
+          {
+            name: 'Отель "ЭкоСтэй"',
+            location: 'Алматы, ул. Достык 120',
+            currentStatus: 'Высокий уровень',
+            currentMeasures: ['Сортировка отходов 70%', 'Компостирование', 'Переработка пластика'],
+            neededMeasures: ['Программа "Нулевые отходы"', 'Обучение персонала'],
+            estimatedInvestment: '0.6 млн тенге',
+            potentialSavings: '0.4 млн тенге/год',
+            co2Reduction: '8 тонн CO₂/год',
+            priority: 'Средний'
+          },
+          {
+            name: 'Гостиница "Центральная"',
+            location: 'Астана, ул. Кенесары 25',
+            currentStatus: 'Низкий уровень',
+            currentMeasures: ['Базовая утилизация'],
+            neededMeasures: ['Полная система сортировки', 'Компостирование', 'Переработка', 'Обучение'],
+            estimatedInvestment: '1.4 млн тенге',
+            potentialSavings: '0.9 млн тенге/год',
+            co2Reduction: '15 тонн CO₂/год',
+            priority: 'Высокий'
+          },
+          {
+            name: 'Курорт "Алаколь"',
+            location: 'Алматинская область, с. Алаколь',
+            currentStatus: 'Средний уровень',
+            currentMeasures: ['Сортировка отходов 40%', 'Базовое компостирование'],
+            neededMeasures: ['Расширение сортировки', 'Переработка пластика', 'Программа "Нулевые отходы"'],
+            estimatedInvestment: '0.8 млн тенге',
+            potentialSavings: '0.5 млн тенге/год',
+            co2Reduction: '10 тонн CO₂/год',
+            priority: 'Средний'
+          }
+        ]
+      },
+      {
+        category: 'Питание',
+        icon: '🌱',
+        measures: [
+          'Партнерство с местными органическими фермерами',
+          'Сезонное меню с местными продуктами',
+          'Сокращение пищевых отходов на 50%',
+          'Вегетарианские и веганские опции',
+          'Устойчивое рыболовство и морепродукты'
+        ],
+        priority: 'Средний',
+        estimatedCost: '300 тыс - 800 тыс тенге',
+        paybackPeriod: '6 месяцев - 2 года',
+        co2Reduction: '3-8 тонн CO₂/год',
+        accommodationPoints: [
+          {
+            name: 'Ресторан-отель "Фермерский"',
+            location: 'Алматинская область, с. Каскелен',
+            currentStatus: 'Высокий уровень',
+            currentMeasures: ['Местные продукты 80%', 'Сезонное меню', 'Вегетарианские опции'],
+            neededMeasures: ['100% местные продукты', 'Сокращение отходов до 70%'],
+            estimatedInvestment: '0.3 млн тенге',
+            potentialSavings: '0.2 млн тенге/год',
+            co2Reduction: '4 тонн CO₂/год',
+            priority: 'Средний'
+          },
+          {
+            name: 'Отель "Столичный"',
+            location: 'Астана, пр. Республики 15',
+            currentStatus: 'Низкий уровень',
+            currentMeasures: ['Стандартное меню'],
+            neededMeasures: ['Партнерство с фермерами', 'Сезонное меню', 'Сокращение отходов', 'Вегетарианские опции'],
+            estimatedInvestment: '0.7 млн тенге',
+            potentialSavings: '0.4 млн тенге/год',
+            co2Reduction: '8 тонн CO₂/год',
+            priority: 'Высокий'
+          },
+          {
+            name: 'Курорт "Шымбулак"',
+            location: 'Алматы, ул. Шымбулак 1',
+            currentStatus: 'Средний уровень',
+            currentMeasures: ['Местные продукты 50%', 'Базовые вегетарианские опции'],
+            neededMeasures: ['Расширение местных поставок', 'Сезонное меню', 'Сокращение отходов'],
+            estimatedInvestment: '0.5 млн тенге',
+            potentialSavings: '0.3 млн тенге/год',
+            co2Reduction: '6 тонн CO₂/год',
+            priority: 'Средний'
+          }
+        ]
+      },
+      {
+        category: 'Транспорт',
+        icon: '🚲',
+        measures: [
+          'Электромобили для трансфера гостей',
+          'Зарядные станции для электромобилей',
+          'Прокат велосипедов и эко-транспорта',
+          'Интеграция с общественным транспортом',
+          'Пешеходные и велосипедные маршруты'
+        ],
+        priority: 'Средний',
+        estimatedCost: '1-4 млн тенге',
+        paybackPeriod: '2-5 лет',
+        co2Reduction: '10-20 тонн CO₂/год',
+        accommodationPoints: [
+          {
+            name: 'Отель "ЭкоТранс"',
+            location: 'Алматы, ул. Толе би 85',
+            currentStatus: 'Высокий уровень',
+            currentMeasures: ['2 электромобиля', 'Зарядная станция', 'Прокат велосипедов'],
+            neededMeasures: ['Расширение парка до 5 электромобилей', 'Дополнительные зарядные станции'],
+            estimatedInvestment: '1.5 млн тенге',
+            potentialSavings: '0.8 млн тенге/год',
+            co2Reduction: '12 тонн CO₂/год',
+            priority: 'Средний'
+          },
+          {
+            name: 'Гостиница "Центр города"',
+            location: 'Астана, ул. Бейбитшилик 10',
+            currentStatus: 'Низкий уровень',
+            currentMeasures: ['Обычные автомобили'],
+            neededMeasures: ['Электромобили для трансфера', 'Зарядные станции', 'Прокат велосипедов', 'Интеграция с общественным транспортом'],
+            estimatedInvestment: '3.2 млн тенге',
+            potentialSavings: '1.5 млн тенге/год',
+            co2Reduction: '20 тонн CO₂/год',
+            priority: 'Критический'
+          },
+          {
+            name: 'Курорт "Алматы-Арасан"',
+            location: 'Алматинская область, с. Алматы-Арасан',
+            currentStatus: 'Средний уровень',
+            currentMeasures: ['1 электромобиль', 'Базовый прокат велосипедов'],
+            neededMeasures: ['Расширение парка электромобилей', 'Зарядные станции', 'Велосипедные маршруты'],
+            estimatedInvestment: '2.1 млн тенге',
+            potentialSavings: '1.1 млн тенге/год',
+            co2Reduction: '15 тонн CO₂/год',
+            priority: 'Высокий'
+          }
+        ]
+      }
+    ];
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-blue-50 p-6 rounded-lg">
+          <p className="text-blue-700 mb-4">
+            Система проанализировала ваши данные и предлагает следующие приоритетные направления 
+            для внедрения экологических мер в точках размещения:
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {recommendations.map((rec, index) => (
+            <div key={index} className="bg-white p-6 rounded-lg shadow-md border-2 border-green-100">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <span className="text-3xl mr-3">{rec.icon}</span>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-800">{rec.category}</h4>
+                    <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${
+                      rec.priority === 'Высокий' ? 'bg-red-100 text-red-800' :
+                      rec.priority === 'Средний' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-green-100 text-green-800'
+                    }`}>
+                      Приоритет: {rec.priority}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedCategory(rec.category)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+                >
+                  Вывести список
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                <div>
+                  <h5 className="font-semibold text-gray-700 mb-2">Рекомендуемые меры:</h5>
+                  <ul className="space-y-1">
+                    {rec.measures.map((measure, idx) => (
+                      <li key={idx} className="flex items-start">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <span className="text-sm text-gray-600">{measure}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-gray-200">
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Стоимость</p>
+                    <p className="font-semibold text-green-600">{rec.estimatedCost}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Окупаемость</p>
+                    <p className="font-semibold text-blue-600">{rec.paybackPeriod}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Сокращение CO₂</p>
+                    <p className="font-semibold text-purple-600">{rec.co2Reduction}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-green-50 p-6 rounded-lg">
+          <h4 className="text-lg font-semibold text-green-800 mb-3">📊 Общая статистика</h4>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-green-600">41-78</p>
+              <p className="text-sm text-gray-600">тонн CO₂/год экономии</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-blue-600">4.8-14.3</p>
+              <p className="text-sm text-gray-600">млн тенге инвестиций</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-purple-600">1-5</p>
+              <p className="text-sm text-gray-600">лет окупаемости</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-yellow-600">25</p>
+              <p className="text-sm text-gray-600">мер по внедрению</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-yellow-50 p-6 rounded-lg">
+          <h4 className="text-lg font-semibold text-yellow-800 mb-3">🎯 Следующие шаги</h4>
+          <ol className="space-y-2 text-sm text-gray-700">
+            <li className="flex items-start">
+              <span className="bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5">1</span>
+              <span>Проведите детальный аудит текущего состояния экологических мер</span>
+            </li>
+            <li className="flex items-start">
+              <span className="bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5">2</span>
+              <span>Составьте план внедрения с приоритизацией по ROI и влиянию</span>
+            </li>
+            <li className="flex items-start">
+              <span className="bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5">3</span>
+              <span>Найдите партнеров и поставщиков для реализации мер</span>
+            </li>
+            <li className="flex items-start">
+              <span className="bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5">4</span>
+              <span>Запустите пилотные проекты для тестирования эффективности</span>
+            </li>
+            <li className="flex items-start">
+              <span className="bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 mt-0.5">5</span>
+              <span>Мониторьте прогресс и корректируйте план по мере необходимости</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    );
+
+    {/* Modal для отображения списка точек размещения */}
+    {selectedCategory && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-lg p-6 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-semibold text-green-800">
+              📋 Список точек размещения - {selectedCategory}
+            </h3>
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <XMarkIcon className="w-6 h-6" />
+            </button>
+          </div>
+          
+          <div className="space-y-6">
+            {recommendations.find(r => r.category === selectedCategory)?.accommodationPoints.map((point, index) => (
+              <div key={index} className="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-800">{point.name}</h4>
+                    <p className="text-sm text-gray-600">{point.location}</p>
+                  </div>
+                  <span className={`inline-block px-3 py-1 rounded text-xs font-medium ${
+                    point.priority === 'Критический' ? 'bg-red-100 text-red-800' :
+                    point.priority === 'Высокий' ? 'bg-orange-100 text-orange-800' :
+                    point.priority === 'Средний' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-green-100 text-green-800'
+                  }`}>
+                    {point.priority}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <h5 className="font-semibold text-gray-700 mb-2">Текущее положение:</h5>
+                    <p className="text-sm text-gray-600 mb-3">{point.currentStatus}</p>
+                    <div className="space-y-2">
+                      <h6 className="font-medium text-gray-700">Текущие меры:</h6>
+                      <ul className="space-y-1">
+                        {point.currentMeasures.map((measure, idx) => (
+                          <li key={idx} className="flex items-start">
+                            <span className="text-blue-500 mr-2">•</span>
+                            <span className="text-sm text-gray-600">{measure}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h5 className="font-semibold text-gray-700 mb-2">Рекомендуемые меры:</h5>
+                    <div className="space-y-2">
+                      <ul className="space-y-1">
+                        {point.neededMeasures.map((measure, idx) => (
+                          <li key={idx} className="flex items-start">
+                            <span className="text-green-500 mr-2">✓</span>
+                            <span className="text-sm text-gray-600">{measure}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-200">
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Инвестиции</p>
+                    <p className="font-semibold text-red-600">{point.estimatedInvestment}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Экономия/год</p>
+                    <p className="font-semibold text-green-600">{point.potentialSavings}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">Сокращение CO₂</p>
+                    <p className="font-semibold text-purple-600">{point.co2Reduction}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500">ROI</p>
+                    <p className="font-semibold text-blue-600">
+                      {Math.round((parseFloat(point.potentialSavings.split(' ')[0]) / parseFloat(point.estimatedInvestment.split(' ')[0])) * 100)}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+            >
+              Закрыть
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  };
+
   const renderAccommodationEcoMeasures = (action: string) => {
     // Моковые данные для экологических мер точек размещения
     const ecoMeasuresData = {
@@ -2687,6 +3207,57 @@ export default function AdminDashboard() {
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Введите имя инструктора"
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Файлы курса</label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
+                    <input
+                      type="file"
+                      multiple
+                      accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png,.mp4,.avi,.mov"
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files || []);
+                        handleInputChange('files', files);
+                      }}
+                      className="hidden"
+                      id="course-files"
+                    />
+                    <label htmlFor="course-files" className="cursor-pointer">
+                      <div className="space-y-2">
+                        <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <div className="text-sm text-gray-600">
+                          <span className="font-medium text-green-600 hover:text-green-500">Нажмите для загрузки</span> или перетащите файлы
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          PDF, DOC, PPT, XLS, изображения, видео (макс. 10 файлов)
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                  {formData.files && formData.files.length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Выбранные файлы:</p>
+                      <div className="space-y-1">
+                        {Array.from(formData.files).map((file, index) => (
+                          <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                            <span className="text-sm text-gray-600 truncate">{file.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newFiles = Array.from(formData.files || []).filter((_, i) => i !== index);
+                                handleInputChange('files', newFiles);
+                              }}
+                              className="text-red-500 hover:text-red-700 text-sm"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventStatus}</label>
@@ -3254,6 +3825,334 @@ export default function AdminDashboard() {
                 className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
               >
                 {t.close}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Recommendations Modal */}
+      {showRecommendationsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-green-800">
+                🤖 Автоматические рекомендации по экологическим мерам
+              </h3>
+              <button
+                onClick={() => setShowRecommendationsModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+            </div>
+            
+            {renderAutoRecommendations()}
+            
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => setShowRecommendationsModal(false)}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+              >
+                {t.close}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Accommodation List Modal */}
+      {selectedCategory && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-green-800">
+                📋 Список точек размещения - {selectedCategory}
+              </h3>
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              {(() => {
+                const recommendations = [
+                  {
+                    category: 'Энергия',
+                    accommodationPoints: [
+                      {
+                        name: 'Эко-отель "Зеленые горы"',
+                        location: 'Алматы, ул. Абая 150',
+                        currentStatus: 'Средний уровень',
+                        currentMeasures: ['LED освещение 30%', 'Солнечные панели 5 кВт'],
+                        neededMeasures: ['Расширение солнечных панелей до 20 кВт', 'Умная система управления'],
+                        estimatedInvestment: '3.2 млн тенге',
+                        potentialSavings: '1.8 млн тенге/год',
+                        co2Reduction: '18 тонн CO₂/год',
+                        priority: 'Высокий'
+                      },
+                      {
+                        name: 'Гостиница "Озеро Балхаш"',
+                        location: 'Алматинская область, с. Балхаш',
+                        currentStatus: 'Низкий уровень',
+                        currentMeasures: ['Базовое освещение'],
+                        neededMeasures: ['Солнечные панели 15 кВт', 'Система мониторинга', 'Аккумуляторы'],
+                        estimatedInvestment: '4.5 млн тенге',
+                        potentialSavings: '2.1 млн тенге/год',
+                        co2Reduction: '22 тонн CO₂/год',
+                        priority: 'Критический'
+                      },
+                      {
+                        name: 'Курорт "Алтайские вершины"',
+                        location: 'ВКО, г. Усть-Каменогорск',
+                        currentStatus: 'Высокий уровень',
+                        currentMeasures: ['Солнечные панели 25 кВт', 'Умная система', 'Геотермальное отопление'],
+                        neededMeasures: ['Расширение до 40 кВт', 'Аккумуляторы энергии'],
+                        estimatedInvestment: '1.8 млн тенге',
+                        potentialSavings: '1.2 млн тенге/год',
+                        co2Reduction: '12 тонн CO₂/год',
+                        priority: 'Средний'
+                      }
+                    ]
+                  },
+                  {
+                    category: 'Вода',
+                    accommodationPoints: [
+                      {
+                        name: 'Отель "Аквамарин"',
+                        location: 'Астана, пр. Республики 45',
+                        currentStatus: 'Средний уровень',
+                        currentMeasures: ['Водосберегающие краны 50%', 'Базовый мониторинг'],
+                        neededMeasures: ['Система сбора дождевой воды', 'Рециркуляция серой воды', 'Умные датчики'],
+                        estimatedInvestment: '2.1 млн тенге',
+                        potentialSavings: '0.8 млн тенге/год',
+                        co2Reduction: '8 тонн CO₂/год',
+                        priority: 'Высокий'
+                      },
+                      {
+                        name: 'Санаторий "Жемчужина"',
+                        location: 'Алматинская область, с. Капчагай',
+                        currentStatus: 'Низкий уровень',
+                        currentMeasures: ['Обычная сантехника'],
+                        neededMeasures: ['Полная система водосбережения', 'Сбор дождевой воды', 'Мониторинг утечек'],
+                        estimatedInvestment: '2.8 млн тенге',
+                        potentialSavings: '1.2 млн тенге/год',
+                        co2Reduction: '12 тонн CO₂/год',
+                        priority: 'Критический'
+                      },
+                      {
+                        name: 'Курорт "Бурабай"',
+                        location: 'Акмолинская область, с. Бурабай',
+                        currentStatus: 'Высокий уровень',
+                        currentMeasures: ['Система сбора дождевой воды', 'Водосберегающая сантехника 80%'],
+                        neededMeasures: ['Рециркуляция серой воды', 'Умные датчики утечек'],
+                        estimatedInvestment: '1.2 млн тенге',
+                        potentialSavings: '0.6 млн тенге/год',
+                        co2Reduction: '6 тонн CO₂/год',
+                        priority: 'Средний'
+                      }
+                    ]
+                  },
+                  {
+                    category: 'Отходы',
+                    accommodationPoints: [
+                      {
+                        name: 'Отель "ЭкоСтэй"',
+                        location: 'Алматы, ул. Достык 120',
+                        currentStatus: 'Высокий уровень',
+                        currentMeasures: ['Сортировка отходов 70%', 'Компостирование', 'Переработка пластика'],
+                        neededMeasures: ['Программа "Нулевые отходы"', 'Обучение персонала'],
+                        estimatedInvestment: '0.6 млн тенге',
+                        potentialSavings: '0.4 млн тенге/год',
+                        co2Reduction: '8 тонн CO₂/год',
+                        priority: 'Средний'
+                      },
+                      {
+                        name: 'Гостиница "Центральная"',
+                        location: 'Астана, ул. Кенесары 25',
+                        currentStatus: 'Низкий уровень',
+                        currentMeasures: ['Базовая утилизация'],
+                        neededMeasures: ['Полная система сортировки', 'Компостирование', 'Переработка', 'Обучение'],
+                        estimatedInvestment: '1.4 млн тенге',
+                        potentialSavings: '0.9 млн тенге/год',
+                        co2Reduction: '15 тонн CO₂/год',
+                        priority: 'Высокий'
+                      },
+                      {
+                        name: 'Курорт "Алаколь"',
+                        location: 'Алматинская область, с. Алаколь',
+                        currentStatus: 'Средний уровень',
+                        currentMeasures: ['Сортировка отходов 40%', 'Базовое компостирование'],
+                        neededMeasures: ['Расширение сортировки', 'Переработка пластика', 'Программа "Нулевые отходы"'],
+                        estimatedInvestment: '0.8 млн тенге',
+                        potentialSavings: '0.5 млн тенге/год',
+                        co2Reduction: '10 тонн CO₂/год',
+                        priority: 'Средний'
+                      }
+                    ]
+                  },
+                  {
+                    category: 'Питание',
+                    accommodationPoints: [
+                      {
+                        name: 'Ресторан-отель "Фермерский"',
+                        location: 'Алматинская область, с. Каскелен',
+                        currentStatus: 'Высокий уровень',
+                        currentMeasures: ['Местные продукты 80%', 'Сезонное меню', 'Вегетарианские опции'],
+                        neededMeasures: ['100% местные продукты', 'Сокращение отходов до 70%'],
+                        estimatedInvestment: '0.3 млн тенге',
+                        potentialSavings: '0.2 млн тенге/год',
+                        co2Reduction: '4 тонн CO₂/год',
+                        priority: 'Средний'
+                      },
+                      {
+                        name: 'Отель "Столичный"',
+                        location: 'Астана, пр. Республики 15',
+                        currentStatus: 'Низкий уровень',
+                        currentMeasures: ['Стандартное меню'],
+                        neededMeasures: ['Партнерство с фермерами', 'Сезонное меню', 'Сокращение отходов', 'Вегетарианские опции'],
+                        estimatedInvestment: '0.7 млн тенге',
+                        potentialSavings: '0.4 млн тенге/год',
+                        co2Reduction: '8 тонн CO₂/год',
+                        priority: 'Высокий'
+                      },
+                      {
+                        name: 'Курорт "Шымбулак"',
+                        location: 'Алматы, ул. Шымбулак 1',
+                        currentStatus: 'Средний уровень',
+                        currentMeasures: ['Местные продукты 50%', 'Базовые вегетарианские опции'],
+                        neededMeasures: ['Расширение местных поставок', 'Сезонное меню', 'Сокращение отходов'],
+                        estimatedInvestment: '0.5 млн тенге',
+                        potentialSavings: '0.3 млн тенге/год',
+                        co2Reduction: '6 тонн CO₂/год',
+                        priority: 'Средний'
+                      }
+                    ]
+                  },
+                  {
+                    category: 'Транспорт',
+                    accommodationPoints: [
+                      {
+                        name: 'Отель "ЭкоТранс"',
+                        location: 'Алматы, ул. Толе би 85',
+                        currentStatus: 'Высокий уровень',
+                        currentMeasures: ['2 электромобиля', 'Зарядная станция', 'Прокат велосипедов'],
+                        neededMeasures: ['Расширение парка до 5 электромобилей', 'Дополнительные зарядные станции'],
+                        estimatedInvestment: '1.5 млн тенге',
+                        potentialSavings: '0.8 млн тенге/год',
+                        co2Reduction: '12 тонн CO₂/год',
+                        priority: 'Средний'
+                      },
+                      {
+                        name: 'Гостиница "Центр города"',
+                        location: 'Астана, ул. Бейбитшилик 10',
+                        currentStatus: 'Низкий уровень',
+                        currentMeasures: ['Обычные автомобили'],
+                        neededMeasures: ['Электромобили для трансфера', 'Зарядные станции', 'Прокат велосипедов', 'Интеграция с общественным транспортом'],
+                        estimatedInvestment: '3.2 млн тенге',
+                        potentialSavings: '1.5 млн тенге/год',
+                        co2Reduction: '20 тонн CO₂/год',
+                        priority: 'Критический'
+                      },
+                      {
+                        name: 'Курорт "Алматы-Арасан"',
+                        location: 'Алматинская область, с. Алматы-Арасан',
+                        currentStatus: 'Средний уровень',
+                        currentMeasures: ['1 электромобиль', 'Базовый прокат велосипедов'],
+                        neededMeasures: ['Расширение парка электромобилей', 'Зарядные станции', 'Велосипедные маршруты'],
+                        estimatedInvestment: '2.1 млн тенге',
+                        potentialSavings: '1.1 млн тенге/год',
+                        co2Reduction: '15 тонн CO₂/год',
+                        priority: 'Высокий'
+                      }
+                    ]
+                  }
+                ];
+
+                const selectedRec = recommendations.find(r => r.category === selectedCategory);
+                return selectedRec?.accommodationPoints.map((point, index) => (
+                  <div key={index} className="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-800">{point.name}</h4>
+                        <p className="text-sm text-gray-600">{point.location}</p>
+                      </div>
+                      <span className={`inline-block px-3 py-1 rounded text-xs font-medium ${
+                        point.priority === 'Критический' ? 'bg-red-100 text-red-800' :
+                        point.priority === 'Высокий' ? 'bg-orange-100 text-orange-800' :
+                        point.priority === 'Средний' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-green-100 text-green-800'
+                      }`}>
+                        {point.priority}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <div>
+                        <h5 className="font-semibold text-gray-700 mb-2">Текущее положение:</h5>
+                        <p className="text-sm text-gray-600 mb-3">{point.currentStatus}</p>
+                        <div className="space-y-2">
+                          <h6 className="font-medium text-gray-700">Текущие меры:</h6>
+                          <ul className="space-y-1">
+                            {point.currentMeasures.map((measure, idx) => (
+                              <li key={idx} className="flex items-start">
+                                <span className="text-blue-500 mr-2">•</span>
+                                <span className="text-sm text-gray-600">{measure}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h5 className="font-semibold text-gray-700 mb-2">Рекомендуемые меры:</h5>
+                        <div className="space-y-2">
+                          <ul className="space-y-1">
+                            {point.neededMeasures.map((measure, idx) => (
+                              <li key={idx} className="flex items-start">
+                                <span className="text-green-500 mr-2">✓</span>
+                                <span className="text-sm text-gray-600">{measure}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-200">
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500">Инвестиции</p>
+                        <p className="font-semibold text-red-600">{point.estimatedInvestment}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500">Экономия/год</p>
+                        <p className="font-semibold text-green-600">{point.potentialSavings}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500">Сокращение CO₂</p>
+                        <p className="font-semibold text-purple-600">{point.co2Reduction}</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500">ROI</p>
+                        <p className="font-semibold text-blue-600">
+                          {Math.round((parseFloat(point.potentialSavings.split(' ')[0]) / parseFloat(point.estimatedInvestment.split(' ')[0])) * 100)}%
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ));
+              })()}
+            </div>
+
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+              >
+                Закрыть
               </button>
             </div>
           </div>

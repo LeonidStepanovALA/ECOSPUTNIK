@@ -182,6 +182,7 @@ export const translations = {
     carbonNeutralCertification: 'Сертификация углеродной нейтральности',
     carbonReporting: 'Отчетность по углероду',
     carbonEducation: 'Обучение по углероду',
+    createAutoRecommendations: 'Создать автоматические рекомендации',
     calendar: 'Календарь',
     bookings: 'Бронирования',
     currentBookings: 'Текущие заказы',
@@ -851,6 +852,7 @@ export const translations = {
     carbonNeutralCertification: 'Carbon Neutral Certification',
     carbonReporting: 'Carbon Reporting',
     carbonEducation: 'Carbon Education',
+    createAutoRecommendations: 'Create Automatic Recommendations',
     
     // Analyst page
     analystDashboard: 'Analyst Dashboard',
