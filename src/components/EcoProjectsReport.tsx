@@ -16,139 +16,6 @@ interface EcoProject {
   region: string;
 }
 
-const mockEcoProjects: EcoProject[] = [
-  // Ожидающие зеленое финансирование (3 примера)
-  {
-    id: 1,
-    name: 'Солнечная электростанция в Алматы',
-    status: 'awaiting',
-    fundingAmount: 50000000,
-    progress: 0,
-    category: 'Энергетика',
-    region: 'Алматы',
-    ecoImpact: 0
-  },
-  {
-    id: 2,
-    name: 'Геотермальная станция в Алатау',
-    status: 'awaiting',
-    fundingAmount: 120000000,
-    progress: 0,
-    category: 'Энергетика',
-    region: 'Алматинская область',
-    ecoImpact: 0
-  },
-  {
-    id: 3,
-    name: 'Эко-комплекс "Зеленый оазис"',
-    status: 'awaiting',
-    fundingAmount: 35000000,
-    progress: 0,
-    category: 'Туризм',
-    region: 'Астана',
-    ecoImpact: 0
-  },
-  
-  // Получившие зеленое финансирование (3 примера)
-  {
-    id: 4,
-    name: 'Эко-отель "Зеленые горы"',
-    status: 'received',
-    fundingAmount: 25000000,
-    progress: 65,
-    category: 'Туризм',
-    region: 'Алматинская область',
-    ecoImpact: 85
-  },
-  {
-    id: 5,
-    name: 'Система переработки отходов в Актау',
-    status: 'received',
-    fundingAmount: 30000000,
-    progress: 30,
-    category: 'Переработка',
-    region: 'Актау',
-    ecoImpact: 75
-  },
-  {
-    id: 6,
-    name: 'Биогазовая установка в Шымкенте',
-    status: 'received',
-    fundingAmount: 45000000,
-    progress: 55,
-    category: 'Энергетика',
-    region: 'Шымкент',
-    ecoImpact: 82
-  },
-  
-  // Реализованные проекты (3 примера)
-  {
-    id: 7,
-    name: 'Система очистки воды в Шымкенте',
-    status: 'implemented',
-    fundingAmount: 15000000,
-    progress: 100,
-    completionDate: '2024-06-15',
-    category: 'Водоснабжение',
-    region: 'Шымкент',
-    ecoImpact: 92
-  },
-  {
-    id: 8,
-    name: 'Эко-ферма "Органик"',
-    status: 'implemented',
-    fundingAmount: 8000000,
-    progress: 100,
-    completionDate: '2024-03-20',
-    category: 'Сельское хозяйство',
-    region: 'Алматинская область',
-    ecoImpact: 88
-  },
-  {
-    id: 9,
-    name: 'Солнечная панель на крыше ТРЦ',
-    status: 'implemented',
-    fundingAmount: 12000000,
-    progress: 100,
-    completionDate: '2024-01-10',
-    category: 'Энергетика',
-    region: 'Алматы',
-    ecoImpact: 78
-  },
-  
-  // Проекты в стадии реализации (3 примера)
-  {
-    id: 10,
-    name: 'Ветровая электростанция в Астане',
-    status: 'in-progress',
-    fundingAmount: 75000000,
-    progress: 45,
-    category: 'Энергетика',
-    region: 'Астана',
-    ecoImpact: 78
-  },
-  {
-    id: 11,
-    name: 'Эко-лагерь "Лесная сказка"',
-    status: 'in-progress',
-    fundingAmount: 18000000,
-    progress: 70,
-    category: 'Туризм',
-    region: 'Алматинская область',
-    ecoImpact: 85
-  },
-  {
-    id: 12,
-    name: 'Система умного освещения в Уральске',
-    status: 'in-progress',
-    fundingAmount: 22000000,
-    progress: 85,
-    category: 'Инфраструктура',
-    region: 'Уральск',
-    ecoImpact: 90
-  }
-];
-
 interface EcoProjectsReportProps {
   filter?: 'awaiting' | 'received' | 'implemented' | 'in-progress' | 'all';
 }
@@ -156,6 +23,140 @@ interface EcoProjectsReportProps {
 export default function EcoProjectsReport({ filter = 'all' }: EcoProjectsReportProps) {
   const { language } = useLanguage();
   const t = translations[language];
+
+  // Mock eco projects with bilingual support
+  const mockEcoProjects: EcoProject[] = [
+    // Ожидающие зеленое финансирование (3 примера)
+    {
+      id: 1,
+      name: language === 'ru' ? 'Солнечная электростанция в Алматы' : 'Solar Power Plant in Almaty',
+      status: 'awaiting',
+      fundingAmount: 50000000,
+      progress: 0,
+      category: language === 'ru' ? 'Энергетика' : 'Energy',
+      region: language === 'ru' ? 'Алматы' : 'Almaty',
+      ecoImpact: 0
+    },
+    {
+      id: 2,
+      name: language === 'ru' ? 'Геотермальная станция в Алатау' : 'Geothermal Station in Alatau',
+      status: 'awaiting',
+      fundingAmount: 120000000,
+      progress: 0,
+      category: language === 'ru' ? 'Энергетика' : 'Energy',
+      region: language === 'ru' ? 'Алматинская область' : 'Almaty Region',
+      ecoImpact: 0
+    },
+    {
+      id: 3,
+      name: language === 'ru' ? 'Эко-комплекс "Зеленый оазис"' : 'Eco Complex "Green Oasis"',
+      status: 'awaiting',
+      fundingAmount: 35000000,
+      progress: 0,
+      category: language === 'ru' ? 'Туризм' : 'Tourism',
+      region: language === 'ru' ? 'Астана' : 'Astana',
+      ecoImpact: 0
+    },
+    
+    // Получившие зеленое финансирование (3 примера)
+    {
+      id: 4,
+      name: language === 'ru' ? 'Эко-отель "Зеленые горы"' : 'Eco Hotel "Green Mountains"',
+      status: 'received',
+      fundingAmount: 25000000,
+      progress: 65,
+      category: language === 'ru' ? 'Туризм' : 'Tourism',
+      region: language === 'ru' ? 'Алматинская область' : 'Almaty Region',
+      ecoImpact: 85
+    },
+    {
+      id: 5,
+      name: language === 'ru' ? 'Система переработки отходов в Актау' : 'Waste Recycling System in Aktau',
+      status: 'received',
+      fundingAmount: 30000000,
+      progress: 30,
+      category: language === 'ru' ? 'Переработка' : 'Recycling',
+      region: language === 'ru' ? 'Актау' : 'Aktau',
+      ecoImpact: 75
+    },
+    {
+      id: 6,
+      name: language === 'ru' ? 'Биогазовая установка в Шымкенте' : 'Biogas Plant in Shymkent',
+      status: 'received',
+      fundingAmount: 45000000,
+      progress: 55,
+      category: language === 'ru' ? 'Энергетика' : 'Energy',
+      region: language === 'ru' ? 'Шымкент' : 'Shymkent',
+      ecoImpact: 82
+    },
+    
+    // Реализованные проекты (3 примера)
+    {
+      id: 7,
+      name: language === 'ru' ? 'Система очистки воды в Шымкенте' : 'Water Purification System in Shymkent',
+      status: 'implemented',
+      fundingAmount: 15000000,
+      progress: 100,
+      completionDate: '2024-06-15',
+      category: language === 'ru' ? 'Водоснабжение' : 'Water Supply',
+      region: language === 'ru' ? 'Шымкент' : 'Shymkent',
+      ecoImpact: 92
+    },
+    {
+      id: 8,
+      name: language === 'ru' ? 'Эко-ферма "Органик"' : 'Eco Farm "Organic"',
+      status: 'implemented',
+      fundingAmount: 8000000,
+      progress: 100,
+      completionDate: '2024-03-20',
+      category: language === 'ru' ? 'Сельское хозяйство' : 'Agriculture',
+      region: language === 'ru' ? 'Алматинская область' : 'Almaty Region',
+      ecoImpact: 88
+    },
+    {
+      id: 9,
+      name: language === 'ru' ? 'Солнечная панель на крыше ТРЦ' : 'Solar Panel on Shopping Center Roof',
+      status: 'implemented',
+      fundingAmount: 12000000,
+      progress: 100,
+      completionDate: '2024-01-10',
+      category: language === 'ru' ? 'Энергетика' : 'Energy',
+      region: language === 'ru' ? 'Алматы' : 'Almaty',
+      ecoImpact: 78
+    },
+    
+    // Проекты в стадии реализации (3 примера)
+    {
+      id: 10,
+      name: language === 'ru' ? 'Ветровая электростанция в Астане' : 'Wind Power Plant in Astana',
+      status: 'in-progress',
+      fundingAmount: 75000000,
+      progress: 45,
+      category: language === 'ru' ? 'Энергетика' : 'Energy',
+      region: language === 'ru' ? 'Астана' : 'Astana',
+      ecoImpact: 78
+    },
+    {
+      id: 11,
+      name: language === 'ru' ? 'Эко-лагерь "Лесная сказка"' : 'Eco Camp "Forest Tale"',
+      status: 'in-progress',
+      fundingAmount: 18000000,
+      progress: 70,
+      category: language === 'ru' ? 'Туризм' : 'Tourism',
+      region: language === 'ru' ? 'Алматинская область' : 'Almaty Region',
+      ecoImpact: 85
+    },
+    {
+      id: 12,
+      name: language === 'ru' ? 'Система умного освещения в Уральске' : 'Smart Lighting System in Uralsk',
+      status: 'in-progress',
+      fundingAmount: 22000000,
+      progress: 85,
+      category: language === 'ru' ? 'Инфраструктура' : 'Infrastructure',
+      region: language === 'ru' ? 'Уральск' : 'Uralsk',
+      ecoImpact: 90
+    }
+  ];
 
   const filteredProjects = filter === 'all' 
     ? mockEcoProjects 
@@ -268,7 +269,7 @@ export default function EcoProjectsReport({ filter = 'all' }: EcoProjectsReportP
               
               {project.completionDate && (
                 <p className="text-sm text-gray-600">
-                  Завершен: {new Date(project.completionDate).toLocaleDateString('ru-RU')}
+                  {t.completed}: {new Date(project.completionDate).toLocaleDateString(language === 'ru' ? 'ru-RU' : 'en-US')}
                 </p>
               )}
             </div>

@@ -4,6 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { StarIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '@/translations';
 
 interface SearchResult {
   id: number;
@@ -34,188 +36,221 @@ interface SearchResultsProps {
   };
 }
 
-const mockResults: SearchResult[] = [
-  {
-    id: 1,
-    type: 'tour',
-    title: 'Треккинг в горах Алматы',
-    description: 'Двухдневный поход по живописным маршрутам с профессиональным гидом и экологическим обучением',
-    image: '/hiking.svg',
-    price: 45000,
-    ecoRating: 5,
-    location: 'Алматы, ущелье Бутаковка',
-    duration: '2 дня',
-    difficulty: 'medium',
-    region: 'almaty',
-    tourType: 'eco'
-  },
-  {
-    id: 2,
-    type: 'accommodation',
-    title: 'Эко-отель "Горный воздух"',
-    description: 'Уютный отель с солнечными панелями, системой очистки воды и органическим садом',
-    image: '/eco-hotel.svg',
-    price: 25000,
-    ecoRating: 4,
-    location: 'Алматинская область, Талгар',
-    region: 'almaty'
-  },
-  {
-    id: 3,
-    type: 'guide',
-    title: 'Гид-натуралист',
-    description: 'Профессиональный гид-натуралист с опытом работы в заповедниках',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Гид-натуралист',
-    price: 15000,
-    ecoRating: 5,
-    location: 'Алматы',
-    duration: '1 день',
-    difficulty: 'easy',
-    region: 'almaty'
-  },
-  {
-    id: 4,
-    type: 'equipment',
-    title: 'Эко-снаряжение',
-    description: 'Прокат экологичного туристического снаряжения из переработанных материалов',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Эко-снаряжение',
-    price: 8000,
-    ecoRating: 4,
-    location: 'Алматы, центр',
-    region: 'almaty'
-  },
-  {
-    id: 5,
-    type: 'tour',
-    title: 'Горнолыжный тур в Шымбулак',
-    description: 'Захватывающий горнолыжный тур с инструктором и проживанием в эко-отеле',
-    image: '/ski-tour.svg',
-    price: 75000,
-    ecoRating: 4,
-    location: 'Алматы, Шымбулак',
-    duration: '3 дня',
-    difficulty: 'medium',
-    region: 'almaty',
-    tourType: 'ski'
-  },
-  {
-    id: 6,
-    type: 'tour',
-    title: 'Гастрономический тур по Алматы',
-    description: 'Знакомство с местной кухней, посещение органических ферм и кулинарные мастер-классы',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Гастротур',
-    price: 35000,
-    ecoRating: 5,
-    location: 'Алматы',
-    duration: '2 дня',
-    difficulty: 'easy',
-    region: 'almaty',
-    tourType: 'gastro'
-  },
-  {
-    id: 7,
-    type: 'transport',
-    title: 'Электровелосипед',
-    description: 'Аренда электровелосипедов для экологичных путешествий',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Электровелосипед',
-    price: 5000,
-    ecoRating: 5,
-    location: 'Алматы, Медеу',
-    region: 'almaty'
-  },
-  {
-    id: 8,
-    type: 'transport',
-    title: 'Tesla Model Y',
-    description: 'Аренда электромобиля Tesla для экологичных поездок',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Tesla',
-    price: 45000,
-    ecoRating: 5,
-    location: 'Алматы, центр',
-    region: 'almaty'
-  },
-  {
-    id: 9,
-    type: 'transport',
-    title: 'Эко-трансфер',
-    description: 'Групповой трансфер на электробусе',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Эко-трансфер',
-    price: 3000,
-    ecoRating: 4,
-    location: 'Алматы',
-    region: 'almaty'
-  },
-  {
-    id: 10,
-    type: 'food',
-    title: 'Эко-кафе',
-    description: 'Органическое кафе с местными продуктами',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Эко-кафе',
-    price: 5000,
-    ecoRating: 5,
-    location: 'Алматы, центр',
-    region: 'almaty'
-  },
-  {
-    id: 11,
-    type: 'food',
-    title: 'Ланчбокс',
-    description: 'Эко-ланчбоксы для походов из органических продуктов',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Ланчбокс',
-    price: 4500,
-    ecoRating: 4,
-    location: 'Алматы',
-    region: 'almaty'
-  },
-  {
-    id: 12,
-    type: 'food',
-    title: 'Фермерский завтрак',
-    description: 'Завтрак из свежих фермерских продуктов',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Фермерский+завтрак',
-    price: 3500,
-    ecoRating: 5,
-    location: 'Алматы',
-    region: 'almaty'
-  },
-  {
-    id: 13,
-    type: 'food',
-    title: 'Кулинарный мастер-класс',
-    description: 'Мастер-класс по приготовлению блюд из органических продуктов',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Мастер-класс',
-    price: 15000,
-    ecoRating: 4,
-    location: 'Алматы',
-    duration: '3 часа',
-    region: 'almaty'
-  },
-  {
-    id: 14,
-    type: 'guide',
-    title: 'Фотограф дикой природы',
-    description: 'Профессиональный фотограф для съемки природы и животных',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Фотограф',
-    price: 25000,
-    ecoRating: 5,
-    location: 'Алматы',
-    duration: '1 день',
-    region: 'almaty'
-  },
-  {
-    id: 15,
-    type: 'accommodation',
-    title: 'Глэмпинг в горах',
-    description: 'Комфортное проживание на природе с минимальным воздействием на окружающую среду',
-    image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Глэмпинг',
-    price: 35000,
-    ecoRating: 5,
-    location: 'Алматинская область, Тургень',
-    region: 'almaty'
-  }
+  // Mock results with bilingual support
+  const mockResults: SearchResult[] = [
+    {
+      id: 1,
+      type: 'tour',
+      title: language === 'ru' ? 'Треккинг в горах Алматы' : 'Trekking in Almaty Mountains',
+      description: language === 'ru' 
+        ? 'Двухдневный поход по живописным маршрутам с профессиональным гидом и экологическим обучением'
+        : 'Two-day hike through scenic routes with professional guide and environmental education',
+      image: '/hiking.svg',
+      price: 45000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы, ущелье Бутаковка' : 'Almaty, Butakovka Gorge',
+      duration: language === 'ru' ? '2 дня' : '2 days',
+      difficulty: 'medium',
+      region: 'almaty',
+      tourType: 'eco'
+    },
+    {
+      id: 2,
+      type: 'accommodation',
+      title: language === 'ru' ? 'Эко-отель "Горный воздух"' : 'Eco-Hotel "Mountain Air"',
+      description: language === 'ru'
+        ? 'Уютный отель с солнечными панелями, системой очистки воды и органическим садом'
+        : 'Cozy hotel with solar panels, water purification system and organic garden',
+      image: '/eco-hotel.svg',
+      price: 25000,
+      ecoRating: 4,
+      location: language === 'ru' ? 'Алматинская область, Талгар' : 'Almaty Region, Talgar',
+      region: 'almaty'
+    },
+    {
+      id: 3,
+      type: 'guide',
+      title: language === 'ru' ? 'Гид-натуралист' : 'Naturalist Guide',
+      description: language === 'ru'
+        ? 'Профессиональный гид-натуралист с опытом работы в заповедниках'
+        : 'Professional naturalist guide with experience in nature reserves',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Гид-натуралист',
+      price: 15000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы' : 'Almaty',
+      duration: language === 'ru' ? '1 день' : '1 day',
+      difficulty: 'easy',
+      region: 'almaty'
+    },
+    {
+      id: 4,
+      type: 'equipment',
+      title: language === 'ru' ? 'Эко-снаряжение' : 'Eco Equipment',
+      description: language === 'ru'
+        ? 'Прокат экологичного туристического снаряжения из переработанных материалов'
+        : 'Rental of eco-friendly tourist equipment made from recycled materials',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Эко-снаряжение',
+      price: 8000,
+      ecoRating: 4,
+      location: language === 'ru' ? 'Алматы, центр' : 'Almaty, center',
+      region: 'almaty'
+    },
+    {
+      id: 5,
+      type: 'tour',
+      title: language === 'ru' ? 'Горнолыжный тур в Шымбулак' : 'Ski Tour in Shymbulak',
+      description: language === 'ru'
+        ? 'Захватывающий горнолыжный тур с инструктором и проживанием в эко-отеле'
+        : 'Exciting ski tour with instructor and accommodation in eco-hotel',
+      image: '/ski-tour.svg',
+      price: 75000,
+      ecoRating: 4,
+      location: language === 'ru' ? 'Алматы, Шымбулак' : 'Almaty, Shymbulak',
+      duration: language === 'ru' ? '3 дня' : '3 days',
+      difficulty: 'medium',
+      region: 'almaty',
+      tourType: 'ski'
+    },
+    {
+      id: 6,
+      type: 'tour',
+      title: language === 'ru' ? 'Гастрономический тур по Алматы' : 'Gastronomic Tour in Almaty',
+      description: language === 'ru'
+        ? 'Знакомство с местной кухней, посещение органических ферм и кулинарные мастер-классы'
+        : 'Introduction to local cuisine, visiting organic farms and culinary master classes',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Гастротур',
+      price: 35000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы' : 'Almaty',
+      duration: language === 'ru' ? '2 дня' : '2 days',
+      difficulty: 'easy',
+      region: 'almaty',
+      tourType: 'gastro'
+    },
+    {
+      id: 7,
+      type: 'transport',
+      title: language === 'ru' ? 'Электровелосипед' : 'Electric Bicycle',
+      description: language === 'ru'
+        ? 'Аренда электровелосипедов для экологичных путешествий'
+        : 'Electric bicycle rental for eco-friendly travel',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Электровелосипед',
+      price: 5000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы, Медеу' : 'Almaty, Medeu',
+      region: 'almaty'
+    },
+    {
+      id: 8,
+      type: 'transport',
+      title: language === 'ru' ? 'Tesla Model Y' : 'Tesla Model Y',
+      description: language === 'ru'
+        ? 'Аренда электромобиля Tesla для экологичных поездок'
+        : 'Tesla electric car rental for eco-friendly trips',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Tesla',
+      price: 45000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы, центр' : 'Almaty, center',
+      region: 'almaty'
+    },
+    {
+      id: 9,
+      type: 'transport',
+      title: language === 'ru' ? 'Эко-трансфер' : 'Eco Transfer',
+      description: language === 'ru'
+        ? 'Групповой трансфер на электробусе'
+        : 'Group transfer by electric bus',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Эко-трансфер',
+      price: 3000,
+      ecoRating: 4,
+      location: language === 'ru' ? 'Алматы' : 'Almaty',
+      region: 'almaty'
+    },
+    {
+      id: 10,
+      type: 'food',
+      title: language === 'ru' ? 'Эко-кафе' : 'Eco Cafe',
+      description: language === 'ru'
+        ? 'Органическое кафе с местными продуктами'
+        : 'Organic cafe with local products',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Эко-кафе',
+      price: 5000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы, центр' : 'Almaty, center',
+      region: 'almaty'
+    },
+    {
+      id: 11,
+      type: 'food',
+      title: language === 'ru' ? 'Ланчбокс' : 'Lunch Box',
+      description: language === 'ru'
+        ? 'Эко-ланчбоксы для походов из органических продуктов'
+        : 'Eco lunch boxes for hiking made from organic products',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Ланчбокс',
+      price: 4500,
+      ecoRating: 4,
+      location: language === 'ru' ? 'Алматы' : 'Almaty',
+      region: 'almaty'
+    },
+    {
+      id: 12,
+      type: 'food',
+      title: language === 'ru' ? 'Фермерский завтрак' : 'Farm Breakfast',
+      description: language === 'ru'
+        ? 'Завтрак из свежих фермерских продуктов'
+        : 'Breakfast from fresh farm products',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Фермерский+завтрак',
+      price: 3500,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы' : 'Almaty',
+      region: 'almaty'
+    },
+    {
+      id: 13,
+      type: 'food',
+      title: language === 'ru' ? 'Кулинарный мастер-класс' : 'Culinary Master Class',
+      description: language === 'ru'
+        ? 'Мастер-класс по приготовлению блюд из органических продуктов'
+        : 'Master class on cooking dishes from organic products',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Мастер-класс',
+      price: 15000,
+      ecoRating: 4,
+      location: language === 'ru' ? 'Алматы' : 'Almaty',
+      duration: language === 'ru' ? '3 часа' : '3 hours',
+      region: 'almaty'
+    },
+    {
+      id: 14,
+      type: 'guide',
+      title: language === 'ru' ? 'Фотограф дикой природы' : 'Wildlife Photographer',
+      description: language === 'ru'
+        ? 'Профессиональный фотограф для съемки природы и животных'
+        : 'Professional photographer for nature and wildlife photography',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Фотограф',
+      price: 25000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматы' : 'Almaty',
+      duration: language === 'ru' ? '1 день' : '1 day',
+      region: 'almaty'
+    },
+    {
+      id: 15,
+      type: 'accommodation',
+      title: language === 'ru' ? 'Глэмпинг в горах' : 'Glamping in the Mountains',
+      description: language === 'ru'
+        ? 'Комфортное проживание на природе с минимальным воздействием на окружающую среду'
+        : 'Comfortable accommodation in nature with minimal impact on the environment',
+      image: 'https://via.placeholder.com/400x300/92C291/FFFFFF?text=Глэмпинг',
+      price: 35000,
+      ecoRating: 5,
+      location: language === 'ru' ? 'Алматинская область, Тургень' : 'Almaty Region, Turgen',
+      region: 'almaty'
+    }
 ];
 
 export default function SearchResults({ results, isLoading = false, filters }: SearchResultsProps) {
+  const { language } = useLanguage();
+  const t = translations[language];
   const [sortBy, setSortBy] = React.useState('relevance');
 
   // Используем переданные результаты или mockResults, если результаты не переданы
@@ -300,7 +335,7 @@ export default function SearchResults({ results, isLoading = false, filters }: S
   const filteredResults = React.useMemo(() => {
     const filtered = filterResults(initialResults);
     return sortResults(filtered);
-  }, [initialResults, filters, sortBy, filterResults, sortResults]);
+  }, [initialResults, filterResults, sortResults]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('kk-KZ', {

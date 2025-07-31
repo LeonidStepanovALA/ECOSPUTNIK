@@ -22,28 +22,54 @@ interface FinancingData {
   }>;
 }
 
-const mockFinancingData: FinancingData = {
-  totalProjects: 12,
-  totalFunding: 425000000,
-  averageFunding: 35416667,
-  fundingDistribution: {
-    awaiting: { count: 3, amount: 205000000, percentage: 48.2 },
-    received: { count: 3, amount: 100000000, percentage: 23.5 },
-    implemented: { count: 3, amount: 35000000, percentage: 8.2 },
-    inProgress: { count: 3, amount: 115000000, percentage: 27.1 }
-  },
-  topFundedProjects: [
-    { name: 'Геотермальная станция в Алатау', amount: 120000000, status: 'awaiting', region: 'Алматинская область' },
-    { name: 'Ветровая электростанция в Астане', amount: 75000000, status: 'in-progress', region: 'Астана' },
-    { name: 'Биогазовая установка в Шымкенте', amount: 45000000, status: 'received', region: 'Шымкент' },
-    { name: 'Система переработки отходов в Актау', amount: 30000000, status: 'received', region: 'Актау' },
-    { name: 'Эко-отель "Зеленые горы"', amount: 25000000, status: 'received', region: 'Алматинская область' }
-  ]
-};
-
 export default function FinancingStatusReport() {
   const { language } = useLanguage();
   const t = translations[language];
+
+  // Mock financing data with bilingual support
+  const mockFinancingData: FinancingData = {
+    totalProjects: 12,
+    totalFunding: 425000000,
+    averageFunding: 35416667,
+    fundingDistribution: {
+      awaiting: { count: 3, amount: 205000000, percentage: 48.2 },
+      received: { count: 3, amount: 100000000, percentage: 23.5 },
+      implemented: { count: 3, amount: 35000000, percentage: 8.2 },
+      inProgress: { count: 3, amount: 115000000, percentage: 27.1 }
+    },
+    topFundedProjects: [
+      { 
+        name: language === 'ru' ? 'Геотермальная станция в Алатау' : 'Geothermal Station in Alatau', 
+        amount: 120000000, 
+        status: 'awaiting', 
+        region: language === 'ru' ? 'Алматинская область' : 'Almaty Region' 
+      },
+      { 
+        name: language === 'ru' ? 'Ветровая электростанция в Астане' : 'Wind Power Plant in Astana', 
+        amount: 75000000, 
+        status: 'in-progress', 
+        region: language === 'ru' ? 'Астана' : 'Astana' 
+      },
+      { 
+        name: language === 'ru' ? 'Биогазовая установка в Шымкенте' : 'Biogas Plant in Shymkent', 
+        amount: 45000000, 
+        status: 'received', 
+        region: language === 'ru' ? 'Шымкент' : 'Shymkent' 
+      },
+      { 
+        name: language === 'ru' ? 'Система переработки отходов в Актау' : 'Waste Recycling System in Aktau', 
+        amount: 30000000, 
+        status: 'received', 
+        region: language === 'ru' ? 'Актау' : 'Aktau' 
+      },
+      { 
+        name: language === 'ru' ? 'Эко-отель "Зеленые горы"' : 'Eco Hotel "Green Mountains"', 
+        amount: 25000000, 
+        status: 'received', 
+        region: language === 'ru' ? 'Алматинская область' : 'Almaty Region' 
+      }
+    ]
+  };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('ru-RU', {

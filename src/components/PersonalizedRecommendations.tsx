@@ -1,5 +1,7 @@
 import React from 'react';
 import { StarIcon, MapPinIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '@/translations';
 
 interface Recommendation {
   id: number;
@@ -11,44 +13,7 @@ interface Recommendation {
   price: string;
 }
 
-const mockRecommendations: Recommendation[] = [
-  {
-    id: 1,
-    title: 'Эко-отель "Зеленая долина"',
-    description: 'Уютный отель с солнечными панелями и органическим садом. Идеально подходит для спокойного отдыха на природе.',
-    type: 'location',
-    rating: 4.8,
-    ecoRating: 5,
-    price: 'от 5000₽/ночь'
-  },
-  {
-    id: 2,
-    title: 'Пеший тур по заповеднику',
-    description: 'Познавательная экскурсия по уникальным природным местам с опытным гидом-экологом.',
-    type: 'activity',
-    rating: 4.9,
-    ecoRating: 5,
-    price: '3000₽/человек'
-  },
-  {
-    id: 3,
-    title: 'Гид Анна Петрова',
-    description: 'Профессиональный эко-гид с 5-летним опытом проведения природных туров.',
-    type: 'guide',
-    rating: 4.7,
-    ecoRating: 4.8,
-    price: 'от 2500₽/час'
-  },
-  {
-    id: 4,
-    title: 'Акция "Посади дерево"',
-    description: 'Участвуйте в экологической акции по высадке деревьев в городских парках и заповедниках. Каждое посаженное дерево компенсирует 0.2 т CO₂ в год. Присоединяйтесь к акциям в парках, заповедниках и городских зонах.',
-    type: 'activity',
-    rating: 4.6,
-    ecoRating: 5,
-    price: 'Бесплатно'
-  }
-];
+
 
 const TypeIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -119,6 +84,57 @@ const PlaceholderImage = ({ type }: { type: string }) => {
 };
 
 export default function PersonalizedRecommendations() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  // Mock recommendations with bilingual support
+  const mockRecommendations: Recommendation[] = [
+    {
+      id: 1,
+      title: language === 'ru' ? 'Эко-отель "Зеленая долина"' : 'Eco-Hotel "Green Valley"',
+      description: language === 'ru'
+        ? 'Уютный отель с солнечными панелями и органическим садом. Идеально подходит для спокойного отдыха на природе.'
+        : 'Cozy hotel with solar panels and organic garden. Perfect for peaceful nature retreat.',
+      type: 'location',
+      rating: 4.8,
+      ecoRating: 5,
+      price: language === 'ru' ? 'от 5000₽/ночь' : 'from 5000₽/night'
+    },
+    {
+      id: 2,
+      title: language === 'ru' ? 'Пеший тур по заповеднику' : 'Walking Tour in Nature Reserve',
+      description: language === 'ru'
+        ? 'Познавательная экскурсия по уникальным природным местам с опытным гидом-экологом.'
+        : 'Educational tour of unique natural places with experienced eco-guide.',
+      type: 'activity',
+      rating: 4.9,
+      ecoRating: 5,
+      price: language === 'ru' ? '3000₽/человек' : '3000₽/person'
+    },
+    {
+      id: 3,
+      title: language === 'ru' ? 'Гид Анна Петрова' : 'Guide Anna Petrova',
+      description: language === 'ru'
+        ? 'Профессиональный эко-гид с 5-летним опытом проведения природных туров.'
+        : 'Professional eco-guide with 5 years of experience conducting nature tours.',
+      type: 'guide',
+      rating: 4.7,
+      ecoRating: 4.8,
+      price: language === 'ru' ? 'от 2500₽/час' : 'from 2500₽/hour'
+    },
+    {
+      id: 4,
+      title: language === 'ru' ? 'Акция "Посади дерево"' : 'Campaign "Plant a Tree"',
+      description: language === 'ru'
+        ? 'Участвуйте в экологической акции по высадке деревьев в городских парках и заповедниках. Каждое посаженное дерево компенсирует 0.2 т CO₂ в год. Присоединяйтесь к акциям в парках, заповедниках и городских зонах.'
+        : 'Participate in environmental campaign to plant trees in city parks and nature reserves. Each planted tree compensates 0.2 tons of CO₂ per year. Join campaigns in parks, reserves and urban areas.',
+      type: 'activity',
+      rating: 4.6,
+      ecoRating: 5,
+      price: language === 'ru' ? 'Бесплатно' : 'Free'
+    }
+  ];
+
   return (
     <div className="space-y-6">
       <div className="bg-green-50 p-4 md:p-6 rounded-lg">

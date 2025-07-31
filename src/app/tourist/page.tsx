@@ -8,7 +8,9 @@ import {
   MagnifyingGlassIcon, 
   PhoneIcon,
   CloudIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  CalendarIcon,
+  MapIcon
 } from '@heroicons/react/24/outline';
 
 import TouristStats from '@/components/TouristStats';
@@ -63,6 +65,20 @@ export default function TouristPage() {
       title: t.carbonReport,
       description: t.carbonReportDesc,
       color: 'bg-teal-500 hover:bg-teal-600'
+    },
+    {
+      href: '/tourist/booking-calendar',
+      icon: CalendarIcon,
+      title: t.bookingCalendar,
+      description: t.bookingCalendarDesc,
+      color: 'bg-orange-500 hover:bg-orange-600'
+    },
+    {
+      href: '/tourist/route-management',
+      icon: MapIcon,
+      title: t.routeManagement,
+      description: t.routeManagementDesc,
+      color: 'bg-indigo-500 hover:bg-indigo-600'
     },
     {
       href: '/settings',

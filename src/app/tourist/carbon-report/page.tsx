@@ -1,75 +1,103 @@
 import React from 'react';
 import { CloudIcon, SparklesIcon, ArrowTrendingDownIcon, CalendarIcon, CalculatorIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '@/hooks/useLanguage';
+import { translations } from '@/translations';
 
-const mockCarbonData = {
-  summary: {
-    totalFootprint: 2.1,
-    savedFootprint: 1.8,
-    reductionPercentage: 46,
-    treesEquivalent: 9,
-    monthlyAverage: 0.3
-  },
-  breakdown: {
-    transport: {
-      total: 0.8,
-      saved: 0.6,
-      percentage: 25
-    },
-    accommodation: {
-      total: 0.5,
-      saved: 0.4,
-      percentage: 20
-    },
-    activities: {
-      total: 0.4,
-      saved: 0.3,
-      percentage: 15
-    },
-    food: {
-      total: 0.3,
-      saved: 0.2,
-      percentage: 10
-    },
-    waste: {
-      total: 0.1,
-      saved: 0.1,
-      percentage: 5
-    }
-  },
-  timeline: [
-    { month: 'Январь', footprint: 0.4, saved: 0.3 },
-    { month: 'Февраль', footprint: 0.3, saved: 0.2 },
-    { month: 'Март', footprint: 0.5, saved: 0.4 },
-    { month: 'Апрель', footprint: 0.2, saved: 0.1 },
-    { month: 'Май', footprint: 0.4, saved: 0.3 },
-    { month: 'Июнь', footprint: 0.3, saved: 0.2 }
-  ],
-  achievements: [
-    { title: 'Эко-транспорт', description: 'Использовал велосипед и электромобили', impact: 'Сократил выбросы на 25%' },
-    { title: 'Эко-отели', description: 'Выбирал отели с эко-сертификатами', impact: 'Сократил выбросы на 20%' },
-    { title: 'Эко-туры', description: 'Участвовал в экологических турах', impact: 'Сократил выбросы на 15%' },
-    { title: 'Эко-питание', description: 'Выбирал местные органические продукты', impact: 'Сократил выбросы на 10%' },
-    { title: 'Переработка', description: 'Сортировал отходы во время путешествий', impact: 'Сократил выбросы на 5%' }
-  ]
-};
+
 
 export default function CarbonReportPage() {
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  // Mock carbon data with bilingual support
+  const mockCarbonData = {
+    summary: {
+      totalFootprint: 2.1,
+      savedFootprint: 1.8,
+      reductionPercentage: 46,
+      treesEquivalent: 9,
+      monthlyAverage: 0.3
+    },
+    breakdown: {
+      transport: {
+        total: 0.8,
+        saved: 0.6,
+        percentage: 25
+      },
+      accommodation: {
+        total: 0.5,
+        saved: 0.4,
+        percentage: 20
+      },
+      activities: {
+        total: 0.4,
+        saved: 0.3,
+        percentage: 15
+      },
+      food: {
+        total: 0.3,
+        saved: 0.2,
+        percentage: 10
+      },
+      waste: {
+        total: 0.1,
+        saved: 0.1,
+        percentage: 5
+      }
+    },
+    timeline: [
+      { month: language === 'ru' ? 'Январь' : 'January', footprint: 0.4, saved: 0.3 },
+      { month: language === 'ru' ? 'Февраль' : 'February', footprint: 0.3, saved: 0.2 },
+      { month: language === 'ru' ? 'Март' : 'March', footprint: 0.5, saved: 0.4 },
+      { month: language === 'ru' ? 'Апрель' : 'April', footprint: 0.2, saved: 0.1 },
+      { month: language === 'ru' ? 'Май' : 'May', footprint: 0.4, saved: 0.3 },
+      { month: language === 'ru' ? 'Июнь' : 'June', footprint: 0.3, saved: 0.2 }
+    ],
+    achievements: [
+      { 
+        title: language === 'ru' ? 'Эко-транспорт' : 'Eco Transport', 
+        description: language === 'ru' ? 'Использовал велосипед и электромобили' : 'Used bicycles and electric cars', 
+        impact: language === 'ru' ? 'Сократил выбросы на 25%' : 'Reduced emissions by 25%' 
+      },
+      { 
+        title: language === 'ru' ? 'Эко-отели' : 'Eco Hotels', 
+        description: language === 'ru' ? 'Выбирал отели с эко-сертификатами' : 'Chose hotels with eco-certificates', 
+        impact: language === 'ru' ? 'Сократил выбросы на 20%' : 'Reduced emissions by 20%' 
+      },
+      { 
+        title: language === 'ru' ? 'Эко-туры' : 'Eco Tours', 
+        description: language === 'ru' ? 'Участвовал в экологических турах' : 'Participated in environmental tours', 
+        impact: language === 'ru' ? 'Сократил выбросы на 15%' : 'Reduced emissions by 15%' 
+      },
+      { 
+        title: language === 'ru' ? 'Эко-питание' : 'Eco Food', 
+        description: language === 'ru' ? 'Выбирал местные органические продукты' : 'Chose local organic products', 
+        impact: language === 'ru' ? 'Сократил выбросы на 10%' : 'Reduced emissions by 10%' 
+      },
+      { 
+        title: language === 'ru' ? 'Переработка' : 'Recycling', 
+        description: language === 'ru' ? 'Сортировал отходы во время путешествий' : 'Sorted waste during travels', 
+        impact: language === 'ru' ? 'Сократил выбросы на 5%' : 'Reduced emissions by 5%' 
+      }
+    ]
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-bold text-green-800 mb-6 md:mb-8">
-          Отчет о сокращенном углеродном следе
+          {t.carbonFootprintReport}
         </h1>
 
         {/* Основная статистика */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
           <div className="bg-white p-4 md:p-6 rounded-lg shadow-md border-2 border-green-100">
             <div className="flex items-center justify-between mb-3 md:mb-4">
-              <h3 className="text-base md:text-lg font-semibold text-green-800">Общий след</h3>
+              <h3 className="text-base md:text-lg font-semibold text-green-800">{t.totalFootprint}</h3>
               <CloudIcon className="w-6 h-6 md:w-8 md:h-8 text-green-500" />
             </div>
             <p className="text-2xl md:text-3xl font-bold text-green-600">{mockCarbonData.summary.totalFootprint} т CO₂</p>
-            <p className="text-xs md:text-sm text-gray-600 mt-2">За весь период</p>
+            <p className="text-xs md:text-sm text-gray-600 mt-2">{t.forEntirePeriod}</p>
           </div>
 
           <div className="bg-white p-4 md:p-6 rounded-lg shadow-md border-2 border-green-100">

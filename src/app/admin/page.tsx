@@ -5,7 +5,6 @@ import {
   AcademicCapIcon, 
   CalendarIcon, 
   PlusIcon, 
-  TrashIcon, 
   PencilIcon,
   EyeIcon,
   XMarkIcon,
@@ -49,6 +48,26 @@ export default function AdminDashboard() {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [selectedStatAction, setSelectedStatAction] = useState<string | null>(null);
   const [showStatModal, setShowStatModal] = useState(false);
+
+  // Состояние для формы курса
+  const [courseForm, setCourseForm] = useState({
+    title: '',
+    description: '',
+    duration: '',
+    level: 'beginner',
+    instructor: 'Айгуль Садыкова',
+    status: 'active' as 'active' | 'inactive'
+  });
+  
+  // Состояние для формы события
+  const [eventForm, setEventForm] = useState({
+    title: '',
+    description: '',
+    date: '',
+    type: 'eco-event' as 'holiday' | 'eco-event' | 'promotion' | 'news',
+    region: 'Все регионы',
+    status: 'active' as 'active' | 'inactive'
+  });
 
   // Моковые данные
   const mockCourses: Course[] = [
@@ -153,11 +172,11 @@ export default function AdminDashboard() {
     activeTourists: 8920,
     newRegistrations: 2340,
     touristGeography: {
-      'Алматы': 4500,
-      'Астана': 3200,
-      'Шымкент': 2100,
-      'Алматинская область': 2800,
-      'Другие регионы': 2820
+      [language === 'ru' ? 'Алматы' : 'Almaty']: 4500,
+      [language === 'ru' ? 'Астана' : 'Astana']: 3200,
+      [language === 'ru' ? 'Шымкент' : 'Shymkent']: 2100,
+      [language === 'ru' ? 'Алматинская область' : 'Almaty Region']: 2800,
+      [language === 'ru' ? 'Другие регионы' : 'Other Regions']: 2820
     },
     totalBookings: 8920,
     confirmedBookings: 6540,
@@ -165,151 +184,151 @@ export default function AdminDashboard() {
     pendingBookings: 1490,
     averageCarbonFootprint: 2.4,
     carbonByRegion: {
-      'Алматы': 1.8,
-      'Астана': 2.1,
-      'Шымкент': 2.9,
-      'Алматинская область': 3.2,
-      'Другие регионы': 2.6
+      [language === 'ru' ? 'Алматы' : 'Almaty']: 1.8,
+      [language === 'ru' ? 'Астана' : 'Astana']: 2.1,
+      [language === 'ru' ? 'Шымкент' : 'Shymkent']: 2.9,
+      [language === 'ru' ? 'Алматинская область' : 'Almaty Region']: 3.2,
+      [language === 'ru' ? 'Другие регионы' : 'Other Regions']: 2.6
     },
     carbonByTourType: {
-      'Эко-туры': 1.2,
-      'Горные походы': 2.8,
-      'Оздоровительные туры': 1.5,
-      'Культурные туры': 2.1,
-      'Приключенческие туры': 3.4
+      [language === 'ru' ? 'Эко-туры' : 'Eco Tours']: 1.2,
+      [language === 'ru' ? 'Горные походы' : 'Mountain Hiking']: 2.8,
+      [language === 'ru' ? 'Оздоровительные туры' : 'Wellness Tours']: 1.5,
+      [language === 'ru' ? 'Культурные туры' : 'Cultural Tours']: 2.1,
+      [language === 'ru' ? 'Приключенческие туры' : 'Adventure Tours']: 3.4
     },
     carbonTrends: [
-      { month: 'Янв', value: 2.8 },
-      { month: 'Фев', value: 2.6 },
-      { month: 'Мар', value: 2.4 },
-      { month: 'Апр', value: 2.3 },
-      { month: 'Май', value: 2.2 },
-      { month: 'Июн', value: 2.1 },
-      { month: 'Июл', value: 2.0 },
-      { month: 'Авг', value: 2.1 },
-      { month: 'Сен', value: 2.2 },
-      { month: 'Окт', value: 2.3 },
-      { month: 'Ноя', value: 2.4 },
-      { month: 'Дек', value: 2.5 }
+      { month: language === 'ru' ? 'Янв' : 'Jan', value: 2.8 },
+      { month: language === 'ru' ? 'Фев' : 'Feb', value: 2.6 },
+      { month: language === 'ru' ? 'Мар' : 'Mar', value: 2.4 },
+      { month: language === 'ru' ? 'Апр' : 'Apr', value: 2.3 },
+      { month: language === 'ru' ? 'Май' : 'May', value: 2.2 },
+      { month: language === 'ru' ? 'Июн' : 'Jun', value: 2.1 },
+      { month: language === 'ru' ? 'Июл' : 'Jul', value: 2.0 },
+      { month: language === 'ru' ? 'Авг' : 'Aug', value: 2.1 },
+      { month: language === 'ru' ? 'Сен' : 'Sep', value: 2.2 },
+      { month: language === 'ru' ? 'Окт' : 'Oct', value: 2.3 },
+      { month: language === 'ru' ? 'Ноя' : 'Nov', value: 2.4 },
+      { month: language === 'ru' ? 'Дек' : 'Dec', value: 2.5 }
     ],
     co2Compensation: 78.5,
     compensationEffectiveness: 85.2,
     compensationComparison: {
-      'Посадка деревьев': 45.3,
-      'Солнечные панели': 28.7,
-      'Ветровые турбины': 15.2,
-      'Переработка отходов': 10.8
+      [language === 'ru' ? 'Посадка деревьев' : 'Tree Planting']: 45.3,
+      [language === 'ru' ? 'Солнечные панели' : 'Solar Panels']: 28.7,
+      [language === 'ru' ? 'Ветровые турбины' : 'Wind Turbines']: 15.2,
+      [language === 'ru' ? 'Переработка отходов' : 'Waste Recycling']: 10.8
     },
     compensationForecast: [
-      { month: 'Янв', value: 72.1 },
-      { month: 'Фев', value: 73.5 },
-      { month: 'Мар', value: 75.2 },
-      { month: 'Апр', value: 76.8 },
-      { month: 'Май', value: 77.9 },
-      { month: 'Июн', value: 78.5 },
-      { month: 'Июл', value: 79.2 },
-      { month: 'Авг', value: 80.1 },
-      { month: 'Сен', value: 81.3 },
-      { month: 'Окт', value: 82.7 },
-      { month: 'Ноя', value: 83.9 },
-      { month: 'Дек', value: 85.2 }
+      { month: language === 'ru' ? 'Янв' : 'Jan', value: 72.1 },
+      { month: language === 'ru' ? 'Фев' : 'Feb', value: 73.5 },
+      { month: language === 'ru' ? 'Мар' : 'Mar', value: 75.2 },
+      { month: language === 'ru' ? 'Апр' : 'Apr', value: 76.8 },
+      { month: language === 'ru' ? 'Май' : 'May', value: 77.9 },
+      { month: language === 'ru' ? 'Июн' : 'Jun', value: 78.5 },
+      { month: language === 'ru' ? 'Июл' : 'Jul', value: 79.2 },
+      { month: language === 'ru' ? 'Авг' : 'Aug', value: 80.1 },
+      { month: language === 'ru' ? 'Сен' : 'Sep', value: 81.3 },
+      { month: language === 'ru' ? 'Окт' : 'Oct', value: 82.7 },
+      { month: language === 'ru' ? 'Ноя' : 'Nov', value: 83.9 },
+      { month: language === 'ru' ? 'Дек' : 'Dec', value: 85.2 }
     ]
   };
 
   // Моковые данные для тепловой карты Казахстана
   const heatMapData = {
     regions: {
-      'Алматы': {
+      [language === 'ru' ? 'Алматы' : 'Almaty']: {
         tourists: 4500,
         emissionsReduction: 78.5,
         ecoMeasures: 15,
         intensity: 85
       },
-      'Астана': {
+      [language === 'ru' ? 'Астана' : 'Astana']: {
         tourists: 3200,
         emissionsReduction: 65.2,
         ecoMeasures: 12,
         intensity: 72
       },
-      'Шымкент': {
+      [language === 'ru' ? 'Шымкент' : 'Shymkent']: {
         tourists: 2100,
         emissionsReduction: 45.8,
         ecoMeasures: 8,
         intensity: 58
       },
-      'Алматинская область': {
+      [language === 'ru' ? 'Алматинская область' : 'Almaty Region']: {
         tourists: 2800,
         emissionsReduction: 92.1,
         ecoMeasures: 18,
         intensity: 95
       },
-      'Актюбинская область': {
+      [language === 'ru' ? 'Актюбинская область' : 'Aktobe Region']: {
         tourists: 1200,
         emissionsReduction: 35.4,
         ecoMeasures: 6,
         intensity: 42
       },
-      'Атырауская область': {
+      [language === 'ru' ? 'Атырауская область' : 'Atyrau Region']: {
         tourists: 800,
         emissionsReduction: 28.7,
         ecoMeasures: 4,
         intensity: 35
       },
-      'Восточно-Казахстанская область': {
+      [language === 'ru' ? 'Восточно-Казахстанская область' : 'East Kazakhstan Region']: {
         tourists: 1500,
         emissionsReduction: 52.3,
         ecoMeasures: 9,
         intensity: 65
       },
-      'Жамбылская область': {
+      [language === 'ru' ? 'Жамбылская область' : 'Zhambyl Region']: {
         tourists: 1100,
         emissionsReduction: 38.9,
         ecoMeasures: 7,
         intensity: 48
       },
-      'Западно-Казахстанская область': {
+      [language === 'ru' ? 'Западно-Казахстанская область' : 'West Kazakhstan Region']: {
         tourists: 900,
         emissionsReduction: 32.1,
         ecoMeasures: 5,
         intensity: 38
       },
-      'Карагандинская область': {
+      [language === 'ru' ? 'Карагандинская область' : 'Karaganda Region']: {
         tourists: 1800,
         emissionsReduction: 58.7,
         ecoMeasures: 10,
         intensity: 68
       },
-      'Костанайская область': {
+      [language === 'ru' ? 'Костанайская область' : 'Kostanay Region']: {
         tourists: 1300,
         emissionsReduction: 42.5,
         ecoMeasures: 7,
         intensity: 52
       },
-      'Кызылординская область': {
+      [language === 'ru' ? 'Кызылординская область' : 'Kyzylorda Region']: {
         tourists: 700,
         emissionsReduction: 25.3,
         ecoMeasures: 3,
         intensity: 28
       },
-      'Мангистауская область': {
+      [language === 'ru' ? 'Мангистауская область' : 'Mangystau Region']: {
         tourists: 600,
         emissionsReduction: 22.8,
         ecoMeasures: 3,
         intensity: 25
       },
-      'Павлодарская область': {
+      [language === 'ru' ? 'Павлодарская область' : 'Pavlodar Region']: {
         tourists: 1400,
         emissionsReduction: 48.6,
         ecoMeasures: 8,
         intensity: 55
       },
-      'Северо-Казахстанская область': {
+      [language === 'ru' ? 'Северо-Казахстанская область' : 'North Kazakhstan Region']: {
         tourists: 1000,
         emissionsReduction: 36.2,
         ecoMeasures: 6,
         intensity: 45
       },
-      'Туркестанская область': {
+      [language === 'ru' ? 'Туркестанская область' : 'Turkestan Region']: {
         tourists: 1600,
         emissionsReduction: 55.4,
         ecoMeasures: 9,
@@ -321,64 +340,62 @@ export default function AdminDashboard() {
   // Моковые данные для отчетов по регионам
   const regionsData = {
     activityMap: {
-      'Алматы': { tourists: 4500, bookings: 3200, ecoRating: 8.5 },
-      'Астана': { tourists: 3200, bookings: 2100, ecoRating: 7.8 },
-      'Шымкент': { tourists: 2100, bookings: 1500, ecoRating: 6.9 },
-      'Алматинская область': { tourists: 2800, bookings: 1900, ecoRating: 9.2 },
-      'Актау': { tourists: 1200, bookings: 800, ecoRating: 7.1 },
-      'Атырау': { tourists: 900, bookings: 600, ecoRating: 6.5 },
-      'Павлодар': { tourists: 1100, bookings: 750, ecoRating: 7.3 },
-      'Усть-Каменогорск': { tourists: 1300, bookings: 900, ecoRating: 8.1 }
+      [language === 'ru' ? 'Алматы' : 'Almaty']: { tourists: 4500, bookings: 3200, ecoRating: 8.5 },
+      [language === 'ru' ? 'Астана' : 'Astana']: { tourists: 3200, bookings: 2100, ecoRating: 7.8 },
+      [language === 'ru' ? 'Шымкент' : 'Shymkent']: { tourists: 2100, bookings: 1500, ecoRating: 6.9 },
+      [language === 'ru' ? 'Алматинская область' : 'Almaty Region']: { tourists: 2800, bookings: 1900, ecoRating: 9.2 },
+      [language === 'ru' ? 'Актау' : 'Aktau']: { tourists: 1200, bookings: 800, ecoRating: 7.1 },
+      [language === 'ru' ? 'Атырау' : 'Atyrau']: { tourists: 900, bookings: 600, ecoRating: 6.5 },
+      [language === 'ru' ? 'Павлодар' : 'Pavlodar']: { tourists: 1100, bookings: 750, ecoRating: 7.3 },
+      [language === 'ru' ? 'Усть-Каменогорск' : 'Ust-Kamenogorsk']: { tourists: 1300, bookings: 900, ecoRating: 8.1 }
     },
     topDirections: {
       popularity: [
-        { name: 'Алматы - Чимбулак', tourists: 3200, rating: 9.1 },
-        { name: 'Астана - Бурабай', tourists: 2800, rating: 8.7 },
-        { name: 'Алматы - Балхаш', tourists: 2100, rating: 8.3 },
-        { name: 'Шымкент - Сайрам', tourists: 1800, rating: 7.9 },
-        { name: 'Алматинская область - Капчагай', tourists: 1600, rating: 8.5 }
+        { name: language === 'ru' ? 'Алматы - Чимбулак' : 'Almaty - Chimbulak', tourists: 3200, rating: 9.1 },
+        { name: language === 'ru' ? 'Астана - Бурабай' : 'Astana - Burabay', tourists: 2800, rating: 8.7 },
+        { name: language === 'ru' ? 'Алматы - Балхаш' : 'Almaty - Balkhash', tourists: 2100, rating: 8.3 },
+        { name: language === 'ru' ? 'Шымкент - Сайрам' : 'Shymkent - Sairam', tourists: 1800, rating: 7.9 },
+        { name: language === 'ru' ? 'Алматинская область - Капчагай' : 'Almaty Region - Kapchagay', tourists: 1600, rating: 8.5 }
       ],
       revenue: [
-        { name: 'Алматы - Чимбулак', revenue: 45600000, rating: 9.1 },
-        { name: 'Астана - Бурабай', revenue: 38900000, rating: 8.7 },
-        { name: 'Алматы - Балхаш', revenue: 28700000, rating: 8.3 },
-        { name: 'Шымкент - Сайрам', revenue: 23400000, rating: 7.9 },
-        { name: 'Алматинская область - Капчагай', revenue: 19800000, rating: 8.5 }
+        { name: language === 'ru' ? 'Алматы - Чимбулак' : 'Almaty - Chimbulak', revenue: 45600000, rating: 9.1 },
+        { name: language === 'ru' ? 'Астана - Бурабай' : 'Astana - Burabay', revenue: 38900000, rating: 8.7 },
+        { name: language === 'ru' ? 'Алматы - Балхаш' : 'Almaty - Balkhash', revenue: 28700000, rating: 8.3 },
+        { name: language === 'ru' ? 'Шымкент - Сайрам' : 'Shymkent - Sairam', revenue: 23400000, rating: 7.9 },
+        { name: language === 'ru' ? 'Алматинская область - Капчагай' : 'Almaty Region - Kapchagay', revenue: 19800000, rating: 8.5 }
       ],
       ecoRating: [
-        { name: 'Алматинская область - Капчагай', ecoRating: 9.2, tourists: 1600 },
-        { name: 'Алматы - Чимбулак', ecoRating: 9.1, tourists: 3200 },
-        { name: 'Астана - Бурабай', ecoRating: 8.7, tourists: 2800 },
-        { name: 'Алматы - Балхаш', ecoRating: 8.3, tourists: 2100 },
-        { name: 'Шымкент - Сайрам', ecoRating: 7.9, tourists: 1800 }
+        { name: language === 'ru' ? 'Алматинская область - Капчагай' : 'Almaty Region - Kapchagay', ecoRating: 9.2, tourists: 1600 },
+        { name: language === 'ru' ? 'Алматы - Чимбулак' : 'Almaty - Chimbulak', ecoRating: 9.1, tourists: 3200 },
+        { name: language === 'ru' ? 'Астана - Бурабай' : 'Astana - Burabay', ecoRating: 8.7, tourists: 2800 },
+        { name: language === 'ru' ? 'Алматы - Балхаш' : 'Almaty - Balkhash', ecoRating: 8.3, tourists: 2100 },
+        { name: language === 'ru' ? 'Шымкент - Сайрам' : 'Shymkent - Sairam', ecoRating: 7.9, tourists: 1800 }
       ]
     },
     greenRegions: {
       ecoInfrastructure: [
-        { region: 'Алматинская область', score: 9.2, projects: 15 },
-        { region: 'Алматы', score: 8.5, projects: 12 },
-        { region: 'Астана', score: 7.8, projects: 8 },
-        { region: 'Шымкент', score: 6.9, projects: 5 },
-        { region: 'Актау', score: 7.1, projects: 6 }
+        { region: language === 'ru' ? 'Алматинская область' : 'Almaty Region', score: 9.2, projects: 15 },
+        { region: language === 'ru' ? 'Алматы' : 'Almaty', score: 8.5, projects: 12 },
+        { region: language === 'ru' ? 'Астана' : 'Astana', score: 7.8, projects: 8 },
+        { region: language === 'ru' ? 'Шымкент' : 'Shymkent', score: 6.9, projects: 5 },
+        { region: language === 'ru' ? 'Актау' : 'Aktau', score: 7.1, projects: 6 }
       ],
       ecoActivities: [
-        { region: 'Алматинская область', activities: 25, participants: 3200 },
-        { region: 'Алматы', activities: 18, participants: 2800 },
-        { region: 'Астана', activities: 12, participants: 1900 },
-        { region: 'Шымкент', activities: 8, participants: 1200 },
-        { region: 'Актау', activities: 6, participants: 800 }
+        { region: language === 'ru' ? 'Алматинская область' : 'Almaty Region', activities: 25, participants: 3200 },
+        { region: language === 'ru' ? 'Алматы' : 'Almaty', activities: 18, participants: 2800 },
+        { region: language === 'ru' ? 'Астана' : 'Astana', activities: 12, participants: 1900 },
+        { region: language === 'ru' ? 'Шымкент' : 'Shymkent', activities: 8, participants: 1200 },
+        { region: language === 'ru' ? 'Актау' : 'Aktau', activities: 6, participants: 800 }
       ],
       ecoCertificates: [
-        { region: 'Алматинская область', certificates: 8, hotels: 12 },
-        { region: 'Алматы', certificates: 6, hotels: 15 },
-        { region: 'Астана', certificates: 4, hotels: 8 },
-        { region: 'Шымкент', certificates: 3, hotels: 5 },
-        { region: 'Актау', certificates: 2, hotels: 3 }
+        { region: language === 'ru' ? 'Алматинская область' : 'Almaty Region', certificates: 8, hotels: 12 },
+        { region: language === 'ru' ? 'Алматы' : 'Almaty', certificates: 6, hotels: 15 },
+        { region: language === 'ru' ? 'Астана' : 'Astana', certificates: 4, hotels: 8 },
+        { region: language === 'ru' ? 'Шымкент' : 'Shymkent', certificates: 3, hotels: 5 },
+        { region: language === 'ru' ? 'Актау' : 'Aktau', certificates: 2, hotels: 3 }
       ]
     }
   };
-
-
 
   // Моковые данные для статистики гидов
   const guidesData = {
@@ -386,35 +403,35 @@ export default function AdminDashboard() {
     activeGuides: 142,
     newGuides: 23,
     guidesByRegion: {
-      'Алматы': 45,
-      'Астана': 32,
-      'Шымкент': 28,
-      'Алматинская область': 25,
-      'Другие регионы': 26
+      [language === 'ru' ? 'Алматы' : 'Almaty']: 45,
+      [language === 'ru' ? 'Астана' : 'Astana']: 32,
+      [language === 'ru' ? 'Шымкент' : 'Shymkent']: 28,
+      [language === 'ru' ? 'Алматинская область' : 'Almaty Region']: 25,
+      [language === 'ru' ? 'Другие регионы' : 'Other Regions']: 26
     },
     guidesByLevel: {
-      'Начинающий': 45,
-      'Средний': 67,
-      'Продвинутый': 44
+      [language === 'ru' ? 'Начинающий' : 'Beginner']: 45,
+      [language === 'ru' ? 'Средний' : 'Intermediate']: 67,
+      [language === 'ru' ? 'Продвинутый' : 'Advanced']: 44
     },
     ratingDistribution: {
-      '5 звезд': 23,
-      '4 звезды': 67,
-      '3 звезды': 45,
-      '2 звезды': 15,
-      '1 звезда': 6
+      [language === 'ru' ? '5 звезд' : '5 stars']: 23,
+      [language === 'ru' ? '4 звезды' : '4 stars']: 67,
+      [language === 'ru' ? '3 звезды' : '3 stars']: 45,
+      [language === 'ru' ? '2 звезды' : '2 stars']: 15,
+      [language === 'ru' ? '1 звезда' : '1 star']: 6
     },
     coursesCompleted: {
-      'Основы экологического туризма': 89,
-      'Экологическая безопасность': 67,
-      'Устойчивое развитие туризма': 45,
-      'Первая помощь в походах': 78,
-      'Экологическое законодательство': 34
+      [language === 'ru' ? 'Основы экологического туризма' : 'Basics of Ecological Tourism']: 89,
+      [language === 'ru' ? 'Экологическая безопасность' : 'Ecological Safety']: 67,
+      [language === 'ru' ? 'Устойчивое развитие туризма' : 'Sustainable Tourism Development']: 45,
+      [language === 'ru' ? 'Первая помощь в походах' : 'First Aid in Hiking']: 78,
+      [language === 'ru' ? 'Экологическое законодательство' : 'Environmental Legislation']: 34
     },
     certificationStatus: {
-      'Сертифицированные': 89,
-      'В процессе сертификации': 34,
-      'Не сертифицированные': 33
+      [language === 'ru' ? 'Сертифицированные' : 'Certified']: 89,
+      [language === 'ru' ? 'В процессе сертификации' : 'In Certification Process']: 34,
+      [language === 'ru' ? 'Не сертифицированные' : 'Not Certified']: 33
     },
     performanceMetrics: {
       averageRating: 4.2,
@@ -423,24 +440,24 @@ export default function AdminDashboard() {
       customerSatisfaction: 92.5
     },
     topGuides: [
-      { name: 'Айгуль Сатпаева', rating: 4.9, tours: 45, region: 'Алматы' },
-      { name: 'Марат Жумабаев', rating: 4.8, tours: 38, region: 'Астана' },
-      { name: 'Анна Ким', rating: 4.7, tours: 42, region: 'Шымкент' },
-      { name: 'Данияр Нурланов', rating: 4.6, tours: 35, region: 'Алматинская область' },
-      { name: 'Елена Петрова', rating: 4.5, tours: 31, region: 'Алматы' }
+      { name: language === 'ru' ? 'Айгуль Сатпаева' : 'Aigul Satpaeva', rating: 4.9, tours: 45, region: language === 'ru' ? 'Алматы' : 'Almaty' },
+      { name: language === 'ru' ? 'Марат Жумабаев' : 'Marat Zhumabaev', rating: 4.8, tours: 38, region: language === 'ru' ? 'Астана' : 'Astana' },
+      { name: language === 'ru' ? 'Анна Ким' : 'Anna Kim', rating: 4.7, tours: 42, region: language === 'ru' ? 'Шымкент' : 'Shymkent' },
+      { name: language === 'ru' ? 'Данияр Нурланов' : 'Daniyar Nurlyanov', rating: 4.6, tours: 35, region: language === 'ru' ? 'Алматинская область' : 'Almaty Region' },
+      { name: language === 'ru' ? 'Елена Петрова' : 'Elena Petrova', rating: 4.5, tours: 31, region: language === 'ru' ? 'Алматы' : 'Almaty' }
     ],
     trainingProgress: {
-      'Завершили базовый курс': 89,
-      'Завершили продвинутый курс': 67,
-      'Проходят обучение': 23,
-      'Не начали обучение': 12
+      [language === 'ru' ? 'Завершили базовый курс' : 'Completed Basic Course']: 89,
+      [language === 'ru' ? 'Завершили продвинутый курс' : 'Completed Advanced Course']: 67,
+      [language === 'ru' ? 'Проходят обучение' : 'Currently Training']: 23,
+      [language === 'ru' ? 'Не начали обучение' : 'Not Started Training']: 12
     },
     specializations: {
-      'Горные походы': 45,
-      'Эко-туры': 38,
-      'Культурные туры': 32,
-      'Приключенческие туры': 28,
-      'Оздоровительные туры': 13
+      [language === 'ru' ? 'Горные походы' : 'Mountain Hiking']: 45,
+      [language === 'ru' ? 'Эко-туры' : 'Eco Tours']: 38,
+      [language === 'ru' ? 'Культурные туры' : 'Cultural Tours']: 32,
+      [language === 'ru' ? 'Приключенческие туры' : 'Adventure Tours']: 28,
+      [language === 'ru' ? 'Оздоровительные туры' : 'Wellness Tours']: 13
     }
   };
 
@@ -448,163 +465,163 @@ export default function AdminDashboard() {
   const menuItems = [
     {
       id: 'dashboard',
-      title: 'Дашборд',
+      title: t.dashboardMenu,
       icon: ChartBarIcon,
       items: [
         { 
-          name: 'Общее количество туристов', 
+          name: t.totalTouristsMenu, 
           action: 'total-tourists',
           subItems: [
-            { name: t.activeTourists, action: 'active-tourists' },
-                          { name: t.newRegistrations, action: 'new-registrations' },
-              { name: t.touristGeography, action: 'tourist-geography' }
+            { name: t.activeTouristsSubmenu, action: 'active-tourists' },
+            { name: t.newRegistrationsSubmenu, action: 'new-registrations' },
+            { name: t.touristGeographySubmenu, action: 'tourist-geography' }
           ]
         },
         { 
-          name: t.totalBookings, 
+          name: t.totalBookingsMenu, 
           action: 'total-bookings',
           subItems: [
-            { name: t.confirmedBookings, action: 'confirmed-bookings' },
-            { name: t.cancelledBookings, action: 'cancelled-bookings' },
-            { name: t.pendingBookings, action: 'pending-bookings' }
+            { name: t.confirmedBookingsSubmenu, action: 'confirmed-bookings' },
+            { name: t.cancelledBookingsSubmenu, action: 'cancelled-bookings' },
+            { name: t.pendingBookingsSubmenu, action: 'pending-bookings' }
           ]
         },
         { 
-          name: 'Средний углеродный след', 
+          name: t.averageCarbonFootprintMenu, 
           action: 'carbon-footprint',
           subItems: [
-            { name: 'Углерод по регионам', action: 'carbon-by-region' },
-            { name: 'Углерод по типам туров', action: 'carbon-by-tour-type' },
-            { name: 'Тенденции углерода', action: 'carbon-trends' }
+            { name: t.carbonByRegionSubmenu, action: 'carbon-by-region' },
+            { name: t.carbonByTourTypeSubmenu, action: 'carbon-by-tour-type' },
+            { name: t.carbonTrendsSubmenu, action: 'carbon-trends' }
           ]
         },
         { 
-          name: 'Процент компенсации CO2', 
+          name: t.co2CompensationMenu, 
           action: 'co2-compensation',
           subItems: [
-            { name: 'Эффективность компенсации', action: 'compensation-effectiveness' },
-            { name: 'Сравнение компенсации', action: 'compensation-comparison' },
-            { name: 'Прогноз компенсации', action: 'compensation-forecast' }
+            { name: t.compensationEffectivenessSubmenu, action: 'compensation-effectiveness' },
+            { name: t.compensationComparisonSubmenu, action: 'compensation-comparison' },
+            { name: t.compensationForecastSubmenu, action: 'compensation-forecast' }
           ]
         }
       ]
     },
     {
       id: 'guides',
-      title: 'Статистика по гидам',
+      title: t.guidesMenu,
       icon: ChartBarIcon,
       items: [
         { 
-          name: t.guidesOverview, 
+          name: t.guidesOverviewMenu, 
           action: 'guides-overview',
           subItems: [
-            { name: 'Количество гидов по регионам', action: 'guides-by-region' },
-            { name: 'Количество гидов по уровням', action: 'guides-by-level' },
-            { name: 'Новые гиды', action: 'new-guides' }
+            { name: t.guidesByRegionSubmenu, action: 'guides-by-region' },
+            { name: t.guidesByLevelSubmenu, action: 'guides-by-level' },
+            { name: t.newGuidesSubmenu, action: 'new-guides' }
           ]
         },
         { 
-          name: 'Рейтинги и отзывы', 
+          name: t.guidesRatingsMenu, 
           action: 'guides-ratings',
           subItems: [
-            { name: 'Распределение рейтингов', action: 'rating-distribution' },
-            { name: 'Топ гиды', action: 'top-guides' },
-            { name: 'Удовлетворенность клиентов', action: 'customer-satisfaction' }
+            { name: t.ratingDistributionSubmenu, action: 'rating-distribution' },
+            { name: t.topGuidesSubmenu, action: 'top-guides' },
+            { name: t.customerSatisfactionSubmenu, action: 'customer-satisfaction' }
           ]
         },
         { 
-          name: 'Обучение и сертификация', 
+          name: t.guidesTrainingMenu, 
           action: 'guides-training',
           subItems: [
-            { name: 'Завершенные курсы', action: 'completed-courses' },
-            { name: 'Статус сертификации', action: 'certification-status' },
-            { name: 'Прогресс обучения', action: 'training-progress' }
+            { name: t.completedCoursesSubmenu, action: 'completed-courses' },
+            { name: t.certificationStatusSubmenu, action: 'certification-status' },
+            { name: t.trainingProgressSubmenu, action: 'training-progress' }
           ]
         },
         { 
-          name: 'Производительность', 
+          name: t.guidesPerformanceMenu, 
           action: 'guides-performance',
           subItems: [
-            { name: 'Количество туров', action: 'tours-count' },
-            { name: 'Средний рейтинг', action: 'average-rating' },
-            { name: 'Специализации', action: 'specializations' }
+            { name: t.toursCountSubmenu, action: 'tours-count' },
+            { name: t.averageRatingSubmenu, action: 'average-rating' },
+            { name: t.specializationsSubmenu, action: 'specializations' }
           ]
         }
       ]
     },
     {
       id: 'regions',
-      title: 'Отчеты по регионам',
+      title: t.regionsMenu,
       icon: ChartBarIcon,
       items: [
         { 
-          name: 'Карта активности', 
+          name: t.activityMapMenu, 
           action: 'activity-map',
           subItems: [
-            { name: 'Интерактивная карта', action: 'interactive-map' },
-            { name: 'Тепловая карта', action: 'heat-map' },
-            { name: 'Концентрация туристов', action: 'tourist-concentration' }
+            { name: t.interactiveMapSubmenu, action: 'interactive-map' },
+            { name: t.heatMapSubmenu, action: 'heat-map' },
+            { name: t.touristConcentrationSubmenu, action: 'tourist-concentration' }
           ]
         },
         { 
-          name: 'Топ-5 направлений', 
+          name: t.topDirectionsMenu, 
           action: 'top-directions',
           subItems: [
-            { name: 'Рейтинг популярности', action: 'popularity-ranking' },
-            { name: 'Рейтинг доходов', action: 'revenue-ranking' },
-            { name: 'Рейтинг эко-оценки', action: 'eco-rating-ranking' }
+            { name: t.popularityRankingSubmenu, action: 'popularity-ranking' },
+            { name: t.revenueRankingSubmenu, action: 'revenue-ranking' },
+            { name: t.ecoRatingRankingSubmenu, action: 'eco-rating-ranking' }
           ]
         },
         { 
-          name: 'Топ-5 зеленых регионов', 
+          name: t.greenRegionsMenu, 
           action: 'green-regions',
           subItems: [
-            { name: 'Эко-инфраструктура', action: 'eco-infrastructure' },
-            { name: 'Эко-активности', action: 'eco-activities' },
-            { name: 'Эко-сертификаты', action: 'eco-certificates' }
+            { name: t.ecoInfrastructureSubmenu, action: 'eco-infrastructure' },
+            { name: t.ecoActivitiesSubmenu, action: 'eco-activities' },
+            { name: t.ecoCertificatesSubmenu, action: 'eco-certificates' }
           ]
         }
       ]
     },
     {
       id: 'ecoProjects',
-      title: 'Отчет по эко-проектам',
+      title: t.ecoProjectsMenu,
       icon: ChartBarIcon,
       items: [
         { 
-          name: 'Ожидающие зеленого финансирования', 
+          name: t.awaitingGreenFinancingMenu, 
           action: 'awaiting-green-financing',
           subItems: [
-            { name: 'Статус финансирования', action: 'financing-status' },
-            { name: 'Сумма финансирования', action: 'funding-amount' },
-            { name: 'Прогресс проекта', action: 'project-progress' }
+            { name: t.financingStatusSubmenu, action: 'financing-status' },
+            { name: t.fundingAmountSubmenu, action: 'funding-amount' },
+            { name: t.projectProgressSubmenu, action: 'project-progress' }
           ]
         },
         { 
-          name: 'Получившие зеленое финансирование', 
+          name: t.receivedGreenFinancingMenu, 
           action: 'received-green-financing',
           subItems: [
-            { name: 'Процент реализации', action: 'implementation-rate' },
-            { name: 'Процент успеха', action: 'success-rate' },
-            { name: 'Прогресс проекта', action: 'project-progress' }
+            { name: t.implementationRateSubmenu, action: 'implementation-rate' },
+            { name: t.successRateSubmenu, action: 'success-rate' },
+            { name: t.projectProgressSubmenu, action: 'project-progress' }
           ]
         },
         { 
-          name: 'Реализованные проекты', 
+          name: t.implementedProjectsMenu, 
           action: 'implemented-projects',
           subItems: [
-            { name: 'Процент успеха', action: 'success-rate' },
-            { name: 'Эко-влияние', action: 'eco-impact' },
-            { name: 'Затраты-выгоды', action: 'cost-benefit' }
+            { name: t.successRateSubmenu, action: 'success-rate' },
+            { name: t.ecoImpactSubmenu, action: 'eco-impact' },
+            { name: t.costBenefitSubmenu, action: 'cost-benefit' }
           ]
         },
         { 
-          name: 'Проекты в процессе', 
+          name: t.projectsInProgressMenu, 
           action: 'projects-in-progress',
           subItems: [
-            { name: 'Прогресс проекта', action: 'project-progress' },
-            { name: 'Прогноз завершения', action: 'completion-forecast' },
-            { name: 'Распределение ресурсов', action: 'resource-allocation' }
+            { name: t.projectProgressSubmenu, action: 'project-progress' },
+            { name: t.completionForecastSubmenu, action: 'completion-forecast' },
+            { name: t.resourceAllocationSubmenu, action: 'resource-allocation' }
           ]
         }
       ]
@@ -619,6 +636,23 @@ export default function AdminDashboard() {
   const closeModal = () => {
     setShowModal(false);
     setModalType(null);
+    // Сброс форм
+    setCourseForm({
+      title: '',
+      description: '',
+      duration: '',
+      level: 'beginner',
+      instructor: 'Айгуль Садыкова',
+      status: 'active'
+    });
+    setEventForm({
+      title: '',
+      description: '',
+      date: '',
+      type: 'eco-event',
+      region: 'Все регионы',
+      status: 'active'
+    });
   };
 
   const handleStatAction = (action: string) => {
@@ -650,7 +684,7 @@ export default function AdminDashboard() {
           className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center space-x-2"
         >
           <PlusIcon className="w-5 h-5" />
-          <span>Добавить курс</span>
+                        <span>{t.addCourse}</span>
         </button>
       </div>
       
@@ -664,24 +698,24 @@ export default function AdminDashboard() {
                 course.status === 'inactive' ? 'bg-yellow-100 text-yellow-800' :
                 'bg-gray-100 text-gray-800'
               }`}>
-                {course.status === 'active' ? 'Активен' : 
-                 course.status === 'inactive' ? 'Неактивен' : 'Архив'}
+                {course.status === 'active' ? t.activeStatus : 
+                 course.status === 'inactive' ? t.inactiveStatus : 'Archive'}
               </span>
             </div>
             <p className="text-gray-600 mb-4">{course.description}</p>
             <div className="space-y-2 mb-4">
-              <p className="text-sm text-gray-600"><strong>Длительность:</strong> {course.duration}</p>
-              <p className="text-sm text-gray-600"><strong>Уровень:</strong> {course.level}</p>
-              <p className="text-sm text-gray-600"><strong>Инструктор:</strong> {course.instructor}</p>
+              <p className="text-sm text-gray-600"><strong>{t.duration}:</strong> {course.duration}</p>
+              <p className="text-sm text-gray-600"><strong>{t.level}:</strong> {course.level}</p>
+              <p className="text-sm text-gray-600"><strong>{t.instructorAigul.split(' ')[0]}:</strong> {course.instructor}</p>
             </div>
             <div className="flex space-x-2">
               <button className="flex-1 bg-green-100 text-green-800 py-2 rounded-lg hover:bg-green-200 flex items-center justify-center space-x-1">
                 <EyeIcon className="w-4 h-4" />
-                <span>Просмотр</span>
+                <span>{t.view}</span>
               </button>
               <button className="flex-1 bg-blue-100 text-blue-800 py-2 rounded-lg hover:bg-blue-200 flex items-center justify-center space-x-1">
                 <PencilIcon className="w-4 h-4" />
-                <span>Редактировать</span>
+                <span>{t.edit}</span>
               </button>
             </div>
           </div>
@@ -699,7 +733,7 @@ export default function AdminDashboard() {
           className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center space-x-2"
         >
           <PlusIcon className="w-5 h-5" />
-          <span>Добавить событие/новость</span>
+                        <span>{t.addEvent}</span>
         </button>
       </div>
       
@@ -712,7 +746,7 @@ export default function AdminDashboard() {
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   event.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                 }`}>
-                  {event.status === 'active' ? 'Активно' : 'Неактивно'}
+                  {event.status === 'active' ? t.activeStatus : t.inactiveStatus}
                 </span>
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   event.type === 'holiday' ? 'bg-blue-100 text-blue-800' :
@@ -721,27 +755,27 @@ export default function AdminDashboard() {
                   event.type === 'promotion' ? 'bg-orange-100 text-orange-800' :
                   'bg-gray-100 text-gray-800'
                 }`}>
-                  {event.type === 'holiday' ? 'Праздник' : 
-                   event.type === 'eco-event' ? 'Эко-событие' :
-                   event.type === 'news' ? 'Новость' :
-                   event.type === 'promotion' ? 'Акция' : 'Событие'}
+                  {event.type === 'holiday' ? t.holiday : 
+                   event.type === 'eco-event' ? t.ecoEvent :
+                   event.type === 'news' ? t.newsItem :
+                   event.type === 'promotion' ? t.promotion : 'Event'}
                 </span>
               </div>
             </div>
             <p className="text-gray-600 mb-4">{event.description}</p>
             <div className="flex justify-between items-center">
               <div className="flex space-x-4 text-sm text-gray-600">
-                <span>Дата: {event.date}</span>
-                <span>Регион: {event.region}</span>
-                {event.type === 'news' && <span>Категория: Новость</span>}
-                {event.type === 'promotion' && <span>Категория: Акция</span>}
+                <span>{t.eventDate}: {event.date}</span>
+                <span>{t.eventRegion}: {event.region}</span>
+                {event.type === 'news' && <span>{t.category}: {t.newsItem}</span>}
+                {event.type === 'promotion' && <span>{t.category}: {t.promotion}</span>}
               </div>
               <div className="flex space-x-2">
                 <button className="bg-green-100 text-green-800 px-3 py-1 rounded hover:bg-green-200 text-sm">
-                  Редактировать
+                  {t.edit}
                 </button>
                 <button className="bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200 text-sm">
-                  Удалить
+                  {t.delete}
                 </button>
               </div>
             </div>
@@ -812,7 +846,7 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-blue-50 p-6 rounded-lg">
-                <h4 className="text-lg font-semibold text-blue-800 mb-2">Всего туристов</h4>
+                <h4 className="text-lg font-semibold text-blue-800 mb-2">{t.totalTouristsStats}</h4>
                 <p className="text-3xl font-bold text-blue-600">{dashboardData.totalTourists.toLocaleString()}</p>
               </div>
               <div className="bg-green-50 p-6 rounded-lg">
@@ -820,13 +854,13 @@ export default function AdminDashboard() {
                 <p className="text-3xl font-bold text-green-600">{dashboardData.activeTourists.toLocaleString()}</p>
               </div>
               <div className="bg-purple-50 p-6 rounded-lg">
-                <h4 className="text-lg font-semibold text-purple-800 mb-2">Новые регистрации</h4>
+                <h4 className="text-lg font-semibold text-purple-800 mb-2">{t.newRegistrationsStats}</h4>
                 <p className="text-3xl font-bold text-purple-600">{dashboardData.newRegistrations.toLocaleString()}</p>
               </div>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">География туристов</h4>
+              <h4 className="text-lg font-semibold text-gray-800 mb-4">{t.touristGeographyStats}</h4>
               <div className="space-y-3">
                 {Object.entries(dashboardData.touristGeography).map(([region, count]) => (
                   <div key={region} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -848,15 +882,15 @@ export default function AdminDashboard() {
                 <p className="text-3xl font-bold text-blue-600">{dashboardData.totalBookings.toLocaleString()}</p>
               </div>
               <div className="bg-green-50 p-6 rounded-lg">
-                <h4 className="text-lg font-semibold text-green-800 mb-2">Подтвержденные</h4>
+                <h4 className="text-lg font-semibold text-green-800 mb-2">{t.confirmedBookingsStats}</h4>
                 <p className="text-3xl font-bold text-green-600">{dashboardData.confirmedBookings.toLocaleString()}</p>
               </div>
               <div className="bg-yellow-50 p-6 rounded-lg">
-                <h4 className="text-lg font-semibold text-yellow-800 mb-2">Ожидающие</h4>
+                <h4 className="text-lg font-semibold text-yellow-800 mb-2">{t.pendingBookingsStats}</h4>
                 <p className="text-3xl font-bold text-yellow-600">{dashboardData.pendingBookings.toLocaleString()}</p>
               </div>
               <div className="bg-red-50 p-6 rounded-lg">
-                <h4 className="text-lg font-semibold text-red-800 mb-2">Отмененные</h4>
+                <h4 className="text-lg font-semibold text-red-800 mb-2">{t.cancelledBookingsStats}</h4>
                 <p className="text-3xl font-bold text-red-600">{dashboardData.cancelledBookings.toLocaleString()}</p>
               </div>
             </div>
@@ -867,11 +901,11 @@ export default function AdminDashboard() {
         return (
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">Средний углеродный след: {dashboardData.averageCarbonFootprint} т CO2</h4>
+              <h4 className="text-lg font-semibold text-gray-800 mb-4">{t.averageCarbonFootprint}: {dashboardData.averageCarbonFootprint} т CO2</h4>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h5 className="font-semibold text-gray-700 mb-3">По регионам</h5>
+                  <h5 className="font-semibold text-gray-700 mb-3">{t.byRegions}</h5>
                   <div className="space-y-2">
                     {Object.entries(dashboardData.carbonByRegion).map(([region, carbon]) => (
                       <div key={region} className="flex justify-between items-center p-2 bg-gray-50 rounded">
@@ -883,7 +917,7 @@ export default function AdminDashboard() {
                 </div>
                 
                 <div>
-                  <h5 className="font-semibold text-gray-700 mb-3">По типам туров</h5>
+                  <h5 className="font-semibold text-gray-700 mb-3">{t.byTourTypes}</h5>
                   <div className="space-y-2">
                     {Object.entries(dashboardData.carbonByTourType).map(([type, carbon]) => (
                       <div key={type} className="flex justify-between items-center p-2 bg-gray-50 rounded">
@@ -897,7 +931,7 @@ export default function AdminDashboard() {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">Тенденции углеродного следа</h4>
+              <h4 className="text-lg font-semibold text-gray-800 mb-4">{t.carbonFootprintTrends}</h4>
               <div className="flex space-x-2 overflow-x-auto">
                 {dashboardData.carbonTrends.map((trend, index) => (
                   <div key={index} className="flex flex-col items-center min-w-[60px]">
@@ -916,17 +950,17 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-green-50 p-6 rounded-lg">
-                <h4 className="text-lg font-semibold text-green-800 mb-2">Компенсация CO2</h4>
+                <h4 className="text-lg font-semibold text-green-800 mb-2">{t.co2Compensation}</h4>
                 <p className="text-3xl font-bold text-green-600">{dashboardData.co2Compensation}%</p>
               </div>
               <div className="bg-blue-50 p-6 rounded-lg">
-                <h4 className="text-lg font-semibold text-blue-800 mb-2">Эффективность</h4>
+                <h4 className="text-lg font-semibold text-blue-800 mb-2">{t.effectiveness}</h4>
                 <p className="text-3xl font-bold text-blue-600">{dashboardData.compensationEffectiveness}%</p>
               </div>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">Сравнение методов компенсации</h4>
+              <h4 className="text-lg font-semibold text-gray-800 mb-4">{t.compensationMethodsComparison}</h4>
               <div className="space-y-3">
                 {Object.entries(dashboardData.compensationComparison).map(([method, percentage]) => (
                   <div key={method} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -943,7 +977,7 @@ export default function AdminDashboard() {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">Прогноз компенсации</h4>
+              <h4 className="text-lg font-semibold text-gray-800 mb-4">{t.compensationForecast}</h4>
               <div className="flex space-x-2 overflow-x-auto">
                 {dashboardData.compensationForecast.map((forecast, index) => (
                   <div key={index} className="flex flex-col items-center min-w-[60px]">
@@ -964,7 +998,7 @@ export default function AdminDashboard() {
               <h4 className="text-lg font-semibold text-gray-800 mb-4">Обзор дашборда</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-blue-50 p-4 rounded-lg">
-                  <h5 className="font-semibold text-blue-800 mb-2">Всего туристов</h5>
+                  <h5 className="font-semibold text-blue-800 mb-2">{t.totalTourists}</h5>
                   <p className="text-2xl font-bold text-blue-600">15,420</p>
                 </div>
                 <div className="bg-green-50 p-4 rounded-lg">
@@ -1064,24 +1098,24 @@ export default function AdminDashboard() {
         return (
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">Тепловая карта Казахстана</h4>
-              <p className="text-sm text-gray-600 mb-6">Интенсивность цвета показывает соотношение количества туристов к примененным мерам по снижению выбросов</p>
+              <h4 className="text-lg font-semibold text-gray-800 mb-4">{t.heatMapKazakhstan}</h4>
+              <p className="text-sm text-gray-600 mb-6">{t.intensityColorDescription}</p>
               
               {/* Легенда */}
               <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                <h5 className="font-semibold text-gray-800 mb-3">Легенда интенсивности</h5>
+                <h5 className="font-semibold text-gray-800 mb-3">{t.intensityLegend}</h5>
                 <div className="flex flex-wrap items-center gap-4 text-sm">
                   <div className="flex items-center space-x-2">
                     <div className="w-6 h-6 bg-red-100 border-2 border-red-300 rounded"></div>
-                    <span>Низкая интенсивность (0-30%)</span>
+                    <span>{t.lowIntensity}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-6 h-6 bg-yellow-100 border-2 border-yellow-300 rounded"></div>
-                    <span>Средняя интенсивность (31-60%)</span>
+                    <span>{t.mediumIntensity}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-6 h-6 bg-green-100 border-2 border-green-300 rounded"></div>
-                    <span>Высокая интенсивность (61-100%)</span>
+                    <span>{t.highIntensity}</span>
                   </div>
                 </div>
               </div>
@@ -1124,17 +1158,17 @@ export default function AdminDashboard() {
                           </div>
                           
                           <div className="bg-white p-3 rounded-lg">
-                            <div className="text-sm text-gray-600 mb-1">Снижение выбросов</div>
+                            <div className="text-sm text-gray-600 mb-1">{t.emissionsReduction}</div>
                             <div className="text-xl font-bold text-green-600">{data.emissionsReduction}%</div>
                           </div>
                           
                           <div className="bg-white p-3 rounded-lg">
-                            <div className="text-sm text-gray-600 mb-1">Эко-меры</div>
+                            <div className="text-sm text-gray-600 mb-1">{t.ecoMeasures}</div>
                             <div className="text-xl font-bold text-purple-600">{data.ecoMeasures}</div>
                           </div>
                           
                           <div className="bg-white p-3 rounded-lg">
-                            <div className="text-sm text-gray-600 mb-1">Эффективность</div>
+                            <div className="text-sm text-gray-600 mb-1">{t.effectiveness}</div>
                             <div className="text-xl font-bold text-orange-600">
                               {Math.round((data.tourists * data.emissionsReduction) / 100)} т CO2
                             </div>
@@ -1144,7 +1178,7 @@ export default function AdminDashboard() {
                         {/* Прогресс-бар интенсивности */}
                         <div className="mt-3">
                           <div className="flex justify-between text-xs text-gray-600 mb-1">
-                            <span>Интенсивность активности</span>
+                            <span>{t.intensityActivity}</span>
                             <span>{data.intensity}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1170,19 +1204,19 @@ export default function AdminDashboard() {
                     <div className="text-2xl font-bold text-blue-600">
                       {Object.values(heatMapData.regions).reduce((sum, data) => sum + data.tourists, 0).toLocaleString()}
                     </div>
-                    <div className="text-sm text-gray-600">Всего туристов</div>
+                    <div className="text-sm text-gray-600">{t.totalTourists}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">
                       {Math.round(Object.values(heatMapData.regions).reduce((sum, data) => sum + data.emissionsReduction, 0) / Object.keys(heatMapData.regions).length)}%
                     </div>
-                    <div className="text-sm text-gray-600">Среднее снижение выбросов</div>
+                    <div className="text-sm text-gray-600">{t.averageEmissionsReduction}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-purple-600">
                       {Object.values(heatMapData.regions).reduce((sum, data) => sum + data.ecoMeasures, 0)}
                     </div>
-                    <div className="text-sm text-gray-600">Всего эко-мер</div>
+                    <div className="text-sm text-gray-600">{t.totalEcoMeasures}</div>
                   </div>
                 </div>
               </div>
@@ -1261,7 +1295,7 @@ export default function AdminDashboard() {
                       <span className="text-lg font-bold text-gray-500">#{index + 1}</span>
                       <div>
                         <h5 className="font-semibold text-gray-800">{region.region}</h5>
-                        <p className="text-sm text-gray-600">Проектов: {region.projects}</p>
+                        <p className="text-sm text-gray-600">{t.projects}: {region.projects}</p>
                       </div>
                     </div>
                     <span className="text-lg font-bold text-green-600">{region.score}/10</span>
@@ -1279,7 +1313,7 @@ export default function AdminDashboard() {
                       <span className="text-lg font-bold text-gray-500">#{index + 1}</span>
                       <div>
                         <h5 className="font-semibold text-gray-800">{region.region}</h5>
-                        <p className="text-sm text-gray-600">Активностей: {region.activities}</p>
+                        <p className="text-sm text-gray-600">{t.activities}: {region.activities}</p>
                       </div>
                     </div>
                     <span className="text-lg font-bold text-blue-600">{region.participants.toLocaleString()}</span>
@@ -1297,7 +1331,7 @@ export default function AdminDashboard() {
                       <span className="text-lg font-bold text-gray-500">#{index + 1}</span>
                       <div>
                         <h5 className="font-semibold text-gray-800">{region.region}</h5>
-                        <p className="text-sm text-gray-600">Отелей: {region.hotels}</p>
+                        <p className="text-sm text-gray-600">{t.hotels}: {region.hotels}</p>
                       </div>
                     </div>
                     <span className="text-lg font-bold text-purple-600">{region.certificates}</span>
@@ -1691,6 +1725,66 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleCourseFormChange = (field: string, value: string) => {
+    setCourseForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleEventFormChange = (field: string, value: string) => {
+    setEventForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSaveCourse = () => {
+    if (courseForm.title && courseForm.description && courseForm.duration) {
+      const newCourse: Course = {
+        id: mockCourses.length + 1,
+        title: courseForm.title,
+        description: courseForm.description,
+        duration: courseForm.duration + ' часов',
+        level: courseForm.level,
+        instructor: courseForm.instructor,
+        status: courseForm.status
+      };
+      
+      // В реальном приложении здесь был бы API вызов
+      // mockCourses.push(newCourse);
+      
+      // Показываем уведомление об успешном добавлении
+      alert(t.courseAddedSuccessfully || 'Курс успешно добавлен!');
+      closeModal();
+    } else {
+      alert(t.pleaseFillAllFields || 'Пожалуйста, заполните все поля!');
+    }
+  };
+
+  const handleSaveEvent = () => {
+    if (eventForm.title && eventForm.description && eventForm.date) {
+      const newEvent: CalendarEvent = {
+        id: (mockEvents.length + 1).toString(),
+        title: eventForm.title,
+        description: eventForm.description,
+        date: eventForm.date,
+        type: eventForm.type,
+        region: eventForm.region,
+        status: eventForm.status
+      };
+      
+      // В реальном приложении здесь был бы API вызов
+      // mockEvents.push(newEvent);
+      
+      // Показываем уведомление об успешном добавлении
+      alert(t.eventAddedSuccessfully || 'Событие успешно добавлено!');
+      closeModal();
+    } else {
+      alert(t.pleaseFillAllFields || 'Пожалуйста, заполните все поля!');
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 md:py-8">
       <div className="max-w-6xl mx-auto">
@@ -1775,6 +1869,8 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.courseName}</label>
                   <input
                     type="text"
+                    value={courseForm.title}
+                    onChange={(e) => handleCourseFormChange('title', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={t.courseNamePlaceholder}
                   />
@@ -1782,6 +1878,8 @@ export default function AdminDashboard() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.description}</label>
                   <textarea
+                    value={courseForm.description}
+                    onChange={(e) => handleCourseFormChange('description', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     rows={3}
                     placeholder={t.courseDescriptionPlaceholder}
@@ -1791,17 +1889,45 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.duration}</label>
                   <input
                     type="number"
+                    value={courseForm.duration}
+                    onChange={(e) => handleCourseFormChange('duration', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={t.durationPlaceholder}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.level}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option value="">{t.selectLevel}</option>
+                  <select 
+                    value={courseForm.level}
+                    onChange={(e) => handleCourseFormChange('level', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
                     <option value="beginner">{t.beginner}</option>
                     <option value="intermediate">{t.intermediate}</option>
                     <option value="advanced">{t.advanced}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.instructor}</label>
+                  <select 
+                    value={courseForm.instructor}
+                    onChange={(e) => handleCourseFormChange('instructor', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
+                    <option value="Айгуль Садыкова">{t.instructorAigul}</option>
+                    <option value="Марат Нурланов">{t.instructorMarat}</option>
+                    <option value="Анна Петрова">{t.instructorAnna}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t.status}</label>
+                  <select 
+                    value={courseForm.status}
+                    onChange={(e) => handleCourseFormChange('status', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
+                    <option value="active">{t.activeStatus}</option>
+                    <option value="inactive">{t.inactiveStatus}</option>
                   </select>
                 </div>
               </div>
@@ -1813,6 +1939,8 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventName}</label>
                   <input
                     type="text"
+                    value={eventForm.title}
+                    onChange={(e) => handleEventFormChange('title', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder={t.eventNamePlaceholder}
                   />
@@ -1820,6 +1948,8 @@ export default function AdminDashboard() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.description}</label>
                   <textarea
+                    value={eventForm.description}
+                    onChange={(e) => handleEventFormChange('description', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     rows={3}
                     placeholder={t.eventDescriptionPlaceholder}
@@ -1829,13 +1959,18 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventDate}</label>
                   <input
                     type="date"
+                    value={eventForm.date}
+                    onChange={(e) => handleEventFormChange('date', e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventType}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option value="">{t.selectEventType}</option>
+                  <select 
+                    value={eventForm.type}
+                    onChange={(e) => handleEventFormChange('type', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
                     <option value="holiday">{t.holiday}</option>
                     <option value="eco-event">{t.ecoEvent}</option>
                     <option value="news">{t.news}</option>
@@ -1844,8 +1979,11 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventRegion}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option value="">{t.selectEventRegion}</option>
+                  <select 
+                    value={eventForm.region}
+                    onChange={(e) => handleEventFormChange('region', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
                     <option value="Все регионы">{t.allRegions}</option>
                     <option value="Алматы">Алматы</option>
                     <option value="Астана">Астана</option>
@@ -1855,7 +1993,11 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t.eventStatus}</label>
-                  <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                  <select 
+                    value={eventForm.status}
+                    onChange={(e) => handleEventFormChange('status', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  >
                     <option value="active">{t.activeStatus}</option>
                     <option value="inactive">{t.inactiveStatus}</option>
                   </select>
@@ -1870,7 +2012,10 @@ export default function AdminDashboard() {
               >
                 {t.cancel}
               </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+              <button 
+                onClick={modalType === 'course' ? handleSaveCourse : handleSaveEvent}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              >
                 {t.save}
               </button>
             </div>

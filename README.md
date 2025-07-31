@@ -1,139 +1,176 @@
-# ECOSPUTNIK - Eco-Tourism Platform
+# 🌱 EcoSputnik - Эко-туристическая платформа
 
-A modern Next.js-based eco-tourism platform with multi-role dashboard supporting tourists, guides, accommodation managers, and analysts.
+Современная веб-платформа для управления эко-туризмом в Казахстане с поддержкой многоязычности и адаптивного дизайна.
 
-## 🌱 Features
+## 🚀 Особенности
 
-### Multi-Role Dashboard
-- **Tourist Dashboard**: Search tours, view recommendations, emergency contacts, news
-- **Guide Dashboard**: Manage tours, bookings, finances, analytics
-- **Accommodation Manager**: Manage properties, bookings, sustainability metrics
-- **Analyst Dashboard**: Market analysis, trends, performance metrics
+### 📱 **Многоязычность**
+- Полная поддержка русского и английского языков
+- Динамическое переключение языков
+- Локализованный контент и интерфейс
 
-### Key Features
-- 🌍 **Bilingual Support**: Russian/English language switching
-- 📱 **Responsive Design**: Mobile-friendly interface
-- 🎨 **Modern UI**: Clean, eco-friendly design with Tailwind CSS
-- 📊 **Statistics**: Carbon footprint tracking, eco-ratings
-- 🔍 **Search & Recommendations**: Personalized tour suggestions
-- 💬 **Real-time Features**: Chat, notifications, emergency contacts
+### 🎯 **Роли пользователей**
+- **Туристы** - поиск маршрутов, бронирование, отчеты о выбросах CO2
+- **Гиды** - управление турами, образование, сертификация
+- **Администраторы** - аналитика, управление проектами, статистика
 
-## 🚀 Getting Started
+### 📊 **Функциональность**
 
-### Prerequisites
+#### **Для туристов:**
+- 🔍 Поиск и фильтрация маршрутов
+- 📅 Календарь бронирований
+- 🌱 Отчеты о сокращении углеродного следа
+- 📰 Новости и акции
+- 🚨 Экстренные контакты
+- 💡 Персонализированные рекомендации
+
+#### **Для гидов:**
+- 📚 Образовательные курсы (8 курсов)
+- 🎓 Система сертификации
+- 📈 Отслеживание прогресса обучения
+- 🗺️ Управление маршрутами
+- 📊 Статистика туров
+
+#### **Для администраторов:**
+- 📊 Аналитика и отчеты
+- 🗺️ Тепловая карта Казахстана
+- 🌿 Управление эко-проектами
+- 💰 Финансовые отчеты
+- 👥 Управление гидами
+
+## 🛠️ Технологии
+
+- **Frontend:** Next.js 14, React 18, TypeScript
+- **Стилизация:** Tailwind CSS
+- **Языки:** Русский, Английский
+- **Адаптивность:** Mobile-first дизайн
+- **Сервер:** Node.js, npm
+
+## 📦 Установка и запуск
+
+### Предварительные требования
 - Node.js 18+ 
-- npm or yarn
+- npm или yarn
+- PowerShell (для Windows)
 
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/LeonidStepanovALA/ECOSPUTNIK.git
-cd ECOSPUTNIK
-```
-
-2. Install dependencies:
+### Установка зависимостей
 ```bash
 npm install
 ```
 
-3. Run the development server:
+### Запуск в режиме разработки
 ```bash
+# Обычный запуск
 npm run dev
+
+# Или используйте скрипты для Windows:
+start-server.bat
+# или
+start-server-permanent.ps1
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+### Запуск в постоянном режиме (Windows)
+```powershell
+# Запуск постоянного сервера
+.\start-server-permanent.ps1
 
-## 📁 Project Structure
+# Остановка сервера
+.\stop-server.ps1
+
+# Просмотр логов
+.\view-logs.ps1
+```
+
+## 🌐 Доступ к приложению
+
+После запуска приложение доступно по адресу:
+- **Локально:** http://localhost:3000
+- **Автоматическое открытие:** Браузер откроется автоматически
+
+## 📁 Структура проекта
 
 ```
-eco-tourism/
+ECOSPUTNIK/
 ├── src/
-│   ├── app/                    # Next.js app router
-│   │   ├── tourist/           # Tourist dashboard pages
-│   │   ├── guide/             # Guide dashboard pages
-│   │   ├── accommodation/     # Accommodation manager pages
-│   │   └── analyst/          # Analyst dashboard pages
-│   ├── components/            # Reusable components
-│   ├── hooks/                # Custom React hooks
-│   └── translations/         # Language files
-├── public/                   # Static assets
-└── package.json
+│   ├── app/                    # Next.js App Router
+│   │   ├── admin/             # Административная панель
+│   │   ├── guide/             # Кабинет гида
+│   │   ├── tourist/           # Кабинет туриста
+│   │   └── layout.tsx         # Основной layout
+│   ├── components/            # React компоненты
+│   ├── hooks/                 # Пользовательские хуки
+│   └── translations/          # Файлы локализации
+├── public/                    # Статические файлы
+├── scripts/                   # Скрипты управления
+└── README.md                  # Документация
 ```
 
-## 🎯 Role-Based Features
+## 🎓 Образовательные курсы для гидов
 
-### Tourist
-- Search and book eco-tours
-- View personalized recommendations
-- Track carbon footprint
-- Access emergency contacts
-- Read news and promotions
+### Доступные курсы:
+1. **Основы эко-туризма** (40 часов) - Айгуль Садыкова
+2. **Экологическая безопасность** (60 часов) - Марат Нурланов
+3. **Устойчивое развитие туризма** (50 часов) - Анна Козлова
+4. **Сохранение дикой природы** (45 часов) - Дмитрий Волков
+5. **Культурное наследие Казахстана** (35 часов) - Елена Петрова
+6. **Первая помощь в дикой природе** (25 часов) - Сергей Иванов
+7. **Фотография природы** (30 часов) - Ольга Сидорова
+8. **Местная кухня и кулинарные традиции** (20 часов) - Марина Ковалева
 
-### Guide
-- Create and manage tours
-- Handle bookings and payments
-- View analytics and ratings
-- Access educational materials
-- Manage eco-certifications
+### Уровни сложности:
+- **Начинающий** - базовые знания
+- **Промежуточный** - углубленное изучение
+- **Продвинутый** - экспертный уровень
 
-### Accommodation Manager
-- Manage eco-friendly properties
-- Track sustainability metrics
-- Handle bookings and guests
-- Monitor environmental impact
+## 🔧 Скрипты управления
 
-### Analyst
-- Market analysis and trends
-- Performance metrics
-- Sustainability reporting
-- Data visualization
+### Windows PowerShell скрипты:
+- `start-server-permanent.ps1` - Запуск постоянного сервера
+- `stop-server.ps1` - Остановка сервера
+- `view-logs.ps1` - Просмотр логов
 
-## 🌐 Internationalization
+### Windows Batch файлы:
+- `start-server.bat` - Быстрый запуск
+- `run-server.bat` - Альтернативный запуск
+- `stop-server.bat` - Остановка через cmd
 
-The platform supports Russian and English languages with:
-- Language switcher component
-- Translation files
-- Persistent language preference
-- Role-specific translations
+## 📊 Функции аналитики
 
-## 🛠️ Technology Stack
+### Для администраторов:
+- 📈 Общая статистика туристов
+- 🗺️ Тепловая карта регионов
+- 🌱 Отчеты по эко-проектам
+- 💰 Финансовые показатели
+- 📊 Сравнение методов компенсации CO2
 
-- **Framework**: Next.js 14 with App Router
-- **Styling**: Tailwind CSS
-- **Icons**: Heroicons
-- **Language**: TypeScript
-- **State Management**: React hooks
-- **Deployment**: Vercel-ready
+### Для туристов:
+- 🌍 Отслеживание углеродного следа
+- 🏆 Достижения и награды
+- 📈 Персональная статистика
 
-## 📈 Future Enhancements
+## 🌍 Экологические особенности
 
-- [ ] Real-time chat functionality
-- [ ] Payment integration
-- [ ] Advanced analytics dashboard
-- [ ] Mobile app development
-- [ ] AI-powered recommendations
-- [ ] Carbon offset integration
+- **Сокращение выбросов CO2** - отслеживание и компенсация
+- **Эко-проекты** - поддержка зеленых инициатив
+- **Устойчивый туризм** - обучение принципам
+- **Биоразнообразие** - сохранение природы
 
-## 🤝 Contributing
+## 🤝 Вклад в проект
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+1. Форкните репозиторий
+2. Создайте ветку для новой функции (`git checkout -b feature/amazing-feature`)
+3. Зафиксируйте изменения (`git commit -m 'Add amazing feature'`)
+4. Отправьте в ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
 
-## 📄 License
+## 📝 Лицензия
 
-This project is licensed under the MIT License.
+Этот проект распространяется под лицензией MIT. См. файл `LICENSE` для получения дополнительной информации.
 
-## 🌍 Environmental Impact
+## 📞 Поддержка
 
-This platform promotes sustainable tourism by:
-- Encouraging eco-friendly travel choices
-- Tracking carbon footprint
-- Supporting local sustainable businesses
-- Educating users about environmental impact
+Если у вас есть вопросы или предложения, создайте Issue в репозитории.
 
 ---
 
-**Built with ❤️ for sustainable tourism**
+**EcoSputnik** - Продвигаем устойчивый туризм в Казахстане! 🌱🇰🇿
